@@ -173,18 +173,29 @@ export default function RadioPage() {
         setIsPlaying(!isPlaying)
     }
 
+    useEffect(() => {
+        if (beepRef.current) beepRef.current.volume = 0.4
+        if (staticRef.current) staticRef.current.volume = 0.3
+    }, [])
+
     const startPowerOnSequence = () => {
         setIsPoweredOn(true)
-        setIsTuning(true)
+        setIsTuning(false) // Start with screen lit but no tuning/static
         setIsPlaying(false)
 
         if (tuningTimeoutRef.current) clearTimeout(tuningTimeoutRef.current)
+
+        // Delay the tuning (FM display and static sound) by 0.5s
+        setTimeout(() => {
+            if (tuningTimeoutRef.current) setIsTuning(true) // Only if still powering on
+        }, 500)
+
         tuningTimeoutRef.current = setTimeout(() => {
             setIsTuning(false)
             setIsPlaying(true)
             audioRef.current?.play()
             tuningTimeoutRef.current = null
-        }, 4000)
+        }, 4500)
     }
 
     const powerOff = () => {
