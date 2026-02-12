@@ -44,6 +44,7 @@ export default function RadioPage() {
     const beepRef = useRef<HTMLAudioElement>(null)
     const staticRef = useRef<HTMLAudioElement>(null)
     const volumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const tuningTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const tracks = [
         {
@@ -162,19 +163,7 @@ export default function RadioPage() {
     }
 
     const togglePlay = () => {
-        if (!audioRef.current) return
-
-        if (!isPoweredOn) {
-            setIsPoweredOn(true)
-            setIsTuning(true)
-
-            setTimeout(() => {
-                setIsTuning(false)
-                setIsPlaying(true)
-                audioRef.current?.play()
-            }, 4000)
-            return
-        }
+        if (!audioRef.current || !isPoweredOn || isTuning) return
 
         if (isPlaying) {
             audioRef.current.pause()
@@ -184,16 +173,38 @@ export default function RadioPage() {
         setIsPlaying(!isPlaying)
     }
 
+    const startPowerOnSequence = () => {
+        setIsPoweredOn(true)
+        setIsTuning(true)
+        setIsPlaying(false)
+
+        if (tuningTimeoutRef.current) clearTimeout(tuningTimeoutRef.current)
+        tuningTimeoutRef.current = setTimeout(() => {
+            setIsTuning(false)
+            setIsPlaying(true)
+            audioRef.current?.play()
+            tuningTimeoutRef.current = null
+        }, 4000)
+    }
+
+    const powerOff = () => {
+        setIsPoweredOn(false)
+        setIsTuning(false)
+        setIsPlaying(false)
+        if (tuningTimeoutRef.current) {
+            clearTimeout(tuningTimeoutRef.current)
+            tuningTimeoutRef.current = null
+        }
+        if (audioRef.current) {
+            audioRef.current.pause()
+            audioRef.current.currentTime = 0
+        }
+    }
+
     const playNextTrack = () => {
         if (!isPoweredOn) {
-            setIsPoweredOn(true)
-            setIsTuning(true)
-
-            setTimeout(() => {
-                setIsTuning(false)
-                setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
-                setIsPlaying(true)
-            }, 4000)
+            startPowerOnSequence()
+            setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
         } else {
             setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
             setIsPlaying(true)
@@ -202,14 +213,8 @@ export default function RadioPage() {
 
     const playPreviousTrack = () => {
         if (!isPoweredOn) {
-            setIsPoweredOn(true)
-            setIsTuning(true)
-
-            setTimeout(() => {
-                setIsTuning(false)
-                setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
-                setIsPlaying(true)
-            }, 4000)
+            startPowerOnSequence()
+            setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
         } else {
             setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
             setIsPlaying(true)
@@ -293,13 +298,7 @@ export default function RadioPage() {
                                 e.stopPropagation()
                                 if (!isPoweredOn) {
                                     playBeep()
-                                    setIsPoweredOn(true)
-                                    setIsTuning(true)
-                                    setTimeout(() => {
-                                        setIsTuning(false)
-                                        setIsPlaying(true)
-                                        audioRef.current?.play()
-                                    }, 4000)
+                                    startPowerOnSequence()
                                 }
                             }}
 
@@ -315,13 +314,11 @@ export default function RadioPage() {
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     playBeep()
-                                    setIsPoweredOn(!isPoweredOn)
-                                    setIsTuning(!isPoweredOn)
-                                    setCurrentTrackIndex(0)
-                                    togglePlay()
-                                    if (audioRef.current && isPoweredOn) {
-                                        audioRef.current.pause()
-                                        audioRef.current.currentTime = 0
+                                    if (isPoweredOn) {
+                                        powerOff()
+                                    } else {
+                                        setCurrentTrackIndex(0)
+                                        startPowerOnSequence()
                                     }
                                 }}
                                 className="absolute top-[26%] left-[4.3%] w-[6%] h-[14%] cursor-pointer z-50"
