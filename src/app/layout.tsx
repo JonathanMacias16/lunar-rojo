@@ -14,7 +14,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Lunar Rojo",
-  description: "The point not everyone sees",
+  description: "El punto que no todos ven.",
+  metadataBase: new URL("https://lunar-rojo.vercel.app"), // Replace with actual domain if different
+  alternates: {
+    canonical: "/",
+  },
+  applicationName: "Lunar Rojo",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Lunar Rojo",
+  },
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -23,6 +33,32 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
+  openGraph: {
+    title: "Lunar Rojo",
+    description: "El punto que no todos ven.",
+    url: "https://lunar-rojo.vercel.app",
+    siteName: "Lunar Rojo",
+    images: [
+      {
+        url: "/logo_completo.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Lunar Rojo - El punto que no todos ven",
+      },
+    ],
+    locale: "es_MX",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lunar Rojo",
+    description: "El punto que no todos ven.",
+    images: ["/logo_completo.jpeg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

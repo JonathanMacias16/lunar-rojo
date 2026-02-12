@@ -50,22 +50,22 @@ export default function RadioPage() {
             src: "/nsqk - Radio ATP (skit).mp3"
         },
         {
-            title: "I Still Think of You",
+            title: "Aún Te Pienso",
             artist: "nsqk",
             src: "/Nsqk - Aún Te Pienso.mp3"
         },
         {
-            title: "Science Fiction",
+            title: "Cienciaficción",
             artist: "nsqk",
             src: "/nsqk - Cienciaficción (Visualizer).mp3"
         },
         {
-            title: "Sooner or Later",
+            title: "Tarde o temprano",
             artist: "nsqk",
             src: "/nsqk - Tarde o temprano (Visualizer).mp3"
         },
         {
-            title: "DJ Sisyphus and his favorites of the week (skit)",
+            title: "DJ Sísifo y sus favoritas de la semana (skit)",
             artist: "nsqk",
             src: "/nsqk - DJ Sísifo y sus favortias de la semana (skit) (Visualizer).mp3"
         },
@@ -80,17 +80,17 @@ export default function RadioPage() {
             src: "/nsqk, Easykid - BOBOMENSOTONTO (Visualizer).mp3"
         },
         {
-            title: "Puzzle (interlude)",
+            title: "rompecabezas (interludio)",
             artist: "nsqk",
             src: "/nsqk - rompecabezas (interludio) (Visualizer).mp3"
         },
         {
-            title: "Mass",
+            title: "misa",
             artist: "nsqk",
             src: "/nsqk - misa (Visualizer).mp3"
         },
         {
-            title: "Listening to nsqk changed my life (skit)",
+            title: "Escuchar a nsqk cambió mi vida (skit)",
             artist: "nsqk",
             src: "/nsqk - Escuchar a nsqk cambió mi vida (skit) (Visualizer).mp3"
         },
@@ -105,22 +105,22 @@ export default function RadioPage() {
             src: "/nsqk, paopao -  Blamegame (Visualizer).mp3"
         },
         {
-            title: "My top 3 of nsqk's new album (skit)",
+            title: "Mi top 3 del nuevo disco de nsqk (skit)",
             artist: "nsqk",
             src: "/nsqk - Mi top 3 del nuevo disco de nsqk (skit).mp3"
         },
         {
-            title: "If you behave well",
+            title: "si te portas bien",
             artist: "nsqk",
             src: "/nsqk - si te portas bien (Visualizer).mp3"
         },
         {
-            title: "The Alps",
+            title: "los alpes",
             artist: "nsqk, Nina",
             src: "/nsqk, Nina -  los alpes (Visualizer).mp3"
         },
         {
-            title: "See you next time (skit)",
+            title: "Nos vemos a la próxima (skit)",
             artist: "nsqk",
             src: "/nsqk - Nos vemos a la próxima (skit) (Visualizer).mp3"
         },
@@ -224,6 +224,19 @@ export default function RadioPage() {
 
             <div className="flex flex-col items-center justify-center transition-all duration-500
                 portrait:max-sm:rotate-90 portrait:max-sm:scale-[0.8] portrait:max-sm:w-[100vh]">
+
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="mb-8 w-48 md:w-64"
+                >
+                    <img
+                        src="/logo_completo.jpeg"
+                        alt="Lunar Rojo Logo"
+                        className="w-full h-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.2)] transition-all duration-500"
+                    />
+                </motion.div>
 
                 <div
                     className="relative w-full max-w-[800px] mx-auto group transition-all duration-500"
@@ -375,7 +388,7 @@ export default function RadioPage() {
                                                     theme.textColor,
                                                     isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
                                                 )}>
-                                                    {isPlaying ? "▶ PLAY" : "II PAUSE"}
+                                                    {isPlaying ? "▶ TOCANDO" : "II PAUSA"}
                                                 </div>
                                             )}
 
@@ -402,7 +415,7 @@ export default function RadioPage() {
                                                         theme.textGlow
                                                     )}
                                                 >
-                                                    {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
+                                                    {isMuted ? "SILENCIO" : `VOL ${Math.round(volume * 100)}`}
                                                 </motion.div>
                                             ) : (
                                                 <motion.div
@@ -431,14 +444,17 @@ export default function RadioPage() {
                     </AnimatePresence>
                 </div>
 
-                <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2 select-none">
-
+                <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-4 select-none">
+                    <div className="flex items-center gap-3">
+                        <img src="/logo_simple.jpeg" alt="Logo Simple" className="w-6 h-6 rounded-full opacity-50 contrast-125" />
+                        <span className="tracking-[0.2em] font-bold text-neutral-400">ATP - NSQK</span>
+                    </div>
                     {!isPoweredOn ? (
-                        <span className="opacity-50 text-base">Tap the power button to turn it on 🎵</span>
+                        <span className="opacity-50 text-base">Toca el botón de encendido para encenderla</span>
                     ) : isTuning ? (
-                        <span className="opacity-50 text-xs animate-pulse">Tuning... 📻</span>
+                        <span className="opacity-50 text-xs animate-pulse">Sintonizando... 📻</span>
                     ) : (
-                        <span className="opacity-50 text-base">Use the radio buttons to control it. Track {currentTrackIndex + 1}/{tracks.length}</span>
+                        <span className="opacity-50 text-base">Usa los botones de la radio para controlarla. Pista {currentTrackIndex + 1}/{tracks.length}</span>
                     )}
                 </p>
             </div>
