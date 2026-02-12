@@ -40,13 +40,88 @@ export default function RadioPage() {
     const tracks = [
         {
             title: "Radio ATP (skit)",
-            artist: "NSQK",
+            artist: "nsqk",
             src: "/nsqk - Radio ATP (skit).mp3"
         },
         {
             title: "Aún Te Pienso",
-            artist: "NSQK",
-            src: "/Nsqk - Aún Te Pienso.mp3"
+            artist: "nsqk",
+            src: "/Nsqk - Aún Te Pienso.mp3"
+        },
+        {
+            title: "Cienciaficción",
+            artist: "nsqk",
+            src: "/nsqk - Cienciaficción (Visualizer).mp3"
+        },
+        {
+            title: "Tarde o temprano",
+            artist: "nsqk",
+            src: "/nsqk - Tarde o temprano (Visualizer).mp3"
+        },
+        {
+            title: "DJ Sísifo y sus favortias de la semana (skit)",
+            artist: "nsqk",
+            src: "/nsqk - DJ Sísifo y sus favortias de la semana (skit) (Visualizer).mp3"
+        },
+        {
+            title: "MIATA ᕙ(⇀‸↼‶)ᕗ",
+            artist: "nsqk, El Malilla",
+            src: "/nsqk, El Malilla - MIATA ᕙ(⇀‸↼‶)ᕗ (Visualizer).mp3"
+        },
+        {
+            title: "BOBOMENSOTONTO",
+            artist: "nsqk, Easykid",
+            src: "/nsqk, Easykid - BOBOMENSOTONTO (Visualizer).mp3"
+        },
+        {
+            title: "rompecabezas (interludio)",
+            artist: "nsqk",
+            src: "/nsqk - rompecabezas (interludio) (Visualizer).mp3"
+        },
+        {
+            title: "misa",
+            artist: "nsqk",
+            src: "/nsqk - misa (Visualizer).mp3"
+        },
+        {
+            title: "Escuchar a nsqk cambió mi vida (skit)",
+            artist: "nsqk",
+            src: "/nsqk - Escuchar a nsqk cambió mi vida (skit) (Visualizer).mp3"
+        },
+        {
+            title: "MUBI",
+            artist: "nsqk, Alvaro Diaz",
+            src: "/nsqk, Alvaro Diaz - MUBI (Visualizer).mp3"
+        },
+        {
+            title: "Blamegame",
+            artist: "nsqk, paopao",
+            src: "/nsqk, paopao -  Blamegame (Visualizer).mp3"
+        },
+        {
+            title: "Mi top 3 del nuevo disco de nsqk (skit)",
+            artist: "nsqk",
+            src: "/nsqk - Mi top 3 del nuevo disco de nsqk (skit).mp3"
+        },
+        {
+            title: "si te portas bien",
+            artist: "nsqk",
+            src: "/nsqk - si te portas bien (Visualizer).mp3"
+        },
+        {
+            title: "los alpes",
+            artist: "nsqk, Nina",
+            src: "/nsqk, Nina -  los alpes (Visualizer).mp3"
+        },
+        {
+            title: "Nos vemos a la próxima (skit)",
+            artist: "nsqk",
+            src: "/nsqk - Nos vemos a la próxima (skit) (Visualizer).mp3"
+        },
+        {
+            title: "RIP PETE",
+            artist: "nsqk",
+            src: "/nsqk - RIP PETE (Visualizer).mp3"
         }
     ]
 
