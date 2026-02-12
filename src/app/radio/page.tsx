@@ -235,19 +235,13 @@ export default function RadioPage() {
                 <div className="absolute -top-16 right-0 flex items-center gap-3 z-50">
                     <button
                         onClick={playNextTrack}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-all backdrop-blur-sm cursor-pointer group/btn"
+                        className="flex hidden items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-all backdrop-blur-sm cursor-pointer group/btn"
                     >
                         <SkipForward className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
                         Next
                     </button>
 
-                    <button
-                        onClick={toggleVariant}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-all backdrop-blur-sm cursor-pointer"
-                    >
-                        <RefreshCcw className="w-4 h-4" />
-                        Switch Style
-                    </button>
+
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -423,13 +417,13 @@ export default function RadioPage() {
             </div>
 
             <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2 select-none">
-                <span>Current Theme: <span className="uppercase text-white font-bold">{currentVariant}</span></span>
+
                 {!isPoweredOn ? (
-                    <span className="opacity-50 text-xs">Tap radio to turn it on 🎵</span>
+                    <span className="opacity-50 text-base">Tap power button to turn it on 🎵</span>
                 ) : isTuning ? (
                     <span className="opacity-50 text-xs animate-pulse">Tuning... 📻</span>
                 ) : (
-                    <span className="opacity-50 text-xs">Tap radio to Play/Pause. Track {currentTrackIndex + 1}/{tracks.length}</span>
+                    <span className="opacity-50 text-base">Tap buttons radio to control it. Track {currentTrackIndex + 1}/{tracks.length}</span>
                 )}
             </p>
         </div>
