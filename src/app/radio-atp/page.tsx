@@ -41,6 +41,8 @@ export default function RadioPage() {
     const [showVolumeStatus, setShowVolumeStatus] = useState(false)
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
     const audioRef = useRef<HTMLAudioElement>(null)
+    const beepRef = useRef<HTMLAudioElement>(null)
+    const staticRef = useRef<HTMLAudioElement>(null)
     const volumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const tracks = [
@@ -134,10 +136,19 @@ export default function RadioPage() {
     const currentTrack = tracks[currentTrackIndex]
 
     const toggleVariant = () => {
+        playBeep()
         setCurrentVariant(prev => prev === 'blue' ? 'orange' : 'blue')
     }
 
+    const playBeep = () => {
+        if (beepRef.current) {
+            beepRef.current.currentTime = 0
+            beepRef.current.play().catch(() => { })
+        }
+    }
+
     const adjustVolume = (delta: number) => {
+        playBeep()
         setIsMuted(false)
         setVolume(prev => {
             const newVol = Math.max(0, Math.min(1, prev + delta))
@@ -211,6 +222,16 @@ export default function RadioPage() {
         }
     }, [currentTrackIndex, isPlaying])
 
+    useEffect(() => {
+        if (!staticRef.current) return
+        if (isTuning) {
+            staticRef.current.currentTime = 0
+            staticRef.current.play().catch(() => { })
+        } else {
+            staticRef.current.pause()
+        }
+    }, [isTuning])
+
     const theme = variants[currentVariant]
 
     return (
@@ -221,6 +242,17 @@ export default function RadioPage() {
                 src={currentTrack.src}
                 onEnded={playNextTrack}
                 muted={isMuted}
+            />
+
+            <audio
+                ref={beepRef}
+                src="/BeepSound.mp3"
+            />
+
+            <audio
+                ref={staticRef}
+                src="/RadioStaticSound.mp3"
+                loop
             />
 
             <div className="flex flex-col items-center justify-center transition-all duration-500
@@ -259,6 +291,7 @@ export default function RadioPage() {
                             onClick={(e) => {
                                 e.stopPropagation()
                                 if (!isPoweredOn) {
+                                    playBeep()
                                     setIsPoweredOn(true)
                                     setIsTuning(true)
                                     setTimeout(() => {
@@ -280,6 +313,7 @@ export default function RadioPage() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
+                                    playBeep()
                                     setIsPoweredOn(!isPoweredOn)
                                     setIsTuning(!isPoweredOn)
                                     setCurrentTrackIndex(0)
@@ -296,6 +330,7 @@ export default function RadioPage() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
+                                    playBeep()
                                     if (!isPoweredOn) return
                                     togglePlay()
                                 }}
@@ -307,6 +342,7 @@ export default function RadioPage() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
+                                    playBeep()
                                     if (!isPoweredOn || isTuning) return
                                     playNextTrack()
                                 }}
@@ -318,6 +354,7 @@ export default function RadioPage() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
+                                    playBeep()
                                     if (!isPoweredOn || isTuning) return
                                     playPreviousTrack()
                                 }}
@@ -349,6 +386,7 @@ export default function RadioPage() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
+                                    playBeep()
                                     setIsMuted(!isMuted)
                                     setShowVolumeStatus(true)
                                     if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
@@ -432,7 +470,7 @@ export default function RadioPage() {
                     </AnimatePresence>
                 </div>
 
-                <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-4 select-none">
+                <div className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-4 select-none">
                     <div className="flex items-center gap-3">
                         <span className="tracking-[0.2em] font-bold text-neutral-400">ATP - NSQK</span>
                     </div>
@@ -443,7 +481,7 @@ export default function RadioPage() {
                     ) : (
                         <span className="opacity-50 text-base">Usa los botones de la radio para controlarla. Pista {currentTrackIndex + 1}/{tracks.length}</span>
                     )}
-                </p>
+                </div>
             </div>
             <img src="/logo_simple.png" alt="Logo Simple" className="size-10 bottom-4 left-4 absolute rounded-full opacity-50 contrast-125" />
         </div>
