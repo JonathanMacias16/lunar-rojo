@@ -222,210 +222,214 @@ export default function RadioPage() {
                 muted={isMuted}
             />
 
-            <div
-                className="relative w-full max-w-[800px] mx-auto group"
-                onWheel={(e) => {
-                    if (isPoweredOn) {
-                        adjustVolume(e.deltaY > 0 ? -0.05 : 0.05)
-                    }
-                }}
-            >
+            <div className="flex flex-col items-center justify-center transition-all duration-500
+                portrait:max-sm:rotate-90 portrait:max-sm:scale-[0.8] portrait:max-sm:w-[100vh]">
 
-                {/* Controls */}
-                <div className="absolute -top-16 right-0 flex items-center gap-3 z-50">
-                    <button
-                        onClick={playNextTrack}
-                        className="flex hidden items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-all backdrop-blur-sm cursor-pointer group/btn"
-                    >
-                        <SkipForward className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                        Next
-                    </button>
+                <div
+                    className="relative w-full max-w-[800px] mx-auto group transition-all duration-500"
+                    onWheel={(e) => {
+                        if (isPoweredOn) {
+                            adjustVolume(e.deltaY > 0 ? -0.05 : 0.05)
+                        }
+                    }}
+                >
+
+                    {/* Controls */}
+                    <div className="absolute -top-16 right-0 flex items-center gap-3 z-50">
+                        <button
+                            onClick={playNextTrack}
+                            className="flex hidden items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-all backdrop-blur-sm cursor-pointer group/btn"
+                        >
+                            <SkipForward className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                            Next
+                        </button>
 
 
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentVariant}
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            transition={{ duration: 0.4 }}
+                            className="relative"
+
+                        >
+                            <img
+                                src={theme.image}
+                                alt="Car Radio Interface"
+                                className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-lg pointer-events-none select-none"
+                            />
+
+
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    setIsPoweredOn(!isPoweredOn)
+                                    setIsTuning(!isPoweredOn)
+                                    setCurrentTrackIndex(0)
+                                    togglePlay()
+                                    if (audioRef.current && isPoweredOn) {
+                                        audioRef.current.pause()
+                                        audioRef.current.currentTime = 0
+                                    }
+                                }}
+                                className="absolute top-[26%] left-[4.3%] w-[6%] h-[14%] cursor-pointer z-50"
+                                style={{ pointerEvents: 'auto' }}
+                            />
+
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    if (!isPoweredOn) return
+                                    togglePlay()
+                                }}
+                                className="absolute top-[24%] right-[6.5%] w-[6%] h-[14%] cursor-pointer z-50"
+                                style={{ pointerEvents: 'auto' }}
+                            />
+
+
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    if (!isPoweredOn || isTuning) return
+                                    playNextTrack()
+                                }}
+                                className="absolute top-[38.6%] right-[6%] w-[6%] h-[14%] cursor-pointer z-50"
+                                style={{ pointerEvents: 'auto' }}
+                            />
+
+
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    if (!isPoweredOn || isTuning) return
+                                    playPreviousTrack()
+                                }}
+                                className="absolute top-[54%] right-[5.8%] w-[6%] h-[14%] cursor-pointer z-50"
+                                style={{ pointerEvents: 'auto' }}
+                            />
+
+
+                            <div className="absolute top-[28%] left-[10.5%] w-[13%] h-[42%] z-50 rounded-full flex overflow-hidden">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        adjustVolume(-0.1)
+                                    }}
+                                    className="w-1/2 h-full  cursor-pointer"
+                                    title="Vol -"
+                                />
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        adjustVolume(0.1)
+                                    }}
+                                    className="w-1/2 h-full cursor-pointer"
+                                    title="Vol +"
+                                />
+                            </div>
+
+
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    setIsMuted(!isMuted)
+                                    setShowVolumeStatus(true)
+                                    if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
+                                    volumeTimeoutRef.current = setTimeout(() => setShowVolumeStatus(false), 2000)
+                                }}
+                                className="absolute top-[38%] left-[14.5%] w-[5%] h-[20%] cursor-pointer z-[51] rounded-full"
+                            />
+
+                            <div className={clsx(
+                                "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen rounded-sm transition-all duration-500",
+                                isPoweredOn ? [theme.overlayBg, theme.shadow, "opacity-90"] : "bg-black opacity-95"
+                            )}>
+
+                                {isPoweredOn && (
+                                    <>
+                                        <div className={clsx("absolute inset-0 bg-gradient-to-b ptr-events-none transition-colors duration-500", theme.screenGlow)} />
+
+                                        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02),rgba(255,255,255,0.02))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-50" />
+
+                                        <div className="w-full overflow-hidden flex flex-col items-center justify-center mask-gradient relative z-0 h-full">
+
+                                            {!isTuning && (
+                                                <div className={clsx(
+                                                    "absolute select-none top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
+                                                    theme.textColor,
+                                                    isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
+                                                )}>
+                                                    {isPlaying ? "▶ PLAY" : "II PAUSE"}
+                                                </div>
+                                            )}
+
+                                            {isTuning ? (
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.8 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    className={clsx(
+                                                        `${orbitron.className} select-none text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
+                                                        theme.textColor,
+                                                        theme.textGlow,
+                                                        "animate-pulse"
+                                                    )}
+                                                >
+                                                    FM 30.9
+                                                </motion.div>
+                                            ) : showVolumeStatus ? (
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    className={clsx(
+                                                        `${orbitron.className} select-none text-4xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-widest`,
+                                                        theme.textColor,
+                                                        theme.textGlow
+                                                    )}
+                                                >
+                                                    {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
+                                                </motion.div>
+                                            ) : (
+                                                <motion.div
+                                                    key={currentTrackIndex}
+                                                    className={clsx(
+                                                        `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                                        theme.textColor,
+                                                        theme.textGlow
+                                                    )}
+                                                    animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
+                                                    transition={{
+                                                        repeat: Infinity,
+                                                        ease: "linear",
+                                                        duration: 15,
+                                                        repeatDelay: 1,
+                                                    }}
+                                                >
+                                                    {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
+                                                </motion.div>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
 
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentVariant}
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.4 }}
-                        className="relative"
+                <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2 select-none">
 
-                    >
-                        <img
-                            src={theme.image}
-                            alt="Car Radio Interface"
-                            className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-lg pointer-events-none select-none"
-                        />
-
-
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                setIsPoweredOn(!isPoweredOn)
-                                setIsTuning(!isTuning)
-                                setCurrentTrackIndex(0)
-                                togglePlay()
-                                if (audioRef.current) {
-                                    audioRef.current.pause()
-                                    audioRef.current.currentTime = 0
-                                }
-                            }}
-                            className="absolute top-[26%] left-[4.3%] w-[6%] h-[14%] cursor-pointer z-50"
-                            style={{ pointerEvents: 'auto' }}
-                        />
-
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                if (!isPoweredOn) return
-                                togglePlay()
-                            }}
-                            className="absolute top-[24%] right-[6.5%] w-[6%] h-[14%] cursor-pointer z-50"
-                            style={{ pointerEvents: 'auto' }}
-                        />
-
-
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                if (!isPoweredOn || isTuning) return
-                                playNextTrack()
-                            }}
-                            className="absolute top-[38.6%] right-[6%] w-[6%] h-[14%] cursor-pointer z-50"
-                            style={{ pointerEvents: 'auto' }}
-                        />
-
-
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                if (!isPoweredOn || isTuning) return
-                                playPreviousTrack()
-                            }}
-                            className="absolute top-[54%] right-[5.8%] w-[6%] h-[14%] cursor-pointer z-50"
-                            style={{ pointerEvents: 'auto' }}
-                        />
-
-
-                        <div className="absolute top-[28%] left-[10.5%] w-[13%] h-[42%] z-50 rounded-full flex overflow-hidden">
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    adjustVolume(-0.1)
-                                }}
-                                className="w-1/2 h-full  cursor-pointer"
-                                title="Vol -"
-                            />
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    adjustVolume(0.1)
-                                }}
-                                className="w-1/2 h-full cursor-pointer"
-                                title="Vol +"
-                            />
-                        </div>
-
-
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                setIsMuted(!isMuted)
-                                setShowVolumeStatus(true)
-                                if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
-                                volumeTimeoutRef.current = setTimeout(() => setShowVolumeStatus(false), 2000)
-                            }}
-                            className="absolute top-[38%] left-[14.5%] w-[5%] h-[20%] cursor-pointer z-[51] rounded-full"
-                        />
-
-                        <div className={clsx(
-                            "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen rounded-sm transition-all duration-500",
-                            isPoweredOn ? [theme.overlayBg, theme.shadow, "opacity-90"] : "bg-black opacity-95"
-                        )}>
-
-                            {isPoweredOn && (
-                                <>
-                                    <div className={clsx("absolute inset-0 bg-gradient-to-b ptr-events-none transition-colors duration-500", theme.screenGlow)} />
-
-                                    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02),rgba(255,255,255,0.02))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-50" />
-
-                                    <div className="w-full overflow-hidden flex flex-col items-center justify-center mask-gradient relative z-0 h-full">
-
-                                        {!isTuning && (
-                                            <div className={clsx(
-                                                "absolute select-none top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
-                                                theme.textColor,
-                                                isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
-                                            )}>
-                                                {isPlaying ? "▶ PLAY" : "II PAUSE"}
-                                            </div>
-                                        )}
-
-                                        {isTuning ? (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.8 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                className={clsx(
-                                                    `${orbitron.className} select-none text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
-                                                    theme.textColor,
-                                                    theme.textGlow,
-                                                    "animate-pulse"
-                                                )}
-                                            >
-                                                FM 30.9
-                                            </motion.div>
-                                        ) : showVolumeStatus ? (
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                className={clsx(
-                                                    `${orbitron.className} select-none text-4xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-widest`,
-                                                    theme.textColor,
-                                                    theme.textGlow
-                                                )}
-                                            >
-                                                {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
-                                            </motion.div>
-                                        ) : (
-                                            <motion.div
-                                                key={currentTrackIndex}
-                                                className={clsx(
-                                                    `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
-                                                    theme.textColor,
-                                                    theme.textGlow
-                                                )}
-                                                animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
-                                                transition={{
-                                                    repeat: Infinity,
-                                                    ease: "linear",
-                                                    duration: 15,
-                                                    repeatDelay: 1,
-                                                }}
-                                            >
-                                                {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
-                                            </motion.div>
-                                        )}
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </motion.div>
-                </AnimatePresence>
+                    {!isPoweredOn ? (
+                        <span className="opacity-50 text-base">Tap power button to turn it on 🎵</span>
+                    ) : isTuning ? (
+                        <span className="opacity-50 text-xs animate-pulse">Tuning... 📻</span>
+                    ) : (
+                        <span className="opacity-50 text-base">Tap buttons radio to control it. Track {currentTrackIndex + 1}/{tracks.length}</span>
+                    )}
+                </p>
             </div>
-
-            <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2 select-none">
-
-                {!isPoweredOn ? (
-                    <span className="opacity-50 text-base">Tap power button to turn it on 🎵</span>
-                ) : isTuning ? (
-                    <span className="opacity-50 text-xs animate-pulse">Tuning... 📻</span>
-                ) : (
-                    <span className="opacity-50 text-base">Tap buttons radio to control it. Track {currentTrackIndex + 1}/{tracks.length}</span>
-                )}
-            </p>
         </div>
     )
 }
