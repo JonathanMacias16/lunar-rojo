@@ -372,7 +372,7 @@ export default function RadioPage() {
 
                                             {!isTuning && (
                                                 <div className={clsx(
-                                                    "absolute select-none top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
+                                                    "absolute select-none top-1.5 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
                                                     theme.textColor,
                                                     isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
                                                 )}>
@@ -409,7 +409,7 @@ export default function RadioPage() {
                                                 <motion.div
                                                     key={currentTrackIndex}
                                                     className={clsx(
-                                                        `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                                        `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-[2rem] tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
                                                         theme.textColor,
                                                         theme.textGlow
                                                     )}
