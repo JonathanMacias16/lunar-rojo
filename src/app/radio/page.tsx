@@ -433,7 +433,6 @@ export default function RadioPage() {
 
                 <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-4 select-none">
                     <div className="flex items-center gap-3">
-                        <img src="/logo_simple.jpeg" alt="Logo Simple" className="w-6 h-6 rounded-full opacity-50 contrast-125" />
                         <span className="tracking-[0.2em] font-bold text-neutral-400">ATP - NSQK</span>
                     </div>
                     {!isPoweredOn ? (
@@ -445,6 +444,7 @@ export default function RadioPage() {
                     )}
                 </p>
             </div>
+            <img src="/logo_simple.png" alt="Logo Simple" className="size-10 bottom-4 left-4 absolute rounded-full opacity-50 contrast-125" />
         </div>
     )
 }
