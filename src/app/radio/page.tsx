@@ -22,7 +22,7 @@ const variants = {
     },
     orange: {
         id: 'orange',
-        image: '/radio-orange.png',
+        image: '/radio-orange-v5.png',
         overlayBg: 'bg-[#3f1a0a]',
         shadow: 'shadow-[inset_0_0_20px_rgba(255,100,0,0.3)]',
         textColor: 'text-[#ffedd5]',
