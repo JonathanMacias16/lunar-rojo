@@ -172,6 +172,22 @@ export default function RadioPage() {
         }
     }
 
+    const playPreviousTrack = () => {
+        if (!isPoweredOn) {
+            setIsPoweredOn(true)
+            setIsTuning(true)
+
+            setTimeout(() => {
+                setIsTuning(false)
+                setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
+                setIsPlaying(true)
+            }, 4000)
+        } else {
+            setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
+            setIsPlaying(true)
+        }
+    }
+
     useEffect(() => {
         if (isPlaying && audioRef.current) {
 
@@ -251,6 +267,28 @@ export default function RadioPage() {
                                 togglePlay()
                             }}
                             className="absolute top-[24%] right-[6.5%] w-[6%] h-[14%] cursor-pointer z-50"
+                            style={{ pointerEvents: 'auto' }}
+                        />
+
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                if (!isPoweredOn || isTuning) return
+                                playNextTrack()
+                            }}
+                            className="absolute top-[38.6%] right-[6%] w-[6%] h-[14%] cursor-pointer z-50"
+                            style={{ pointerEvents: 'auto' }}
+                        />
+
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                if (!isPoweredOn || isTuning) return
+                                playPreviousTrack()
+                            }}
+                            className="absolute top-[54%] right-[5.8%] w-[6%] h-[14%] cursor-pointer z-50"
                             style={{ pointerEvents: 'auto' }}
                         />
 
