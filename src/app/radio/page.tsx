@@ -244,6 +244,16 @@ export default function RadioPage() {
                             style={{ pointerEvents: 'auto' }}
                         />
 
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                if (!isPoweredOn) return
+                                togglePlay()
+                            }}
+                            className="absolute top-[24%] right-[6.5%] w-[6%] h-[14%] cursor-pointer z-50"
+                            style={{ pointerEvents: 'auto' }}
+                        />
+
                         <div className={clsx(
                             "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen rounded-sm transition-all duration-500",
                             isPoweredOn ? [theme.overlayBg, theme.shadow, "opacity-90"] : "bg-black opacity-95"
