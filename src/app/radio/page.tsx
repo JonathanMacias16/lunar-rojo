@@ -34,6 +34,7 @@ const variants = {
 export default function RadioPage() {
     const [currentVariant, setCurrentVariant] = useState<RadioVariant>('orange')
     const [isPoweredOn, setIsPoweredOn] = useState(false)
+    const [isTuning, setIsTuning] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
     const audioRef = useRef<HTMLAudioElement>(null)
@@ -137,8 +138,13 @@ export default function RadioPage() {
 
         if (!isPoweredOn) {
             setIsPoweredOn(true)
-            setIsPlaying(true)
-            audioRef.current.play()
+            setIsTuning(true)
+
+            setTimeout(() => {
+                setIsTuning(false)
+                setIsPlaying(true)
+                audioRef.current?.play()
+            }, 4000)
             return
         }
 
@@ -153,9 +159,17 @@ export default function RadioPage() {
     const playNextTrack = () => {
         if (!isPoweredOn) {
             setIsPoweredOn(true)
+            setIsTuning(true)
+
+            setTimeout(() => {
+                setIsTuning(false)
+                setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
+                setIsPlaying(true)
+            }, 4000)
+        } else {
+            setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
+            setIsPlaying(true)
         }
-        setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
-        setIsPlaying(true)
     }
 
     useEffect(() => {
@@ -226,31 +240,48 @@ export default function RadioPage() {
 
                                     <div className="w-full overflow-hidden flex flex-col items-center justify-center mask-gradient relative z-0 h-full">
 
-                                        <div className={clsx(
-                                            "absolute top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
-                                            theme.textColor,
-                                            isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
-                                        )}>
-                                            {isPlaying ? "▶ PLAY" : "II PAUSE"}
-                                        </div>
-
-                                        <motion.div
-                                            key={currentTrackIndex}
-                                            className={clsx(
-                                                `${orbitron.className} flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                        {!isTuning && (
+                                            <div className={clsx(
+                                                "absolute top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
                                                 theme.textColor,
-                                                theme.textGlow
-                                            )}
-                                            animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
-                                            transition={{
-                                                repeat: Infinity,
-                                                ease: "linear",
-                                                duration: 15,
-                                                repeatDelay: 1,
-                                            }}
-                                        >
-                                            {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
-                                        </motion.div>
+                                                isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
+                                            )}>
+                                                {isPlaying ? "▶ PLAY" : "II PAUSE"}
+                                            </div>
+                                        )}
+
+                                        {isTuning ? (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className={clsx(
+                                                    `${orbitron.className} text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
+                                                    theme.textColor,
+                                                    theme.textGlow,
+                                                    "animate-pulse"
+                                                )}
+                                            >
+                                                FM 30.9
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key={currentTrackIndex}
+                                                className={clsx(
+                                                    `${orbitron.className} flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                                    theme.textColor,
+                                                    theme.textGlow
+                                                )}
+                                                animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
+                                                transition={{
+                                                    repeat: Infinity,
+                                                    ease: "linear",
+                                                    duration: 15,
+                                                    repeatDelay: 1,
+                                                }}
+                                            >
+                                                {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
+                                            </motion.div>
+                                        )}
                                     </div>
                                 </>
                             )}
@@ -261,10 +292,12 @@ export default function RadioPage() {
 
             <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2">
                 <span>Current Theme: <span className="uppercase text-white font-bold">{currentVariant}</span></span>
-                {isPoweredOn ? (
-                    <span className="opacity-50 text-xs">Tap radio to Play/Pause. Track {currentTrackIndex + 1}/{tracks.length}</span>
-                ) : (
+                {!isPoweredOn ? (
                     <span className="opacity-50 text-xs">Tap radio to turn it on 🎵</span>
+                ) : isTuning ? (
+                    <span className="opacity-50 text-xs animate-pulse">Tuning... 📻</span>
+                ) : (
+                    <span className="opacity-50 text-xs">Tap radio to Play/Pause. Track {currentTrackIndex + 1}/{tracks.length}</span>
                 )}
             </p>
         </div>
