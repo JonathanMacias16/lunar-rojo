@@ -152,11 +152,7 @@ export default function RadioPage() {
         if (!isPoweredOn) return
         playBeep()
         setIsMuted(false)
-        setVolume(prev => {
-            const newVol = Math.max(0, Math.min(1, prev + delta))
-            if (audioRef.current) audioRef.current.volume = newVol
-            return newVol
-        })
+        setVolume(prev => Math.max(0, Math.min(1, prev + delta)))
         setShowVolumeStatus(true)
         if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
         volumeTimeoutRef.current = setTimeout(() => setShowVolumeStatus(false), 2000)
@@ -177,6 +173,12 @@ export default function RadioPage() {
         if (beepRef.current) beepRef.current.volume = 0.4
         if (staticRef.current) staticRef.current.volume = 0.3
     }, [])
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume * 0.7
+        }
+    }, [volume, currentTrackIndex])
 
     const startPowerOnSequence = () => {
         setIsPoweredOn(true)
