@@ -138,6 +138,7 @@ export default function RadioPage() {
     }
 
     const adjustVolume = (delta: number) => {
+        setIsMuted(false)
         setVolume(prev => {
             const newVol = Math.max(0, Math.min(1, prev + delta))
             if (audioRef.current) audioRef.current.volume = newVol
@@ -402,7 +403,7 @@ export default function RadioPage() {
                                                         theme.textGlow
                                                     )}
                                                 >
-                                                    {isMuted ? "SILENCIO" : `VOL ${Math.round(volume * 100)}`}
+                                                    {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
                                                 </motion.div>
                                             ) : (
                                                 <motion.div

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Lunar Rojo",
-  description: "El punto que no todos ven.",
+  description: "El punto que no todos ven. JM",
   metadataBase: new URL("https://lunar-rojo.vercel.app"), // Replace with actual domain if different
   alternates: {
     canonical: "/",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   openGraph: {
     title: "Lunar Rojo",
-    description: "El punto que no todos ven.",
+    description: "El punto que no todos ven. JM",
     url: "https://lunar-rojo.vercel.app",
     siteName: "Lunar Rojo",
     images: [
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
         url: "/logo_completo.jpeg",
         width: 1200,
         height: 630,
-        alt: "Lunar Rojo - El punto que no todos ven",
+        alt: "Lunar Rojo - El punto que no todos ve. JM",
       },
     ],
     locale: "es_MX",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Lunar Rojo",
-    description: "El punto que no todos ven.",
+    description: "El punto que no todos ven. JM",
     images: ["/logo_completo.jpeg"],
   },
   robots: {
