@@ -225,19 +225,6 @@ export default function RadioPage() {
             <div className="flex flex-col items-center justify-center transition-all duration-500
                 portrait:max-sm:rotate-90 portrait:max-sm:scale-[0.8] portrait:max-sm:w-[100vh]">
 
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="mb-8 w-48 md:w-64"
-                >
-                    <img
-                        src="/logo_completo.jpeg"
-                        alt="Lunar Rojo Logo"
-                        className="w-full h-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.2)] transition-all duration-500"
-                    />
-                </motion.div>
-
                 <div
                     className="relative w-full max-w-[800px] mx-auto group transition-all duration-500"
                     onWheel={(e) => {
