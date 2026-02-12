@@ -457,7 +457,7 @@ export default function RadioPage() {
                                                     transition={{
                                                         repeat: Infinity,
                                                         ease: "linear",
-                                                        duration: Math.max(10, (currentTrack.title.length + currentTrack.artist.length) / 3),
+                                                        duration: Math.max(10, (currentTrack.title.length + currentTrack.artist.length) / 1.4),
                                                         repeatDelay: 1,
                                                     }}
                                                 >
