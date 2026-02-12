@@ -33,6 +33,7 @@ const variants = {
 
 export default function RadioPage() {
     const [currentVariant, setCurrentVariant] = useState<RadioVariant>('orange')
+    const [isPoweredOn, setIsPoweredOn] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
     const audioRef = useRef<HTMLAudioElement>(null)
@@ -134,6 +135,13 @@ export default function RadioPage() {
     const togglePlay = () => {
         if (!audioRef.current) return
 
+        if (!isPoweredOn) {
+            setIsPoweredOn(true)
+            setIsPlaying(true)
+            audioRef.current.play()
+            return
+        }
+
         if (isPlaying) {
             audioRef.current.pause()
         } else {
@@ -143,13 +151,16 @@ export default function RadioPage() {
     }
 
     const playNextTrack = () => {
+        if (!isPoweredOn) {
+            setIsPoweredOn(true)
+        }
         setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
         setIsPlaying(true)
     }
 
     useEffect(() => {
         if (isPlaying && audioRef.current) {
-            // Wait for render to update src, then play
+
             audioRef.current.play().catch(e => console.error("Play failed:", e))
         }
     }, [currentTrackIndex, isPlaying])
@@ -203,43 +214,46 @@ export default function RadioPage() {
                         />
 
                         <div className={clsx(
-                            "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen opacity-90 rounded-sm transition-colors duration-500",
-                            theme.overlayBg,
-                            theme.shadow
+                            "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen rounded-sm transition-all duration-500",
+                            isPoweredOn ? [theme.overlayBg, theme.shadow, "opacity-90"] : "bg-black opacity-95"
                         )}>
 
-                            <div className={clsx("absolute inset-0 bg-gradient-to-b ptr-events-none transition-colors duration-500", theme.screenGlow)} />
+                            {isPoweredOn && (
+                                <>
+                                    <div className={clsx("absolute inset-0 bg-gradient-to-b ptr-events-none transition-colors duration-500", theme.screenGlow)} />
 
-                            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02),rgba(255,255,255,0.02))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-50" />
+                                    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02),rgba(255,255,255,0.02))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-50" />
 
-                            <div className="w-full overflow-hidden flex flex-col items-center justify-center mask-gradient relative z-0 h-full">
+                                    <div className="w-full overflow-hidden flex flex-col items-center justify-center mask-gradient relative z-0 h-full">
 
-                                <div className={clsx(
-                                    "absolute top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
-                                    theme.textColor,
-                                    isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
-                                )}>
-                                    {isPlaying ? "▶ PLAY" : "II PAUSE"}
-                                </div>
+                                        <div className={clsx(
+                                            "absolute top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
+                                            theme.textColor,
+                                            isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
+                                        )}>
+                                            {isPlaying ? "▶ PLAY" : "II PAUSE"}
+                                        </div>
 
-                                <motion.div
-                                    key={currentTrackIndex}
-                                    className={clsx(
-                                        `${orbitron.className} flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
-                                        theme.textColor,
-                                        theme.textGlow
-                                    )}
-                                    animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
-                                    transition={{
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                        duration: 15,
-                                        repeatDelay: 1,
-                                    }}
-                                >
-                                    {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
-                                </motion.div>
-                            </div>
+                                        <motion.div
+                                            key={currentTrackIndex}
+                                            className={clsx(
+                                                `${orbitron.className} flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                                theme.textColor,
+                                                theme.textGlow
+                                            )}
+                                            animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
+                                            transition={{
+                                                repeat: Infinity,
+                                                ease: "linear",
+                                                duration: 15,
+                                                repeatDelay: 1,
+                                            }}
+                                        >
+                                            {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
+                                        </motion.div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </motion.div>
                 </AnimatePresence>
@@ -247,7 +261,11 @@ export default function RadioPage() {
 
             <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2">
                 <span>Current Theme: <span className="uppercase text-white font-bold">{currentVariant}</span></span>
-                <span className="opacity-50 text-xs">Tap radio to Play/Pause. Track {currentTrackIndex + 1}/{tracks.length}</span>
+                {isPoweredOn ? (
+                    <span className="opacity-50 text-xs">Tap radio to Play/Pause. Track {currentTrackIndex + 1}/{tracks.length}</span>
+                ) : (
+                    <span className="opacity-50 text-xs">Tap radio to turn it on 🎵</span>
+                )}
             </p>
         </div>
     )
