@@ -227,6 +227,23 @@ export default function RadioPage() {
                             className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-lg pointer-events-none select-none"
                         />
 
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                setIsPoweredOn(!isPoweredOn)
+                                setIsTuning(!isTuning)
+                                setCurrentTrackIndex(0)
+                                togglePlay()
+                                if (audioRef.current) {
+                                    audioRef.current.pause()
+                                    audioRef.current.currentTime = 0
+                                }
+                            }}
+                            className="absolute top-[26%] left-[4.3%] w-[6%] h-[14%] cursor-pointer z-50"
+                            style={{ pointerEvents: 'auto' }}
+                        />
+
                         <div className={clsx(
                             "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen rounded-sm transition-all duration-500",
                             isPoweredOn ? [theme.overlayBg, theme.shadow, "opacity-90"] : "bg-black opacity-95"
