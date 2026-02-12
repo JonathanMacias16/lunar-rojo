@@ -501,7 +501,7 @@ export default function RadioPage() {
                     {!isPoweredOn ? (
                         <span className="opacity-50 text-base">Toca el botón de encendido para encenderla</span>
                     ) : isTuning ? (
-                        <span className="opacity-50 text-xs animate-pulse">Sintonizando... 📻</span>
+                        <span className="opacity-50 text-base animate-pulse">Sintonizando... 📻</span>
                     ) : (
                         <span className="opacity-50 text-base">Usa los botones de la radio para controlarla. Pista {currentTrackIndex + 1}/{tracks.length}</span>
                     )}
