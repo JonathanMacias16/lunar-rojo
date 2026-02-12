@@ -375,7 +375,7 @@ export default function RadioPage() {
                                                     theme.textColor,
                                                     isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
                                                 )}>
-                                                    {isPlaying ? "▶ TOCANDO" : "II PAUSA"}
+                                                    {isPlaying ? "▶ PLAY" : "II PAUSA"}
                                                 </div>
                                             )}
 
