@@ -229,14 +229,15 @@ export default function RadioPage() {
                                         theme.textColor,
                                         theme.textGlow
                                     )}
-                                    animate={isPlaying ? { x: ["100%", "-100%"] } : { x: 0 }}
+                                    animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
                                     transition={{
                                         repeat: Infinity,
                                         ease: "linear",
-                                        duration: 12,
+                                        duration: 15,
+                                        repeatDelay: 1,
                                     }}
                                 >
-                                    {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
+                                    {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
                                 </motion.div>
                             </div>
                         </div>
