@@ -50,22 +50,22 @@ export default function RadioPage() {
             src: "/nsqk - Radio ATP (skit).mp3"
         },
         {
-            title: "Aún Te Pienso",
+            title: "I Still Think of You",
             artist: "nsqk",
             src: "/Nsqk - Aún Te Pienso.mp3"
         },
         {
-            title: "Cienciaficción",
+            title: "Science Fiction",
             artist: "nsqk",
             src: "/nsqk - Cienciaficción (Visualizer).mp3"
         },
         {
-            title: "Tarde o temprano",
+            title: "Sooner or Later",
             artist: "nsqk",
             src: "/nsqk - Tarde o temprano (Visualizer).mp3"
         },
         {
-            title: "DJ Sísifo y sus favortias de la semana (skit)",
+            title: "DJ Sisyphus and his favorites of the week (skit)",
             artist: "nsqk",
             src: "/nsqk - DJ Sísifo y sus favortias de la semana (skit) (Visualizer).mp3"
         },
@@ -80,17 +80,17 @@ export default function RadioPage() {
             src: "/nsqk, Easykid - BOBOMENSOTONTO (Visualizer).mp3"
         },
         {
-            title: "rompecabezas (interludio)",
+            title: "Puzzle (interlude)",
             artist: "nsqk",
             src: "/nsqk - rompecabezas (interludio) (Visualizer).mp3"
         },
         {
-            title: "misa",
+            title: "Mass",
             artist: "nsqk",
             src: "/nsqk - misa (Visualizer).mp3"
         },
         {
-            title: "Escuchar a nsqk cambió mi vida (skit)",
+            title: "Listening to nsqk changed my life (skit)",
             artist: "nsqk",
             src: "/nsqk - Escuchar a nsqk cambió mi vida (skit) (Visualizer).mp3"
         },
@@ -105,22 +105,22 @@ export default function RadioPage() {
             src: "/nsqk, paopao -  Blamegame (Visualizer).mp3"
         },
         {
-            title: "Mi top 3 del nuevo disco de nsqk (skit)",
+            title: "My top 3 of nsqk's new album (skit)",
             artist: "nsqk",
             src: "/nsqk - Mi top 3 del nuevo disco de nsqk (skit).mp3"
         },
         {
-            title: "si te portas bien",
+            title: "If you behave well",
             artist: "nsqk",
             src: "/nsqk - si te portas bien (Visualizer).mp3"
         },
         {
-            title: "los alpes",
+            title: "The Alps",
             artist: "nsqk, Nina",
             src: "/nsqk, Nina -  los alpes (Visualizer).mp3"
         },
         {
-            title: "Nos vemos a la próxima (skit)",
+            title: "See you next time (skit)",
             artist: "nsqk",
             src: "/nsqk - Nos vemos a la próxima (skit) (Visualizer).mp3"
         },
@@ -255,6 +255,9 @@ export default function RadioPage() {
                             exit={{ opacity: 0, scale: 0.98 }}
                             transition={{ duration: 0.4 }}
                             className="relative"
+                            onClick={() => {
+                                setIsPoweredOn(true)
+                            }}
 
                         >
                             <img
@@ -422,11 +425,11 @@ export default function RadioPage() {
                 <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2 select-none">
 
                     {!isPoweredOn ? (
-                        <span className="opacity-50 text-base">Tap power button to turn it on 🎵</span>
+                        <span className="opacity-50 text-base">Tap the power button to turn it on 🎵</span>
                     ) : isTuning ? (
                         <span className="opacity-50 text-xs animate-pulse">Tuning... 📻</span>
                     ) : (
-                        <span className="opacity-50 text-base">Tap buttons radio to control it. Track {currentTrackIndex + 1}/{tracks.length}</span>
+                        <span className="opacity-50 text-base">Use the radio buttons to control it. Track {currentTrackIndex + 1}/{tracks.length}</span>
                     )}
                 </p>
             </div>
