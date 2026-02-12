@@ -255,8 +255,17 @@ export default function RadioPage() {
                             exit={{ opacity: 0, scale: 0.98 }}
                             transition={{ duration: 0.4 }}
                             className="relative"
-                            onClick={() => {
-                                setIsPoweredOn(true)
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                if (!isPoweredOn) {
+                                    setIsPoweredOn(true)
+                                    setIsTuning(true)
+                                    setTimeout(() => {
+                                        setIsTuning(false)
+                                        setIsPlaying(true)
+                                        audioRef.current?.play()
+                                    }, 4000)
+                                }
                             }}
 
                         >
