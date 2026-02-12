@@ -148,6 +148,7 @@ export default function RadioPage() {
     }
 
     const adjustVolume = (delta: number) => {
+        if (!isPoweredOn) return
         playBeep()
         setIsMuted(false)
         setVolume(prev => {
@@ -369,7 +370,7 @@ export default function RadioPage() {
                                         e.stopPropagation()
                                         adjustVolume(-0.1)
                                     }}
-                                    className="w-1/2 h-full  cursor-pointer"
+                                    className={clsx("w-1/2 h-full", isPoweredOn ? "cursor-pointer" : "cursor-default pointer-events-none")}
                                     title="Vol -"
                                 />
                                 <button
@@ -377,7 +378,7 @@ export default function RadioPage() {
                                         e.stopPropagation()
                                         adjustVolume(0.1)
                                     }}
-                                    className="w-1/2 h-full cursor-pointer"
+                                    className={clsx("w-1/2 h-full", isPoweredOn ? "cursor-pointer" : "cursor-default pointer-events-none")}
                                     title="Vol +"
                                 />
                             </div>
@@ -386,13 +387,17 @@ export default function RadioPage() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation()
+                                    if (!isPoweredOn) return
                                     playBeep()
                                     setIsMuted(!isMuted)
                                     setShowVolumeStatus(true)
                                     if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
                                     volumeTimeoutRef.current = setTimeout(() => setShowVolumeStatus(false), 2000)
                                 }}
-                                className="absolute top-[38%] left-[14.5%] w-[5%] h-[20%] cursor-pointer z-[51] rounded-full"
+                                className={clsx(
+                                    "absolute top-[38%] left-[14.5%] w-[5%] h-[20%] z-[51] rounded-full",
+                                    isPoweredOn ? "cursor-pointer" : "cursor-default pointer-events-none"
+                                )}
                             />
 
                             <div className={clsx(
