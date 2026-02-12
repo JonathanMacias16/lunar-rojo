@@ -34,6 +34,7 @@ const variants = {
 export default function RadioPage() {
     const [currentVariant, setCurrentVariant] = useState<RadioVariant>('orange')
     const [isPoweredOn, setIsPoweredOn] = useState(false)
+    const [isBooting, setIsBooting] = useState(false)
     const [isTuning, setIsTuning] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isMuted, setIsMuted] = useState(false)
@@ -182,14 +183,18 @@ export default function RadioPage() {
 
     const startPowerOnSequence = () => {
         setIsPoweredOn(true)
-        setIsTuning(false) // Start with screen lit but no tuning/static
+        setIsBooting(true)
+        setIsTuning(false)
         setIsPlaying(false)
 
         if (tuningTimeoutRef.current) clearTimeout(tuningTimeoutRef.current)
 
         // Delay the tuning (FM display and static sound) by 0.5s
         setTimeout(() => {
-            if (tuningTimeoutRef.current) setIsTuning(true) // Only if still powering on
+            if (tuningTimeoutRef.current) {
+                setIsBooting(false)
+                setIsTuning(true)
+            }
         }, 500)
 
         tuningTimeoutRef.current = setTimeout(() => {
@@ -202,6 +207,7 @@ export default function RadioPage() {
 
     const powerOff = () => {
         setIsPoweredOn(false)
+        setIsBooting(false)
         setIsTuning(false)
         setIsPlaying(false)
         if (tuningTimeoutRef.current) {
@@ -422,60 +428,63 @@ export default function RadioPage() {
                                         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02),rgba(255,255,255,0.02))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-50" />
 
                                         <div className="w-full overflow-hidden flex flex-col items-center justify-center mask-gradient relative z-0 h-full">
+                                            {isBooting ? null : (
+                                                <>
+                                                    {!isTuning && (
+                                                        <div className={clsx(
+                                                            "absolute select-none top-1.5 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
+                                                            theme.textColor,
+                                                            isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
+                                                        )}>
+                                                            {isPlaying ? "▶ PLAY" : "II PAUSA"}
+                                                        </div>
+                                                    )}
 
-                                            {!isTuning && (
-                                                <div className={clsx(
-                                                    "absolute select-none top-1.5 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
-                                                    theme.textColor,
-                                                    isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
-                                                )}>
-                                                    {isPlaying ? "▶ PLAY" : "II PAUSA"}
-                                                </div>
-                                            )}
-
-                                            {isTuning ? (
-                                                <motion.div
-                                                    initial={{ opacity: 0, scale: 0.8 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    className={clsx(
-                                                        `${orbitron.className} select-none text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
-                                                        theme.textColor,
-                                                        theme.textGlow,
-                                                        "animate-pulse"
+                                                    {isTuning ? (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, scale: 0.8 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            className={clsx(
+                                                                `${orbitron.className} select-none text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
+                                                                theme.textColor,
+                                                                theme.textGlow,
+                                                                "animate-pulse"
+                                                            )}
+                                                        >
+                                                            FM 30.9
+                                                        </motion.div>
+                                                    ) : showVolumeStatus ? (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, scale: 0.9 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            className={clsx(
+                                                                `${orbitron.className} select-none text-4xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-widest`,
+                                                                theme.textColor,
+                                                                theme.textGlow
+                                                            )}
+                                                        >
+                                                            {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
+                                                        </motion.div>
+                                                    ) : (
+                                                        <motion.div
+                                                            key={currentTrackIndex}
+                                                            className={clsx(
+                                                                `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-[2rem] tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                                                theme.textColor,
+                                                                theme.textGlow
+                                                            )}
+                                                            animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
+                                                            transition={{
+                                                                repeat: Infinity,
+                                                                ease: "linear",
+                                                                duration: Math.max(10, (currentTrack.title.length + currentTrack.artist.length) / 1.4),
+                                                                repeatDelay: 1,
+                                                            }}
+                                                        >
+                                                            {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
+                                                        </motion.div>
                                                     )}
-                                                >
-                                                    FM 30.9
-                                                </motion.div>
-                                            ) : showVolumeStatus ? (
-                                                <motion.div
-                                                    initial={{ opacity: 0, scale: 0.9 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    className={clsx(
-                                                        `${orbitron.className} select-none text-4xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-widest`,
-                                                        theme.textColor,
-                                                        theme.textGlow
-                                                    )}
-                                                >
-                                                    {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
-                                                </motion.div>
-                                            ) : (
-                                                <motion.div
-                                                    key={currentTrackIndex}
-                                                    className={clsx(
-                                                        `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-[2rem] tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
-                                                        theme.textColor,
-                                                        theme.textGlow
-                                                    )}
-                                                    animate={isPlaying ? { x: ["60%", "-60%"] } : { x: 0 }}
-                                                    transition={{
-                                                        repeat: Infinity,
-                                                        ease: "linear",
-                                                        duration: Math.max(10, (currentTrack.title.length + currentTrack.artist.length) / 1.4),
-                                                        repeatDelay: 1,
-                                                    }}
-                                                >
-                                                    {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist} ✦ {currentTrack.title} - {currentTrack.artist}
-                                                </motion.div>
+                                                </>
                                             )}
                                         </div>
                                     </>
