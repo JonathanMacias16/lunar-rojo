@@ -229,7 +229,7 @@ export default function RadioPage() {
                     className="relative w-full max-w-[800px] mx-auto group transition-all duration-500"
                     onWheel={(e) => {
                         if (isPoweredOn) {
-                            adjustVolume(e.deltaY > 0 ? -0.05 : 0.05)
+                            adjustVolume(e.deltaY > 0 ? 0.05 : -0.05)
                         }
                     }}
                 >
