@@ -36,8 +36,12 @@ export default function RadioPage() {
     const [isPoweredOn, setIsPoweredOn] = useState(false)
     const [isTuning, setIsTuning] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
+    const [isMuted, setIsMuted] = useState(false)
+    const [volume, setVolume] = useState(0.7)
+    const [showVolumeStatus, setShowVolumeStatus] = useState(false)
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
     const audioRef = useRef<HTMLAudioElement>(null)
+    const volumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const tracks = [
         {
@@ -133,6 +137,17 @@ export default function RadioPage() {
         setCurrentVariant(prev => prev === 'blue' ? 'orange' : 'blue')
     }
 
+    const adjustVolume = (delta: number) => {
+        setVolume(prev => {
+            const newVol = Math.max(0, Math.min(1, prev + delta))
+            if (audioRef.current) audioRef.current.volume = newVol
+            return newVol
+        })
+        setShowVolumeStatus(true)
+        if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
+        volumeTimeoutRef.current = setTimeout(() => setShowVolumeStatus(false), 2000)
+    }
+
     const togglePlay = () => {
         if (!audioRef.current) return
 
@@ -204,9 +219,17 @@ export default function RadioPage() {
                 ref={audioRef}
                 src={currentTrack.src}
                 onEnded={playNextTrack}
+                muted={isMuted}
             />
 
-            <div className="relative w-full max-w-[800px] mx-auto group">
+            <div
+                className="relative w-full max-w-[800px] mx-auto group"
+                onWheel={(e) => {
+                    if (isPoweredOn) {
+                        adjustVolume(e.deltaY > 0 ? -0.05 : 0.05)
+                    }
+                }}
+            >
 
                 {/* Controls */}
                 <div className="absolute -top-16 right-0 flex items-center gap-3 z-50">
@@ -234,8 +257,8 @@ export default function RadioPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.98 }}
                         transition={{ duration: 0.4 }}
-                        className="relative cursor-pointer active:scale-[0.99] transition-transform"
-                        onClick={togglePlay}
+                        className="relative"
+
                     >
                         <img
                             src={theme.image}
@@ -292,6 +315,38 @@ export default function RadioPage() {
                             style={{ pointerEvents: 'auto' }}
                         />
 
+
+                        <div className="absolute top-[28%] left-[10.5%] w-[13%] h-[42%] z-50 rounded-full flex overflow-hidden">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    adjustVolume(-0.1)
+                                }}
+                                className="w-1/2 h-full  cursor-pointer"
+                                title="Vol -"
+                            />
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    adjustVolume(0.1)
+                                }}
+                                className="w-1/2 h-full cursor-pointer"
+                                title="Vol +"
+                            />
+                        </div>
+
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                setIsMuted(!isMuted)
+                                setShowVolumeStatus(true)
+                                if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current)
+                                volumeTimeoutRef.current = setTimeout(() => setShowVolumeStatus(false), 2000)
+                            }}
+                            className="absolute top-[38%] left-[14.5%] w-[5%] h-[20%] cursor-pointer z-[51] rounded-full"
+                        />
+
                         <div className={clsx(
                             "absolute top-[31%] left-[25%] w-[50.5%] h-[30%] overflow-hidden flex items-center justify-center mix-blend-screen rounded-sm transition-all duration-500",
                             isPoweredOn ? [theme.overlayBg, theme.shadow, "opacity-90"] : "bg-black opacity-95"
@@ -307,7 +362,7 @@ export default function RadioPage() {
 
                                         {!isTuning && (
                                             <div className={clsx(
-                                                "absolute top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
+                                                "absolute select-none top-2 right-4 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-opacity duration-300",
                                                 theme.textColor,
                                                 isPlaying ? "opacity-100 animate-pulse" : "opacity-50"
                                             )}>
@@ -320,7 +375,7 @@ export default function RadioPage() {
                                                 initial={{ opacity: 0, scale: 0.8 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 className={clsx(
-                                                    `${orbitron.className} text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
+                                                    `${orbitron.className} select-none text-5xl sm:text-6xl md:text-7xl lg:text-4xl font-bold tracking-wider`,
                                                     theme.textColor,
                                                     theme.textGlow,
                                                     "animate-pulse"
@@ -328,11 +383,23 @@ export default function RadioPage() {
                                             >
                                                 FM 30.9
                                             </motion.div>
+                                        ) : showVolumeStatus ? (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className={clsx(
+                                                    `${orbitron.className} select-none text-4xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-widest`,
+                                                    theme.textColor,
+                                                    theme.textGlow
+                                                )}
+                                            >
+                                                {isMuted ? "MUTED" : `VOL ${Math.round(volume * 100)}`}
+                                            </motion.div>
                                         ) : (
                                             <motion.div
                                                 key={currentTrackIndex}
                                                 className={clsx(
-                                                    `${orbitron.className} flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
+                                                    `${orbitron.className} select-none flex whitespace-nowrap text-lg sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] font-bold uppercase transition-colors duration-300`,
                                                     theme.textColor,
                                                     theme.textGlow
                                                 )}
@@ -355,7 +422,7 @@ export default function RadioPage() {
                 </AnimatePresence>
             </div>
 
-            <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2">
+            <p className="mt-12 text-neutral-500 text-sm font-mono flex flex-col items-center gap-2 select-none">
                 <span>Current Theme: <span className="uppercase text-white font-bold">{currentVariant}</span></span>
                 {!isPoweredOn ? (
                     <span className="opacity-50 text-xs">Tap radio to turn it on 🎵</span>
