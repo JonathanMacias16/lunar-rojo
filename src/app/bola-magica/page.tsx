@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type FormEvent } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/react"
+import { Mic, Volume2, VolumeX } from "lucide-react"
+import clsx from "clsx"
 import { respuestas } from "./respuestas"
+import { sonidos } from "./sonidos"
 import { Triangulo } from "./triangulo"
 
 type Estado = "inicio" | "agitando" | "respuesta"
@@ -36,6 +39,44 @@ const sensorNecesitaPermiso = () =>
     typeof (DeviceMotionEvent as DeviceMotionConPermiso).requestPermission === "function" &&
     navigator.maxTouchPoints > 0
 
+// Dictado por voz (Chrome, Edge y Safari lo tienen; Firefox no)
+type Reconocedor = {
+    lang: string
+    interimResults: boolean
+    continuous: boolean
+    onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null
+    onerror: ((e: { error: string }) => void) | null
+    onend: (() => void) | null
+    start: () => void
+    stop: () => void
+    abort: () => void
+}
+type ConstructorReconocedor = new () => Reconocedor
+
+const obtenerReconocedor = () => {
+    const w = window as unknown as {
+        SpeechRecognition?: ConstructorReconocedor
+        webkitSpeechRecognition?: ConstructorReconocedor
+    }
+    return w.SpeechRecognition ?? w.webkitSpeechRecognition
+}
+const hayDictado = () => obtenerReconocedor() !== undefined
+
+const MENSAJES_DICTADO: Record<string, string> = {
+    "not-allowed": "Dale permiso al micrófono para dictar",
+    "service-not-allowed": "Dale permiso al micrófono para dictar",
+    "no-speech": "No te escuché, intenta otra vez",
+    "audio-capture": "No encontré el micrófono",
+    network: "El dictado necesita internet",
+}
+
+// El dictado llega sin signos: "me va a ir bien" → "¿Me va a ir bien?"
+const comoPregunta = (texto: string) => {
+    const limpio = texto.trim().replace(/^¿/, "").replace(/\?$/, "")
+    if (!limpio) return ""
+    return `¿${limpio[0].toUpperCase()}${limpio.slice(1)}?`
+}
+
 export default function BolaMagicaPage() {
     const [estado, setEstado] = useState<Estado>("inicio")
     const [volteada, setVolteada] = useState(false)
@@ -45,25 +86,47 @@ export default function BolaMagicaPage() {
     const [puedeAgitar, setPuedeAgitar] = useState(false)
     const [permisoPedido, setPermisoPedido] = useState(false)
     const sensorConPermiso = useSyncExternalStore(sinSuscripcion, sensorNecesitaPermiso, () => false)
+    const dictadoDisponible = useSyncExternalStore(sinSuscripcion, hayDictado, () => false)
+    const [escuchando, setEscuchando] = useState(false)
+    const [avisoDictado, setAvisoDictado] = useState("")
+    const [sonidoActivo, setSonidoActivo] = useState(true)
     const [bola, animarBola] = useAnimate<HTMLButtonElement>()
     const reducirMovimiento = useReducedMotion()
     const agitandoRef = useRef(false)
     const ultimoIndiceRef = useRef<number | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-    const preguntarRef = useRef<() => void>(() => { })
+    const preguntarRef = useRef<(texto?: string) => void>(() => { })
+    const reconocedorRef = useRef<Reconocedor | null>(null)
+    const sonidoRef = useRef(true)
 
-    const preguntar = async () => {
+    const detenerDictado = () => {
+        const rec = reconocedorRef.current
+        if (!rec) return
+        reconocedorRef.current = null
+        rec.onresult = null
+        rec.onerror = null
+        rec.onend = null
+        rec.abort()
+        setEscuchando(false)
+    }
+
+    const preguntar = async (texto = pregunta) => {
         if (agitandoRef.current) return
         agitandoRef.current = true
+        detenerDictado()
 
-        setPreguntaHecha(pregunta.trim())
+        setPreguntaHecha(texto.trim())
         setPregunta("")
+        setAvisoDictado("")
         setRespuesta(null)
         setEstado("agitando")
         navigator.vibrate?.(300)
 
+        const duracion = reducirMovimiento ? 0.4 : 0.9
+        if (sonidoRef.current) sonidos.agitar(duracion)
+
         if (reducirMovimiento) {
-            await new Promise((resolver) => setTimeout(resolver, 400))
+            await new Promise((resolver) => setTimeout(resolver, duracion * 1000))
         } else {
             await animarBola(
                 bola.current,
@@ -72,12 +135,16 @@ export default function BolaMagicaPage() {
                     y: [0, 6, -5, 4, -3, 2, -1, 0],
                     rotate: [0, -8, 7, -6, 5, -3, 2, 0],
                 },
-                { duration: 0.9, ease: "easeInOut" }
+                { duration: duracion, ease: "easeInOut" }
             )
         }
 
         const indice = elegirIndice(ultimoIndiceRef.current)
         ultimoIndiceRef.current = indice
+        if (sonidoRef.current) {
+            if (!volteada) sonidos.voltear()
+            sonidos.revelar(respuestas[indice].tipo)
+        }
         setVolteada(true)
         setRespuesta({ id: Date.now(), indice, giro: Math.random() * 8 - 4 })
         setEstado("respuesta")
@@ -121,23 +188,96 @@ export default function BolaMagicaPage() {
         setPermisoPedido(true)
     }
 
+    const dictar = () => {
+        // Si ya está escuchando, el toque termina el dictado y pregunta con lo que oyó
+        if (reconocedorRef.current) {
+            reconocedorRef.current.stop()
+            return
+        }
+        const ConstructorReconocedor = obtenerReconocedor()
+        if (!ConstructorReconocedor || agitandoRef.current) return
+        sonidos.desbloquear()
+
+        const rec = new ConstructorReconocedor()
+        rec.lang = "es-MX"
+        rec.interimResults = true
+        rec.continuous = false
+        let texto = ""
+        rec.onresult = (e) => {
+            texto = Array.from(e.results, (r) => r[0]?.transcript ?? "").join("")
+            setPregunta(texto)
+        }
+        rec.onerror = (e) => {
+            if (e.error === "aborted") return
+            setAvisoDictado(MENSAJES_DICTADO[e.error] ?? "No pude escucharte, intenta otra vez")
+        }
+        rec.onend = () => {
+            reconocedorRef.current = null
+            setEscuchando(false)
+            const preguntaDictada = comoPregunta(texto)
+            if (preguntaDictada) preguntarRef.current(preguntaDictada)
+        }
+
+        reconocedorRef.current = rec
+        setAvisoDictado("")
+        setPregunta("")
+        setEscuchando(true)
+        try {
+            rec.start()
+        } catch {
+            reconocedorRef.current = null
+            setEscuchando(false)
+        }
+    }
+
+    // Si se salen de la página a media frase, apaga el micrófono
+    useEffect(() => () => reconocedorRef.current?.abort(), [])
+
+    const alternarSonido = () => {
+        sonidoRef.current = !sonidoRef.current
+        setSonidoActivo(sonidoRef.current)
+    }
+
     const enviar = (e: FormEvent) => {
         e.preventDefault()
         inputRef.current?.blur() // cierra el teclado para que se vea la bola
         preguntar()
     }
 
-    const lineas = respuesta ? respuestas[respuesta.indice] : null
+    const lineas = respuesta ? respuestas[respuesta.indice].lineas : null
+
+    const pista = escuchando
+        ? "Te escucho… habla ahora"
+        : avisoDictado
+            ? avisoDictado
+            : estado === "agitando"
+                ? "Agitando…"
+                : estado === "respuesta"
+                    ? "Toca la bola para preguntar otra vez"
+                    : puedeAgitar
+                        ? "Piensa tu pregunta y agita el cel"
+                        : "Piensa tu pregunta y toca la bola"
 
     return (
         <main
             className="relative min-h-dvh overflow-hidden bg-neutral-950 flex flex-col items-center justify-center gap-5 px-4 py-16"
             style={{ "--bola": "min(76vw, 340px, 46dvh)" } as CSSProperties}
+            // El primer toque en cualquier parte deja sonar el audio (también al agitar el cel)
+            onClick={sonidos.desbloquear}
         >
             <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(127,29,29,0.16),transparent_55%)]"
             />
+
+            <button
+                type="button"
+                onClick={alternarSonido}
+                aria-label={sonidoActivo ? "Silenciar" : "Activar sonido"}
+                className="absolute top-4 right-4 z-10 grid size-10 place-items-center rounded-full text-neutral-500 transition-colors hover:bg-white/5 hover:text-neutral-300 cursor-pointer"
+            >
+                {sonidoActivo ? <Volume2 className="size-5" /> : <VolumeX className="size-5" />}
+            </button>
 
             <h1 className="relative font-mono text-sm font-bold tracking-[0.3em] text-neutral-400 select-none">
                 BOLA MÁGICA
@@ -151,7 +291,7 @@ export default function BolaMagicaPage() {
                 <motion.button
                     ref={bola}
                     type="button"
-                    onClick={preguntar}
+                    onClick={() => preguntar()}
                     aria-label="Agitar la bola mágica"
                     whileTap={{ scale: 0.97 }}
                     className="relative isolate overflow-hidden rounded-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-red-800 focus-visible:ring-offset-4 focus-visible:ring-offset-neutral-950 [-webkit-tap-highlight-color:transparent]"
@@ -281,17 +421,37 @@ export default function BolaMagicaPage() {
                 <label htmlFor="pregunta" className="sr-only">
                     Tu pregunta
                 </label>
-                <input
-                    id="pregunta"
-                    ref={inputRef}
-                    value={pregunta}
-                    onChange={(e) => setPregunta(e.target.value)}
-                    maxLength={140}
-                    placeholder="Escribe tu pregunta…"
-                    enterKeyHint="send"
-                    autoComplete="off"
-                    className="min-w-0 flex-1 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-base text-neutral-100 placeholder:text-neutral-500 outline-none transition-colors focus:border-red-900/80 focus:bg-white/[0.07]"
-                />
+                <div className="relative min-w-0 flex-1">
+                    <input
+                        id="pregunta"
+                        ref={inputRef}
+                        value={pregunta}
+                        onChange={(e) => setPregunta(e.target.value)}
+                        maxLength={140}
+                        placeholder={escuchando ? "Te escucho…" : "Escribe tu pregunta…"}
+                        enterKeyHint="send"
+                        autoComplete="off"
+                        className={clsx(
+                            "w-full rounded-full bg-white/5 border border-white/10 py-3 pl-5 text-base text-neutral-100 placeholder:text-neutral-500 outline-none transition-colors focus:border-red-900/80 focus:bg-white/[0.07]",
+                            dictadoDisponible ? "pr-12" : "pr-5"
+                        )}
+                    />
+                    {dictadoDisponible && (
+                        <button
+                            type="button"
+                            onClick={dictar}
+                            aria-label={escuchando ? "Dejar de escuchar" : "Dictar tu pregunta"}
+                            className={clsx(
+                                "absolute right-1.5 top-1/2 -translate-y-1/2 grid size-9 place-items-center rounded-full transition-colors cursor-pointer",
+                                escuchando
+                                    ? "bg-red-800 text-white animate-pulse"
+                                    : "text-neutral-400 hover:bg-white/10 hover:text-neutral-200"
+                            )}
+                        >
+                            <Mic className="size-[18px]" />
+                        </button>
+                    )}
+                </div>
                 <button
                     type="submit"
                     disabled={estado === "agitando"}
@@ -302,13 +462,7 @@ export default function BolaMagicaPage() {
             </form>
 
             <p className="relative min-h-5 text-center font-mono text-sm text-neutral-500 select-none">
-                {estado === "agitando"
-                    ? "Agitando…"
-                    : estado === "respuesta"
-                        ? "Toca la bola para preguntar otra vez"
-                        : puedeAgitar
-                            ? "Haz tu pregunta y agita el cel"
-                            : "Haz tu pregunta y toca la bola"}
+                {pista}
             </p>
 
             {sensorConPermiso && !permisoPedido && !puedeAgitar && (
