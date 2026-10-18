@@ -33,35 +33,48 @@ type DeviceMotionConPermiso = typeof DeviceMotionEvent & {
     requestPermission?: () => Promise<"granted" | "denied">
 }
 
-// "Solo la bola": esconde todo lo demás. Se recuerda en este cel.
-const CLAVE_SOLO_BOLA = "bola-magica:solo-bola"
-let soloBolaElegido: boolean | null = null
-const avisosSoloBola = new Set<() => void>()
-const suscribirSoloBola = (avisar: () => void) => {
-    avisosSoloBola.add(avisar)
-    return () => {
-        avisosSoloBola.delete(avisar)
+// Preferencias que se recuerdan en este cel. Si el navegador no deja guardar
+// (modo privado), duran solo la visita.
+const crearPreferencia = (clave: string) => {
+    let valor: string | null | undefined
+    const avisos = new Set<() => void>()
+    return {
+        suscribir: (avisar: () => void) => {
+            avisos.add(avisar)
+            return () => {
+                avisos.delete(avisar)
+            }
+        },
+        leer: () => {
+            if (valor === undefined) {
+                try {
+                    valor = localStorage.getItem(clave)
+                } catch {
+                    valor = null
+                }
+            }
+            return valor
+        },
+        guardar: (nuevo: string) => {
+            valor = nuevo
+            try {
+                localStorage.setItem(clave, nuevo)
+            } catch {
+                // Sin almacenamiento: solo dura esta visita
+            }
+            avisos.forEach((avisar) => avisar())
+        },
     }
 }
-const leerSoloBola = () => {
-    if (soloBolaElegido === null) {
-        try {
-            soloBolaElegido = localStorage.getItem(CLAVE_SOLO_BOLA) === "1"
-        } catch {
-            soloBolaElegido = false
-        }
-    }
-    return soloBolaElegido
-}
-const guardarSoloBola = (valor: boolean) => {
-    soloBolaElegido = valor
-    try {
-        localStorage.setItem(CLAVE_SOLO_BOLA, valor ? "1" : "0")
-    } catch {
-        // Sin almacenamiento (modo privado): solo dura esta visita
-    }
-    avisosSoloBola.forEach((avisar) => avisar())
-}
+
+// "Solo la bola": esconde todo lo demás
+const preferenciaSoloBola = crearPreferencia("bola-magica:solo-bola")
+const leerSoloBola = () => preferenciaSoloBola.leer() === "1"
+
+// Si ya aceptó lo de agitar. El iPhone olvida ese permiso al cerrar la app,
+// así que lo recordamos nosotros para no volver a mostrar el botón.
+const preferenciaAgitar = crearPreferencia("bola-magica:agitar")
+const leerAgitarAceptado = () => preferenciaAgitar.leer() === "si"
 
 // En iPhone hay que pedir permiso con un toque antes de leer el sensor de movimiento
 const sinSuscripcion = () => () => { }
@@ -141,7 +154,9 @@ export default function BolaMagicaPage() {
     const [avisoDictado, setAvisoDictado] = useState("")
     const [sonidoActivo, setSonidoActivo] = useState(true)
     const instalacion = useInstalacion()
-    const soloBola = useSyncExternalStore(suscribirSoloBola, leerSoloBola, () => false)
+    const soloBola = useSyncExternalStore(preferenciaSoloBola.suscribir, leerSoloBola, () => false)
+    const agitarAceptado = useSyncExternalStore(preferenciaAgitar.suscribir, leerAgitarAceptado, () => false)
+    const sensorPedidoRef = useRef(false)
     // Solo cuenta los cambios hechos con el botón, para no animar al cargar la página
     const [cambiosVista, setCambiosVista] = useState(0)
     const [bola, animarBola] = useAnimate<HTMLButtonElement>()
@@ -231,11 +246,15 @@ export default function BolaMagicaPage() {
         return () => window.removeEventListener("devicemotion", alMoverse)
     }, [])
 
+    // Tiene que llamarse dentro de un toque, o el iPhone no muestra la pregunta
     const activarSensor = async () => {
+        sensorPedidoRef.current = true
         try {
-            await (DeviceMotionEvent as DeviceMotionConPermiso).requestPermission?.()
+            const resultado = await (DeviceMotionEvent as DeviceMotionConPermiso).requestPermission?.()
+            if (resultado === "granted") preferenciaAgitar.guardar("si")
+            if (resultado === "denied") preferenciaAgitar.guardar("no")
         } catch {
-            // Si lo rechazan, la bola se sigue usando con toques
+            // Si no se pudo preguntar, la bola se sigue usando con toques
         }
         setPermisoPedido(true)
     }
@@ -346,7 +365,7 @@ export default function BolaMagicaPage() {
     useEffect(() => () => dictadoRef.current?.cancelar(), [])
 
     const alternarSoloBola = () => {
-        guardarSoloBola(!soloBola)
+        preferenciaSoloBola.guardar(soloBola ? "0" : "1")
         setCambiosVista((n) => n + 1)
     }
 
@@ -381,7 +400,13 @@ export default function BolaMagicaPage() {
             style={{ "--bola": soloBola ? "min(88vw, 460px, 72dvh)" : "min(76vw, 340px, 46dvh)" } as CSSProperties}
             // El primer toque en cualquier parte deja sonar el audio (también al agitar el cel)
             onClick={() => {
-                if (!dictadoRef.current) sonidos.desbloquear()
+                if (dictadoRef.current) return
+                sonidos.desbloquear()
+                // Ya lo aceptó antes pero el iPhone lo olvidó: se pide con este toque, sin botón.
+                // Si el iPhone todavía lo recuerda, no sale ninguna pregunta.
+                if (sensorConPermiso && agitarAceptado && !puedeAgitar && !sensorPedidoRef.current) {
+                    activarSensor()
+                }
             }}
         >
             <div
@@ -633,7 +658,7 @@ export default function BolaMagicaPage() {
                         </p>
 
                         <div className="flex flex-wrap justify-center gap-2">
-                            {sensorConPermiso && !permisoPedido && !puedeAgitar && (
+                            {sensorConPermiso && !agitarAceptado && !permisoPedido && !puedeAgitar && (
                                 <button
                                     type="button"
                                     onClick={activarSensor}
