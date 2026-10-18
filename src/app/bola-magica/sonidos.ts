@@ -166,6 +166,10 @@ export const sonidos = {
     desbloquear: () => {
         obtenerContexto()
     },
+    // Mientras se dicta: en iPhone el micrófono se puede trabar si este audio está activo
+    pausar: () => {
+        if (contexto?.state === "running") contexto.suspend().catch(() => { })
+    },
     agitar: (duracion: number) => {
         const c = obtenerContexto()
         if (c && maestro) agitar(c, maestro, c.currentTime + 0.02, duracion)

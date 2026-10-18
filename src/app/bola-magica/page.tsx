@@ -45,6 +45,7 @@ type Reconocedor = {
     lang: string
     interimResults: boolean
     continuous: boolean
+    onstart: (() => void) | null
     onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null
     onerror: ((e: { error: string }) => void) | null
     onend: (() => void) | null
@@ -65,10 +66,28 @@ const hayDictado = () => obtenerReconocedor() !== undefined
 
 const MENSAJES_DICTADO: Record<string, string> = {
     "not-allowed": "Dale permiso al micrófono para dictar",
-    "service-not-allowed": "Dale permiso al micrófono para dictar",
+    // En iPhone sale cuando Dictado está apagado en Ajustes
+    "service-not-allowed": "No puedo dictar, usa el 🎤 del teclado",
     "no-speech": "No te escuché, intenta otra vez",
     "audio-capture": "No encontré el micrófono",
     network: "El dictado necesita internet",
+}
+
+// Tiempos del dictado (ms). Safari en iPhone a veces no avisa que terminaste
+// de hablar, así que nosotros decidimos cuándo parar.
+const SILENCIO_PARA_CONTESTAR = 1500
+const ESPERA_SIN_VOZ = 7000
+const LIMITE_DICTADO = 15000
+
+// El texto puede llegar en pedazos ("me va", " a ir bien") o repetido y más
+// largo cada vez ("me va", "me va a ir bien"); esto arma la frase en ambos casos
+const unirResultados = (resultados: ArrayLike<ArrayLike<{ transcript: string }>>) => {
+    let texto = ""
+    for (const resultado of Array.from(resultados)) {
+        const parte = resultado[0]?.transcript ?? ""
+        texto = texto && !parte.startsWith(texto.trim()) ? texto + parte : parte
+    }
+    return texto
 }
 
 // El dictado llega sin signos: "me va a ir bien" → "¿Me va a ir bien?"
@@ -87,7 +106,7 @@ export default function BolaMagicaPage() {
     const [puedeAgitar, setPuedeAgitar] = useState(false)
     const [permisoPedido, setPermisoPedido] = useState(false)
     const sensorConPermiso = useSyncExternalStore(sinSuscripcion, sensorNecesitaPermiso, () => false)
-    const dictadoDisponible = useSyncExternalStore(sinSuscripcion, hayDictado, () => false)
+    const hayDictadoEnNavegador = useSyncExternalStore(sinSuscripcion, hayDictado, () => false)
     const [escuchando, setEscuchando] = useState(false)
     const [avisoDictado, setAvisoDictado] = useState("")
     const [sonidoActivo, setSonidoActivo] = useState(true)
@@ -98,19 +117,17 @@ export default function BolaMagicaPage() {
     const ultimoIndiceRef = useRef<number | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     const preguntarRef = useRef<(texto?: string) => void>(() => { })
-    const reconocedorRef = useRef<Reconocedor | null>(null)
+    const reconocedorRef = useRef<Reconocedor | null>(null) // se reusa para no pedir permiso cada vez
+    const dictadoRef = useRef<{ terminar: () => void; cancelar: () => void } | null>(null)
+    const fallasDictadoRef = useRef(0)
     const sonidoRef = useRef(true)
 
-    const detenerDictado = () => {
-        const rec = reconocedorRef.current
-        if (!rec) return
-        reconocedorRef.current = null
-        rec.onresult = null
-        rec.onerror = null
-        rec.onend = null
-        rec.abort()
-        setEscuchando(false)
-    }
+    // En iPhone, la bola agregada a inicio no puede usar el dictado del navegador
+    const dictadoPorTeclado = instalacion.plataforma === "ios" && instalacion.yaEsApp
+
+    const mostrarMicrofono = hayDictadoEnNavegador || dictadoPorTeclado
+
+    const detenerDictado = () => dictadoRef.current?.cancelar()
 
     const preguntar = async (texto = pregunta) => {
         if (agitandoRef.current) return
@@ -190,50 +207,110 @@ export default function BolaMagicaPage() {
         setPermisoPedido(true)
     }
 
-    const dictar = () => {
+    const dictar = (reintento = false) => {
         // Si ya está escuchando, el toque termina el dictado y pregunta con lo que oyó
-        if (reconocedorRef.current) {
-            reconocedorRef.current.stop()
+        if (dictadoRef.current) {
+            dictadoRef.current.terminar()
+            return
+        }
+        if (dictadoPorTeclado) {
+            inputRef.current?.focus()
+            setAvisoDictado("Usa el 🎤 de tu teclado para dictar")
             return
         }
         const ConstructorReconocedor = obtenerReconocedor()
         if (!ConstructorReconocedor || agitandoRef.current) return
-        sonidos.desbloquear()
 
-        const rec = new ConstructorReconocedor()
+        // En iPhone el micrófono se puede trabar si el audio de la página está activo
+        sonidos.pausar()
+
+        const rec = reconocedorRef.current ?? new ConstructorReconocedor()
+        reconocedorRef.current = rec
         rec.lang = "es-MX"
         rec.interimResults = true
         rec.continuous = false
+
         let texto = ""
+        let huboError = false
+        let terminado = false
+        let sinVoz: ReturnType<typeof setTimeout> | undefined
+        let silencio: ReturnType<typeof setTimeout> | undefined
+        const limite = setTimeout(() => terminar(), LIMITE_DICTADO)
+
+        const cancelar = () => {
+            if (terminado) return
+            terminado = true
+            clearTimeout(limite)
+            clearTimeout(sinVoz)
+            clearTimeout(silencio)
+            rec.onstart = null
+            rec.onresult = null
+            rec.onerror = null
+            rec.onend = null
+            try {
+                rec.abort()
+            } catch {
+                // Ya estaba detenido
+            }
+            dictadoRef.current = null
+            setEscuchando(false)
+        }
+
+        const terminar = () => {
+            if (terminado) return
+            cancelar()
+            const preguntaDictada = comoPregunta(texto)
+            if (preguntaDictada) {
+                fallasDictadoRef.current = 0
+                preguntarRef.current(preguntaDictada)
+                return
+            }
+            // No oyó nada: la próxima vez empieza con un reconocedor nuevo por si este se trabó
+            reconocedorRef.current = null
+            fallasDictadoRef.current += 1
+            if (!huboError) {
+                setAvisoDictado(
+                    fallasDictadoRef.current > 1
+                        ? "Prueba el 🎤 de tu teclado"
+                        : "No te escuché, intenta otra vez"
+                )
+            }
+        }
+
+        rec.onstart = () => {
+            sinVoz = setTimeout(terminar, ESPERA_SIN_VOZ)
+        }
         rec.onresult = (e) => {
-            texto = Array.from(e.results, (r) => r[0]?.transcript ?? "").join("")
+            texto = unirResultados(e.results)
             setPregunta(texto)
+            clearTimeout(sinVoz)
+            clearTimeout(silencio)
+            silencio = setTimeout(terminar, SILENCIO_PARA_CONTESTAR)
         }
         rec.onerror = (e) => {
             if (e.error === "aborted") return
+            huboError = true
             setAvisoDictado(MENSAJES_DICTADO[e.error] ?? "No pude escucharte, intenta otra vez")
+            terminar()
         }
-        rec.onend = () => {
-            reconocedorRef.current = null
-            setEscuchando(false)
-            const preguntaDictada = comoPregunta(texto)
-            if (preguntaDictada) preguntarRef.current(preguntaDictada)
-        }
+        rec.onend = terminar
 
-        reconocedorRef.current = rec
+        dictadoRef.current = { terminar, cancelar }
         setAvisoDictado("")
         setPregunta("")
         setEscuchando(true)
         try {
             rec.start()
         } catch {
+            // El reconocedor quedó en mal estado: uno nuevo, una sola vez
+            cancelar()
             reconocedorRef.current = null
-            setEscuchando(false)
+            if (!reintento) dictar(true)
         }
     }
 
     // Si se salen de la página a media frase, apaga el micrófono
-    useEffect(() => () => reconocedorRef.current?.abort(), [])
+    useEffect(() => () => dictadoRef.current?.cancelar(), [])
 
     const alternarSonido = () => {
         sonidoRef.current = !sonidoRef.current
@@ -265,7 +342,9 @@ export default function BolaMagicaPage() {
             className="relative min-h-dvh overflow-hidden bg-neutral-950 flex flex-col items-center justify-center gap-5 px-4 py-16"
             style={{ "--bola": "min(76vw, 340px, 46dvh)" } as CSSProperties}
             // El primer toque en cualquier parte deja sonar el audio (también al agitar el cel)
-            onClick={sonidos.desbloquear}
+            onClick={() => {
+                if (!dictadoRef.current) sonidos.desbloquear()
+            }}
         >
             <div
                 aria-hidden
@@ -435,13 +514,13 @@ export default function BolaMagicaPage() {
                         autoComplete="off"
                         className={clsx(
                             "w-full rounded-full bg-white/5 border border-white/10 py-3 pl-5 text-base text-neutral-100 placeholder:text-neutral-500 outline-none transition-colors focus:border-red-900/80 focus:bg-white/[0.07]",
-                            dictadoDisponible ? "pr-12" : "pr-5"
+                            mostrarMicrofono ? "pr-12" : "pr-5"
                         )}
                     />
-                    {dictadoDisponible && (
+                    {mostrarMicrofono && (
                         <button
                             type="button"
-                            onClick={dictar}
+                            onClick={() => dictar()}
                             aria-label={escuchando ? "Dejar de escuchar" : "Dictar tu pregunta"}
                             className={clsx(
                                 "absolute right-1.5 top-1/2 -translate-y-1/2 grid size-9 place-items-center rounded-full transition-colors cursor-pointer",

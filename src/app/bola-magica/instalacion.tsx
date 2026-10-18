@@ -86,6 +86,7 @@ export function useInstalacion() {
         disponible,
         abierta: disponible && (hoja === "abierta" || (hoja === "auto" && llegoPorEnlace)),
         plataforma,
+        yaEsApp,
         puedeInstalarDirecto: evento !== null,
         instalar,
         // Con Chrome basta un toque; en los demás mostramos cómo hacerlo
