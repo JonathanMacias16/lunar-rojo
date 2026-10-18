@@ -8,6 +8,7 @@ import clsx from "clsx"
 import { respuestas } from "./respuestas"
 import { sonidos } from "./sonidos"
 import { Triangulo } from "./triangulo"
+import { HojaInstalar, useInstalacion } from "./instalacion"
 
 type Estado = "inicio" | "agitando" | "respuesta"
 
@@ -90,6 +91,7 @@ export default function BolaMagicaPage() {
     const [escuchando, setEscuchando] = useState(false)
     const [avisoDictado, setAvisoDictado] = useState("")
     const [sonidoActivo, setSonidoActivo] = useState(true)
+    const instalacion = useInstalacion()
     const [bola, animarBola] = useAnimate<HTMLButtonElement>()
     const reducirMovimiento = useReducedMotion()
     const agitandoRef = useRef(false)
@@ -465,15 +467,28 @@ export default function BolaMagicaPage() {
                 {pista}
             </p>
 
-            {sensorConPermiso && !permisoPedido && !puedeAgitar && (
-                <button
-                    type="button"
-                    onClick={activarSensor}
-                    className="relative rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
-                >
-                    📳 Activar agitar el cel
-                </button>
-            )}
+            <div className="relative flex flex-wrap justify-center gap-2">
+                {sensorConPermiso && !permisoPedido && !puedeAgitar && (
+                    <button
+                        type="button"
+                        onClick={activarSensor}
+                        className="rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
+                    >
+                        📳 Activar agitar el cel
+                    </button>
+                )}
+                {instalacion.disponible && (
+                    <button
+                        type="button"
+                        onClick={instalacion.abrir}
+                        className="rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
+                    >
+                        📲 Agregar a inicio
+                    </button>
+                )}
+            </div>
+
+            <HojaInstalar {...instalacion} />
 
             <Image
                 src="/logo_simple.png"

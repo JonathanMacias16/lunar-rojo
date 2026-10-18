@@ -1,0 +1,33 @@
+{
+    "id": "/bola-magica",
+    "name": "Bola Mágica · Lunar Rojo",
+    "short_name": "Bola Mágica",
+    "description": "Hazle una pregunta a la bola mágica.",
+    "lang": "es-MX",
+    "start_url": "/bola-magica",
+    "scope": "/bola-magica",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0a0a0a",
+    "theme_color": "#0a0a0a",
+    "icons": [
+        {
+            "src": "/bola-magica-icono-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/bola-magica-icono-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/bola-magica-icono-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
