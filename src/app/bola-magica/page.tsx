@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type FormEvent } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/react"
-import { Mic, Volume2, VolumeX } from "lucide-react"
+import { Eye, EyeOff, Mic, Volume2, VolumeX } from "lucide-react"
 import clsx from "clsx"
 import { respuestas } from "./respuestas"
 import { sonidos } from "./sonidos"
@@ -31,6 +31,36 @@ const elegirIndice = (anterior: number | null) => {
 
 type DeviceMotionConPermiso = typeof DeviceMotionEvent & {
     requestPermission?: () => Promise<"granted" | "denied">
+}
+
+// "Solo la bola": esconde todo lo demás. Se recuerda en este cel.
+const CLAVE_SOLO_BOLA = "bola-magica:solo-bola"
+let soloBolaElegido: boolean | null = null
+const avisosSoloBola = new Set<() => void>()
+const suscribirSoloBola = (avisar: () => void) => {
+    avisosSoloBola.add(avisar)
+    return () => {
+        avisosSoloBola.delete(avisar)
+    }
+}
+const leerSoloBola = () => {
+    if (soloBolaElegido === null) {
+        try {
+            soloBolaElegido = localStorage.getItem(CLAVE_SOLO_BOLA) === "1"
+        } catch {
+            soloBolaElegido = false
+        }
+    }
+    return soloBolaElegido
+}
+const guardarSoloBola = (valor: boolean) => {
+    soloBolaElegido = valor
+    try {
+        localStorage.setItem(CLAVE_SOLO_BOLA, valor ? "1" : "0")
+    } catch {
+        // Sin almacenamiento (modo privado): solo dura esta visita
+    }
+    avisosSoloBola.forEach((avisar) => avisar())
 }
 
 // En iPhone hay que pedir permiso con un toque antes de leer el sensor de movimiento
@@ -111,6 +141,9 @@ export default function BolaMagicaPage() {
     const [avisoDictado, setAvisoDictado] = useState("")
     const [sonidoActivo, setSonidoActivo] = useState(true)
     const instalacion = useInstalacion()
+    const soloBola = useSyncExternalStore(suscribirSoloBola, leerSoloBola, () => false)
+    // Solo cuenta los cambios hechos con el botón, para no animar al cargar la página
+    const [cambiosVista, setCambiosVista] = useState(0)
     const [bola, animarBola] = useAnimate<HTMLButtonElement>()
     const reducirMovimiento = useReducedMotion()
     const agitandoRef = useRef(false)
@@ -312,6 +345,11 @@ export default function BolaMagicaPage() {
     // Si se salen de la página a media frase, apaga el micrófono
     useEffect(() => () => dictadoRef.current?.cancelar(), [])
 
+    const alternarSoloBola = () => {
+        guardarSoloBola(!soloBola)
+        setCambiosVista((n) => n + 1)
+    }
+
     const alternarSonido = () => {
         sonidoRef.current = !sonidoRef.current
         setSonidoActivo(sonidoRef.current)
@@ -340,7 +378,7 @@ export default function BolaMagicaPage() {
     return (
         <main
             className="relative min-h-dvh overflow-hidden bg-neutral-950 flex flex-col items-center justify-center gap-5 px-4 py-16"
-            style={{ "--bola": "min(76vw, 340px, 46dvh)" } as CSSProperties}
+            style={{ "--bola": soloBola ? "min(88vw, 460px, 72dvh)" : "min(76vw, 340px, 46dvh)" } as CSSProperties}
             // El primer toque en cualquier parte deja sonar el audio (también al agitar el cel)
             onClick={() => {
                 if (!dictadoRef.current) sonidos.desbloquear()
@@ -351,24 +389,63 @@ export default function BolaMagicaPage() {
                 className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(127,29,29,0.16),transparent_55%)]"
             />
 
-            <button
-                type="button"
-                onClick={alternarSonido}
-                aria-label={sonidoActivo ? "Silenciar" : "Activar sonido"}
-                className="absolute top-4 right-4 z-10 grid size-10 place-items-center rounded-full text-neutral-500 transition-colors hover:bg-white/5 hover:text-neutral-300 cursor-pointer"
+            <div className="absolute top-4 right-4 z-10 flex items-center gap-1">
+                <AnimatePresence initial={false}>
+                    {!soloBola && (
+                        <motion.button
+                            key="sonido"
+                            type="button"
+                            onClick={alternarSonido}
+                            aria-label={sonidoActivo ? "Silenciar" : "Activar sonido"}
+                            className="grid size-10 place-items-center rounded-full text-neutral-500 transition-colors hover:bg-white/5 hover:text-neutral-300 cursor-pointer"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            {sonidoActivo ? <Volume2 className="size-5" /> : <VolumeX className="size-5" />}
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+                <button
+                    type="button"
+                    onClick={alternarSoloBola}
+                    aria-label={soloBola ? "Mostrar todo" : "Dejar solo la bola"}
+                    title={soloBola ? "Mostrar todo" : "Dejar solo la bola"}
+                    className={clsx(
+                        "grid size-10 place-items-center rounded-full transition-colors hover:bg-white/5 cursor-pointer",
+                        soloBola ? "text-neutral-600 hover:text-neutral-300" : "text-neutral-500 hover:text-neutral-300"
+                    )}
+                >
+                    {soloBola ? <Eye className="size-5" /> : <EyeOff className="size-5" />}
+                </button>
+            </div>
+
+            <AnimatePresence mode="popLayout" initial={false}>
+                {!soloBola && (
+                    <motion.div
+                        key="arriba"
+                        className="relative flex w-full flex-col items-center gap-5"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duration: 0.4, delay: 0.2 } }}
+                        exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                    >
+                        <h1 className="font-mono text-sm font-bold tracking-[0.3em] text-neutral-400 select-none">
+                            BOLA MÁGICA
+                        </h1>
+
+                        <p className="min-h-6 max-w-sm text-center text-neutral-300 italic break-words line-clamp-3">
+                            {preguntaHecha && estado !== "inicio" ? `“${preguntaHecha}”` : ""}
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <motion.div
+                layout
+                layoutDependency={cambiosVista}
+                transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
+                className="relative flex flex-col items-center"
             >
-                {sonidoActivo ? <Volume2 className="size-5" /> : <VolumeX className="size-5" />}
-            </button>
-
-            <h1 className="relative font-mono text-sm font-bold tracking-[0.3em] text-neutral-400 select-none">
-                BOLA MÁGICA
-            </h1>
-
-            <p className="relative min-h-6 max-w-sm text-center text-neutral-300 italic break-words line-clamp-3">
-                {preguntaHecha && estado !== "inicio" ? `“${preguntaHecha}”` : ""}
-            </p>
-
-            <div className="relative flex flex-col items-center">
                 <motion.button
                     ref={bola}
                     type="button"
@@ -492,90 +569,104 @@ export default function BolaMagicaPage() {
                         marginTop: "calc(var(--bola) * -0.02)",
                     }}
                 />
-            </div>
+            </motion.div>
 
             <p aria-live="polite" className="sr-only">
                 {lineas ? lineas.join(" ") : ""}
             </p>
 
-            <form onSubmit={enviar} className="relative mt-2 w-full max-w-sm flex gap-2">
-                <label htmlFor="pregunta" className="sr-only">
-                    Tu pregunta
-                </label>
-                <div className="relative min-w-0 flex-1">
-                    <input
-                        id="pregunta"
-                        ref={inputRef}
-                        value={pregunta}
-                        onChange={(e) => setPregunta(e.target.value)}
-                        maxLength={140}
-                        placeholder={escuchando ? "Te escucho…" : "Escribe tu pregunta…"}
-                        enterKeyHint="send"
-                        autoComplete="off"
-                        className={clsx(
-                            "w-full rounded-full bg-white/5 border border-white/10 py-3 pl-5 text-base text-neutral-100 placeholder:text-neutral-500 outline-none transition-colors focus:border-red-900/80 focus:bg-white/[0.07]",
-                            mostrarMicrofono ? "pr-12" : "pr-5"
-                        )}
-                    />
-                    {mostrarMicrofono && (
-                        <button
-                            type="button"
-                            onClick={() => dictar()}
-                            aria-label={escuchando ? "Dejar de escuchar" : "Dictar tu pregunta"}
-                            className={clsx(
-                                "absolute right-1.5 top-1/2 -translate-y-1/2 grid size-9 place-items-center rounded-full transition-colors cursor-pointer",
-                                escuchando
-                                    ? "bg-red-800 text-white animate-pulse"
-                                    : "text-neutral-400 hover:bg-white/10 hover:text-neutral-200"
+            <AnimatePresence mode="popLayout" initial={false}>
+                {!soloBola && (
+                    <motion.div
+                        key="abajo"
+                        className="relative flex w-full flex-col items-center gap-5"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duration: 0.4, delay: 0.2 } }}
+                        exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                    >
+                        <form onSubmit={enviar} className="mt-2 w-full max-w-sm flex gap-2">
+                            <label htmlFor="pregunta" className="sr-only">
+                                Tu pregunta
+                            </label>
+                            <div className="relative min-w-0 flex-1">
+                                <input
+                                    id="pregunta"
+                                    ref={inputRef}
+                                    value={pregunta}
+                                    onChange={(e) => setPregunta(e.target.value)}
+                                    maxLength={140}
+                                    placeholder={escuchando ? "Te escucho…" : "Escribe tu pregunta…"}
+                                    enterKeyHint="send"
+                                    autoComplete="off"
+                                    className={clsx(
+                                        "w-full rounded-full bg-white/5 border border-white/10 py-3 pl-5 text-base text-neutral-100 placeholder:text-neutral-500 outline-none transition-colors focus:border-red-900/80 focus:bg-white/[0.07]",
+                                        mostrarMicrofono ? "pr-12" : "pr-5"
+                                    )}
+                                />
+                                {mostrarMicrofono && (
+                                    <button
+                                        type="button"
+                                        onClick={() => dictar()}
+                                        aria-label={escuchando ? "Dejar de escuchar" : "Dictar tu pregunta"}
+                                        className={clsx(
+                                            "absolute right-1.5 top-1/2 -translate-y-1/2 grid size-9 place-items-center rounded-full transition-colors cursor-pointer",
+                                            escuchando
+                                                ? "bg-red-800 text-white animate-pulse"
+                                                : "text-neutral-400 hover:bg-white/10 hover:text-neutral-200"
+                                        )}
+                                    >
+                                        <Mic className="size-[18px]" />
+                                    </button>
+                                )}
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={estado === "agitando"}
+                                className="rounded-full bg-white/10 px-5 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/20 disabled:opacity-40 cursor-pointer disabled:cursor-default"
+                            >
+                                Preguntar
+                            </button>
+                        </form>
+
+                        <p className="min-h-5 text-center font-mono text-sm text-neutral-500 select-none">
+                            {pista}
+                        </p>
+
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {sensorConPermiso && !permisoPedido && !puedeAgitar && (
+                                <button
+                                    type="button"
+                                    onClick={activarSensor}
+                                    className="rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
+                                >
+                                    📳 Activar agitar el cel
+                                </button>
                             )}
-                        >
-                            <Mic className="size-[18px]" />
-                        </button>
-                    )}
-                </div>
-                <button
-                    type="submit"
-                    disabled={estado === "agitando"}
-                    className="rounded-full bg-white/10 px-5 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/20 disabled:opacity-40 cursor-pointer disabled:cursor-default"
-                >
-                    Preguntar
-                </button>
-            </form>
-
-            <p className="relative min-h-5 text-center font-mono text-sm text-neutral-500 select-none">
-                {pista}
-            </p>
-
-            <div className="relative flex flex-wrap justify-center gap-2">
-                {sensorConPermiso && !permisoPedido && !puedeAgitar && (
-                    <button
-                        type="button"
-                        onClick={activarSensor}
-                        className="rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
-                    >
-                        📳 Activar agitar el cel
-                    </button>
+                            {instalacion.disponible && (
+                                <button
+                                    type="button"
+                                    onClick={instalacion.abrir}
+                                    className="rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
+                                >
+                                    📲 Agregar a inicio
+                                </button>
+                            )}
+                        </div>
+                    </motion.div>
                 )}
-                {instalacion.disponible && (
-                    <button
-                        type="button"
-                        onClick={instalacion.abrir}
-                        className="rounded-full border border-white/10 px-4 py-2 text-xs text-neutral-400 transition-colors hover:bg-white/5 cursor-pointer"
-                    >
-                        📲 Agregar a inicio
-                    </button>
-                )}
-            </div>
+            </AnimatePresence>
 
             <HojaInstalar {...instalacion} />
 
-            <Image
-                src="/logo_simple.png"
-                alt="Lunar Rojo"
-                width={40}
-                height={40}
-                className="size-10 bottom-4 left-4 absolute rounded-full opacity-50 contrast-125"
-            />
+            {!soloBola && (
+                <Image
+                    src="/logo_simple.png"
+                    alt="Lunar Rojo"
+                    width={40}
+                    height={40}
+                    className="size-10 bottom-4 left-4 absolute rounded-full opacity-50 contrast-125"
+                />
+            )}
         </main>
     )
 }
