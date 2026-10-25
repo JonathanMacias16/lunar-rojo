@@ -321,9 +321,11 @@
         "villanos:Vecna (Stranger Things)"
     ],
     "merlina": [
-        "f.addamsfamily:Wednesday Addams#(2022)|ortega",
-        "f.addamsfamily:Wednesday Addams (2022)",
-        "w:Wednesday (TV series)"
+        "heroes:Wednesday Addams (Wednesday)",
+        "heroes:Wednesday Addams (2022)",
+        "f.addamsfamily:Wednesday Addams#jenna|netflix|2022|tv series",
+        "heroes:Wednesday Addams",
+        "w:Wednesday Addams"
     ],
     "enid": [
         "f.addamsfamily:Enid Sinclair",
