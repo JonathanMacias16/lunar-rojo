@@ -1,0 +1,63 @@
+// Busca la foto principal de un personaje en Wikipedia o en un wiki de Fandom.
+// La usan la página (/adivina-quien/foto/<id>) y scripts/fotos-adivina-quien.mjs.
+//
+// Una fuente es "wiki:Título exacto" (la foto de esa página) o
+// "wiki?texto a buscar" (la foto de la primera página que encuentre).
+
+// Dirección de la API de cada wiki
+const WIKIS = {
+    w: "https://en.wikipedia.org/w/api.php",
+    es: "https://es.wikipedia.org/w/api.php",
+    villanos: "https://villains.fandom.com/api.php",
+    heroes: "https://heroes.fandom.com/api.php",
+    disney: "https://disney.fandom.com/api.php",
+    simpson: "https://simpsons.fandom.com/api.php",
+}
+
+// Solo se aceptan fotos de estos servidores
+const SERVIDORES_DE_FOTOS = ["upload.wikimedia.org", "static.wikia.nocookie.net"]
+
+export const AGENTE = "LunarRojoAdivinaQuien/1.0 (https://lunar-rojo.vercel.app/adivina-quien)"
+
+/**
+ * @param {string} fuente
+ * @param {number} ancho ancho de la foto en píxeles (Wikipedia prefiere 250, 330, 500 o 960)
+ * @returns {Promise<{ url: string, archivo: string, pagina: string, enlace: string } | null>}
+ */
+export async function buscarFoto(fuente, ancho) {
+    const exacta = fuente.match(/^(\w+):(.+)$/)
+    const busqueda = fuente.match(/^(\w+)\?(.+)$/)
+    const [, wiki, texto] = exacta ?? busqueda ?? []
+    const api = WIKIS[/** @type {keyof typeof WIKIS} */ (wiki)]
+    if (!api) throw new Error(`Fuente mal escrita: ${fuente}`)
+
+    const p = new URLSearchParams({
+        action: "query",
+        format: "json",
+        formatversion: "2",
+        redirects: "1",
+        prop: "pageimages|info",
+        inprop: "url",
+        piprop: "thumbnail|name",
+        pithumbsize: String(ancho),
+        pilicense: "any",
+    })
+    if (exacta) p.set("titles", texto)
+    else {
+        p.set("generator", "search")
+        p.set("gsrsearch", texto)
+        p.set("gsrlimit", "1")
+        p.set("gsrnamespace", "0")
+    }
+
+    const r = await fetch(`${api}?${p}`, { headers: { "User-Agent": AGENTE } })
+    if (!r.ok) throw new Error(`${r.status} en ${wiki}`)
+    const datos = await r.json()
+    /** @type {{ title: string, fullurl: string, pageimage?: string, thumbnail?: { source: string } } | undefined} */
+    const pagina = datos.query?.pages?.find((/** @type {any} */ x) => x.thumbnail?.source)
+    if (!pagina?.thumbnail) return null
+
+    const url = pagina.thumbnail.source
+    if (!SERVIDORES_DE_FOTOS.includes(new URL(url).hostname)) return null
+    return { url, archivo: pagina.pageimage ?? "", pagina: pagina.title, enlace: pagina.fullurl }
+}

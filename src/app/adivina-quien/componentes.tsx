@@ -18,7 +18,6 @@ const esconderSiFalla = (e: SyntheticEvent<HTMLImageElement>) => {
 
 // La foto del personaje encima de su emoji, llenando su caja
 function Foto({ p, tamanos }: { p: Personaje; tamanos: string }) {
-    if (!p.foto) return null
     return (
         <Image
             src={p.foto}
@@ -27,8 +26,9 @@ function Foto({ p, tamanos }: { p: Personaje; tamanos: string }) {
             unoptimized
             sizes={tamanos}
             draggable={false}
+            referrerPolicy="no-referrer"
             onError={esconderSiFalla}
-            className="object-cover"
+            className="object-cover object-[50%_22%]"
         />
     )
 }
@@ -92,12 +92,7 @@ export function Tarjeta({
                         {p.emoji}
                     </span>
                     <Foto p={p} tamanos="(min-width: 640px) 120px, 25vw" />
-                    <span
-                        className={clsx(
-                            "absolute inset-0 bg-gradient-to-b",
-                            p.foto ? "from-transparent via-transparent via-55% to-black/90" : "from-white/20 via-transparent to-black/75"
-                        )}
-                    />
+                    <span className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-55% to-black/90" />
                     <span className="flex-1" />
                     <span className="relative mx-1 mb-1.5 line-clamp-2 text-center text-[11px] font-semibold leading-[1.15] text-white sm:text-xs">
                         {p.nombre}
@@ -135,12 +130,7 @@ export function TarjetaGrande({ p }: { p: Personaje }) {
                 {p.emoji}
             </span>
             <Foto p={p} tamanos="176px" />
-            <span
-                className={clsx(
-                    "absolute inset-0 bg-gradient-to-b",
-                    p.foto ? "from-transparent via-transparent via-50% to-black/90" : "from-white/20 via-transparent to-black/80"
-                )}
-            />
+            <span className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-50% to-black/90" />
             <span className="flex-1" />
             <span className="relative px-3 pb-3 text-center">
                 <span className="block text-base font-bold leading-tight text-white">{p.nombre}</span>

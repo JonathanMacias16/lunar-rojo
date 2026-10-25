@@ -151,7 +151,7 @@ export type Personaje = {
     nombre: string
     emoji: string
     color: string
-    foto?: string // si no hay, se usa el emoji
+    foto: string // si no carga, queda el emoji
     de: string // "Título (año)"
     grupo: Grupo
     rasgos: ReadonlySet<Rasgo>
@@ -167,15 +167,14 @@ export const numeroDeTexto = (texto: string) => {
     return h >>> 0
 }
 
-// Las fotos las baja scripts/fotos-adivina-quien.mjs; la versión cambia si se cambia la foto
+// Las fotos guardadas en el sitio (scripts/fotos-adivina-quien.mjs) van primero; si no hay,
+// /adivina-quien/foto/<id> la busca en Wikipedia o Fandom. La versión cambia si cambia la foto.
 const fotos: Record<string, { archivo?: string }> = listaFotos
 const fotoDe = (id: string) => {
     const foto = fotos[id]
-    if (!foto) return undefined
+    if (!foto) return `/adivina-quien/foto/${id}`
     return `/adivina-quien/fotos/${id}.webp?v=${numeroDeTexto(foto.archivo ?? id).toString(36)}`
 }
-
-export const hayFotos = Object.keys(fotos).length > 0
 
 const p = (
     id: string,

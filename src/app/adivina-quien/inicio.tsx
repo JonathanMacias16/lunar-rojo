@@ -4,9 +4,9 @@ import { useState, useSyncExternalStore, type FormEvent } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { ChevronDown, Users, Wifi } from "lucide-react"
 import clsx from "clsx"
-import { Boton, fuenteTerror } from "./componentes"
+import { Boton, Ficha, Hoja, Tarjeta, TarjetaGrande, fuenteTerror } from "./componentes"
 import { limpiarCodigo, nuevoCodigo, type Partida } from "./juego"
-import { hayFotos, personajes } from "./personajes"
+import { personajes, type Personaje } from "./personajes"
 
 const CLAVE_NOMBRE = "adivina-quien:nombre"
 
@@ -51,6 +51,8 @@ export function Inicio({
     const [panelElegido, setPanel] = useState<Panel | undefined>(undefined)
     const [codigoEscrito, setCodigo] = useState<string | null>(null)
     const [verReglas, setVerReglas] = useState(false)
+    const [verTodos, setVerTodos] = useState(false)
+    const [ficha, setFicha] = useState<Personaje | null>(null)
 
     const nombre = (nombreEscrito ?? nombreGuardado).slice(0, 20)
     const panel = panelElegido === undefined ? (salaDelLink ? "unirse" : null) : panelElegido
@@ -266,11 +268,39 @@ export function Inicio({
                 </AnimatePresence>
             </section>
 
-            {hayFotos && (
-                <p className="mt-6 text-center text-[11px] leading-relaxed text-neutral-600">
-                    Fotos de Wikipedia y de los wikis de Fandom. Los personajes son de sus estudios y creadores.
-                </p>
-            )}
+            <section className="mt-3 rounded-2xl border border-white/10 bg-white/[0.03]">
+                <button
+                    type="button"
+                    onClick={() => setVerTodos((v) => !v)}
+                    aria-expanded={verTodos}
+                    className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-neutral-200 cursor-pointer"
+                >
+                    Ver los {personajes.length} personajes
+                    <ChevronDown className={clsx("size-4 transition-transform", verTodos && "rotate-180")} />
+                </button>
+                {verTodos && (
+                    <div className="grid grid-cols-4 gap-2 px-3 pb-4">
+                        {personajes.map((p) => (
+                            <Tarjeta key={p.id} p={p} alTocar={() => setFicha(p)} etiqueta={`Ver la ficha de ${p.nombre}`} />
+                        ))}
+                    </div>
+                )}
+            </section>
+
+            <p className="mt-6 text-center text-[11px] leading-relaxed text-neutral-600">
+                Fotos de Wikipedia y de los wikis de Fandom. Los personajes son de sus estudios y creadores.
+            </p>
+
+            <Hoja abierta={ficha !== null} alCerrar={() => setFicha(null)} titulo="Ficha del personaje">
+                {ficha && (
+                    <div className="text-center">
+                        <TarjetaGrande p={ficha} />
+                        <div className="mt-4 text-left">
+                            <Ficha p={ficha} />
+                        </div>
+                    </div>
+                )}
+            </Hoja>
         </div>
     )
 }
