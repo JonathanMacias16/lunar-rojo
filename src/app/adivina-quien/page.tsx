@@ -14,6 +14,7 @@ import {
     Send,
     Share2,
     Shuffle,
+    Users,
     Volume2,
     VolumeX,
     WifiOff,
@@ -140,7 +141,7 @@ export default function AdivinaQuienPage() {
     )
 }
 
-type HojaAbierta = "preguntar" | "adivinar" | "menu" | "secreto" | null
+type HojaAbierta = "preguntar" | "adivinar" | "menu" | "secreto" | "terminar" | null
 type Respuesta = { texto: string; rasgo?: Rasgo; si: boolean }
 
 function EnPartida({
@@ -361,7 +362,7 @@ function EnPartida({
     } else if (fase === "esperando-rival") {
         banner = { tono: "espera", texto: `Esperando a que ${rival} elija su personaje…` }
     } else if (local) {
-        banner = { tono: "info", texto: "Pregúntense por turnos en voz alta y bajen a los que ya no puedan ser." }
+        banner = { tono: "info", texto: "En persona: pregúntense por turnos en voz alta." }
     } else if (partida.pendiente?.tipo === "pregunta") {
         banner = { tono: "espera", texto: `Esperando la respuesta de ${rival}…`, detalle: `«${partida.pendiente.texto}»` }
     } else if (partida.pendiente?.tipo === "adivinar") {
@@ -422,6 +423,15 @@ function EnPartida({
                                 className="shrink-0 rounded-full bg-orange-500 px-3 py-1 text-xs font-bold text-[#1a0b02] cursor-pointer"
                             >
                                 Revancha
+                            </button>
+                        )}
+                        {local && fase === "jugando" && (
+                            <button
+                                type="button"
+                                onClick={() => setHoja("terminar")}
+                                className="shrink-0 rounded-full border border-white/15 px-3 py-1 text-xs font-semibold cursor-pointer"
+                            >
+                                ¿Te adivinaron?
                             </button>
                         )}
                         {banner.tono === "alerta" && (
@@ -611,6 +621,10 @@ function EnPartida({
 
             {menu}
 
+            <Hoja abierta={hoja === "terminar"} alCerrar={() => setHoja(null)} titulo="Cómo terminó la ronda">
+                <ContenidoTerminar rival={rival} alTerminar={terminarLocal} alVolver={() => setHoja(null)} />
+            </Hoja>
+
             {/* El rival hizo una pregunta propia: hay que contestarla */}
             <Hoja
                 abierta={partida.porResponder !== null && fase === "jugando" && !local}
@@ -717,7 +731,7 @@ function Encabezado({
                 ? "bg-rose-500"
                 : "bg-amber-400 animate-pulse"
     const estado = local
-        ? "Sin conexión"
+        ? "En persona"
         : conexion === "conectado"
             ? "Conectado"
             : conexion === "sin-servidor"
@@ -735,7 +749,7 @@ function Encabezado({
                         className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 font-mono text-xs tracking-widest text-neutral-200"
                         title={estado}
                     >
-                        {local ? <WifiOff className="size-3 text-neutral-400" /> : <span className={clsx("size-2 rounded-full", color)} />}
+                        {local ? <Users className="size-3 text-neutral-400" /> : <span className={clsx("size-2 rounded-full", color)} />}
                         <span className="sr-only">{estado}, código </span>
                         {partida.codigo}
                     </span>
@@ -878,11 +892,11 @@ function Sala({
                     </Boton>
                 )}
                 <Boton variante="secundario" onClick={alSinConexion}>
-                    <WifiOff className="size-5" /> Jugar sin conexión
+                    <Users className="size-5" /> Jugar en persona
                 </Boton>
                 <p className="text-xs text-neutral-500">
-                    Sin conexión, tu rival elige «Jugar sin conexión» con el código {partida.codigo} y les sale el mismo
-                    tablero.
+                    Si están juntos no hace falta internet: tu rival toca «Jugar en persona» con el código{" "}
+                    {partida.codigo} y les sale el mismo tablero.
                 </p>
                 <Boton variante="fantasma" className="mt-2" onClick={alCancelar}>
                     Cancelar
@@ -1255,23 +1269,7 @@ function ContenidoMenu({
     }
 
     if (paso === "terminar") {
-        return (
-            <div className="text-center">
-                <p className="text-lg font-semibold">¿Cómo terminó la ronda?</p>
-                <p className="mt-1 text-sm text-neutral-400">Si tú adivinaste, usa el botón Adivinar.</p>
-                <div className="mt-5 flex flex-col gap-2">
-                    <Boton variante="no" onClick={() => alTerminar(false, false, null)}>
-                        {mayus(rival)} adivinó mi personaje
-                    </Boton>
-                    <Boton variante="si" onClick={() => alTerminar(true, false, null)}>
-                        {mayus(rival)} se equivocó
-                    </Boton>
-                    <Boton variante="fantasma" onClick={() => setPaso("menu")}>
-                        Volver
-                    </Boton>
-                </div>
-            </div>
-        )
+        return <ContenidoTerminar rival={rival} alTerminar={alTerminar} alVolver={() => setPaso("menu")} />
     }
 
     return (
@@ -1281,7 +1279,7 @@ function ContenidoMenu({
             </p>
             <p className="mt-0.5 text-sm text-neutral-400">
                 Ronda {partida.ronda} · Tú {partida.marcador.yo} – {partida.marcador.rival} {mayus(rival)}
-                {local ? " · sin conexión" : ""}
+                {local ? " · en persona" : ""}
             </p>
 
             {partida.historial.length > 0 && (
@@ -1317,7 +1315,7 @@ function ContenidoMenu({
                 )}
                 {local && jugando && (
                     <Boton variante="secundario" onClick={() => setPaso("terminar")}>
-                        Mi rival ya adivinó…
+                        Mi rival ya trató de adivinar…
                     </Boton>
                 )}
                 {local && (
@@ -1430,6 +1428,35 @@ function ContenidoFinal({
                 </Boton>
                 <Boton variante="fantasma" onClick={alSalir}>
                     Salir
+                </Boton>
+            </div>
+        </div>
+    )
+}
+
+// En persona: cuando tu rival adivina (o falla) en su cel, aquí se anota
+function ContenidoTerminar({
+    rival,
+    alTerminar,
+    alVolver,
+}: {
+    rival: string
+    alTerminar: (gane: boolean, adivinoYo: boolean, intento: string | null) => void
+    alVolver: () => void
+}) {
+    return (
+        <div className="text-center">
+            <p className="text-lg font-semibold">¿{mayus(rival)} ya trató de adivinar?</p>
+            <p className="mt-1 text-sm text-neutral-400">Si el que adivina eres tú, usa el botón Adivinar.</p>
+            <div className="mt-5 flex flex-col gap-2">
+                <Boton variante="no" onClick={() => alTerminar(false, false, null)}>
+                    Sí, y adivinó mi personaje
+                </Boton>
+                <Boton variante="si" onClick={() => alTerminar(true, false, null)}>
+                    Sí, pero se equivocó
+                </Boton>
+                <Boton variante="fantasma" onClick={alVolver}>
+                    Todavía no
                 </Boton>
             </div>
         </div>

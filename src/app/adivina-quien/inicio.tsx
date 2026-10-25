@@ -2,7 +2,7 @@
 
 import { useState, useSyncExternalStore, type FormEvent } from "react"
 import { AnimatePresence, motion } from "motion/react"
-import { ChevronDown, Users, WifiOff } from "lucide-react"
+import { ChevronDown, Users, Wifi } from "lucide-react"
 import clsx from "clsx"
 import { Boton, fuenteTerror } from "./componentes"
 import { limpiarCodigo, nuevoCodigo, type Partida } from "./juego"
@@ -94,7 +94,7 @@ export function Inicio({
                         ? salaDelLink && codigoEscrito === null
                             ? "Te invitaron a esta partida:"
                             : "Escribe el código que le salió a tu rival:"
-                        : "Los dos escriben el mismo código y les sale el mismo tablero. Las preguntas se hacen en voz alta."}
+                        : "Uno toca «Inventar» y le dice el código al otro. Si los dos escriben el mismo código, les sale el mismo tablero."}
                 </p>
                 <div className="mt-3 flex gap-2">
                     <input
@@ -120,7 +120,7 @@ export function Inicio({
                     )}
                 </div>
                 <Boton type="submit" className="mt-3 w-full" disabled={!codigoCompleto}>
-                    {panel === "unirse" ? "Entrar" : "Jugar sin conexión"}
+                    {panel === "unirse" ? "Entrar" : "¡A jugar!"}
                 </Boton>
             </div>
         </motion.form>
@@ -195,29 +195,38 @@ export function Inicio({
                     </>
                 ) : (
                     <>
-                        <Boton onClick={() => conNombre(alCrear)} className="mt-1">
-                            <Users className="size-5" /> Crear partida
+                        <Boton onClick={() => abrir("local")} aria-expanded={panel === "local"} className="mt-1">
+                            <Users className="size-5" /> Jugar en persona
                         </Boton>
-                        <Boton
-                            variante="secundario"
-                            onClick={() => abrir("unirse")}
-                            aria-expanded={panel === "unirse"}
-                        >
-                            Unirme con un código
-                        </Boton>
-                        <AnimatePresence initial={false}>{panel && formulario}</AnimatePresence>
+                        <p className="-mt-1 text-center text-xs text-neutral-500">
+                            Cada quien en su cel, sin internet. Las preguntas se hacen en voz alta.
+                        </p>
+                        <AnimatePresence initial={false}>{panel === "local" && formulario}</AnimatePresence>
+
+                        <div className="mt-4 flex items-center gap-3 text-xs text-neutral-500">
+                            <span className="h-px flex-1 bg-white/10" />
+                            o conecten los dos cels
+                            <span className="h-px flex-1 bg-white/10" />
+                        </div>
+                        <p className="-mt-1 text-center text-xs text-neutral-500">
+                            Necesita internet, pero las preguntas de la lista se contestan solas y lleva los turnos.
+                        </p>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Boton variante="secundario" className="px-3" onClick={() => conNombre(alCrear)}>
+                                <Wifi className="size-5" /> Crear
+                            </Boton>
+                            <Boton
+                                variante="secundario"
+                                className="px-3"
+                                onClick={() => abrir("unirse")}
+                                aria-expanded={panel === "unirse"}
+                            >
+                                Unirme
+                            </Boton>
+                        </div>
+                        <AnimatePresence initial={false}>{panel === "unirse" && formulario}</AnimatePresence>
                     </>
                 )}
-
-
-                <button
-                    type="button"
-                    onClick={() => abrir("local")}
-                    aria-expanded={panel === "local"}
-                    className="mx-auto mt-1 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-white/5 hover:text-neutral-200 cursor-pointer"
-                >
-                    <WifiOff className="size-4" /> Jugar sin conexión
-                </button>
             </div>
 
             <section className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03]">
@@ -238,11 +247,14 @@ export function Inicio({
                             animate={{ height: "auto", opacity: 1, paddingBottom: 16 }}
                             exit={{ height: 0, opacity: 0, paddingBottom: 0 }}
                         >
-                            <li>Una persona crea la partida y le pasa el código a la otra.</li>
+                            <li>
+                                Los dos escriben el mismo código (en persona) o uno crea la partida y el otro se une
+                                (conectados).
+                            </li>
                             <li>Los dos tienen los mismos 24 personajes. Cada quien elige uno secreto.</li>
                             <li>
-                                Por turnos, hagan preguntas de sí o no: «¿Es mujer?», «¿Usa sombrero?». Las de la lista
-                                se contestan solas.
+                                Por turnos, hagan preguntas de sí o no: «¿Es mujer?», «¿Usa sombrero?». Para contestar,
+                                revisa la ficha de tu personaje.
                             </li>
                             <li>Toca a los personajes que ya no pueden ser para bajarlos.</li>
                             <li>
