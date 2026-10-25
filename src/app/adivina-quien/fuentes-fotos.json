@@ -114,16 +114,20 @@
         "w:Candyman (character)"
     ],
     "winifred": [
-        "disney:Winifred Sanderson"
+        "disney:Winifred Sanderson",
+        "disney?Winifred Sanderson"
     ],
     "mary-sanderson": [
-        "disney:Mary Sanderson"
+        "disney:Mary Sanderson",
+        "disney?Mary Sanderson"
     ],
     "sarah-sanderson": [
-        "disney:Sarah Sanderson"
+        "disney:Sarah Sanderson",
+        "disney?Sarah Sanderson"
     ],
     "binx": [
-        "disney:Thackery Binx"
+        "disney:Thackery Binx",
+        "disney?Thackery Binx"
     ],
     "ghostface": [
         "w:Ghostface (identity)"
@@ -201,7 +205,8 @@
     ],
     "zero": [
         "disney:Zero",
-        "disney?Zero ghost dog Nightmare Before Christmas"
+        "disney?Zero ghost dog Nightmare Before Christmas",
+        "disney?Zero ghost dog"
     ],
     "alcalde": [
         "disney:Mayor of Halloween Town",
@@ -262,7 +267,8 @@
         "heroes?La Muerte Book of Life"
     ],
     "xibalba": [
-        "villanos:Xibalba"
+        "villanos:Xibalba",
+        "villanos?Xibalba Book of Life"
     ],
     "hector": [
         "heroes:Héctor Rivera",
@@ -359,53 +365,77 @@
         "w:Bill Cipher"
     ],
     "kang-kodos": [
-        "w:Kang and Kodos"
+        "w:Kang and Kodos",
+        "simpson:Kang and Kodos"
     ],
     "bart-cuervo": [
         "simpson:The Raven",
-        "simpson?The Raven Treehouse of Horror"
+        "simpson?Bart raven Treehouse of Horror",
+        "simpson?The Raven segment"
     ],
     "bart-poderoso": [
         "simpson:Bart's Nightmare",
-        "simpson?Bart's Nightmare Treehouse of Horror II"
+        "simpson?Bart's Nightmare Treehouse of Horror II",
+        "simpson?Bart Zone Twilight Zone Treehouse"
     ],
     "muneco-krusty": [
+        "simpson:Krusty Doll",
         "simpson:Clown Without Pity",
-        "simpson?Krusty Doll evil"
+        "simpson?Krusty Doll evil switch"
     ],
     "king-homero": [
-        "simpson:King Homer"
+        "simpson:King Homer",
+        "simpson?King Homer giant ape",
+        "simpson?King Homer Treehouse of Horror III"
     ],
     "flanders-zombi": [
-        "simpson:Dial Z for Zombies"
+        "simpson:Zombie Flanders",
+        "simpson:Dial Z for Zombies",
+        "simpson?zombie Flanders"
     ],
     "flanders-diablo": [
         "simpson:Devil Flanders",
-        "simpson?Devil Flanders"
-    ],
-    "homero-dona": [
+        "simpson?Devil Flanders",
         "simpson:The Devil and Homer Simpson"
     ],
+    "homero-dona": [
+        "simpson:The Devil and Homer Simpson",
+        "simpson?Homer donut head",
+        "simpson?Devil and Homer Simpson"
+    ],
     "burns-dracula": [
-        "simpson:Bart Simpson's Dracula"
+        "simpson:Bart Simpson's Dracula",
+        "simpson?Burns Dracula vampire",
+        "simpson?Bart Simpson's Dracula"
     ],
     "homero-resplandor": [
-        "simpson:The Shinning"
+        "simpson:The Shinning",
+        "simpson?The Shinning Treehouse of Horror V",
+        "simpson?Shinning"
     ],
     "willie": [
-        "simpson:Nightmare on Evergreen Terrace"
+        "simpson:Nightmare on Evergreen Terrace",
+        "simpson?Groundskeeper Willie Nightmare on Evergreen Terrace",
+        "simpson?Nightmare Evergreen Terrace"
     ],
     "homero-3d": [
         "simpson:Homer³",
-        "simpson?Homer3 Treehouse of Horror VI"
+        "simpson:Homer3",
+        "simpson?Homer3 Treehouse of Horror VI",
+        "simpson?3D Homer"
     ],
     "hugo": [
-        "simpson:Hugo Simpson"
+        "simpson:Hugo Simpson",
+        "simpson?Hugo Simpson"
     ],
     "bart-mosca": [
-        "simpson:Fly vs. Fly"
+        "simpson:Fly vs. Fly",
+        "simpson?Fly vs. Fly",
+        "simpson?Bart fly Treehouse of Horror VIII"
     ],
     "marge-bruja": [
-        "simpson:Easy-Bake Coven"
+        "simpson:Easy-Bake Coven",
+        "simpson?Easy-Bake Coven",
+        "simpson?Marge witch Treehouse of Horror VIII"
     ]
 }

@@ -19,6 +19,34 @@ const SERVIDORES_DE_FOTOS = ["upload.wikimedia.org", "static.wikia.nocookie.net"
 
 export const AGENTE = "LunarRojoAdivinaQuien/1.0 (https://lunar-rojo.vercel.app/adivina-quien)"
 
+/** @param {string} api @param {URLSearchParams} p */
+const consultar = async (api, p) => {
+    p.set("format", "json")
+    p.set("formatversion", "2")
+    const r = await fetch(`${api}?${p}`, { headers: { "User-Agent": AGENTE } })
+    if (!r.ok) throw new Error(`${r.status} en ${new URL(api).hostname}`)
+    return r.json()
+}
+
+// Imágenes que no son el personaje (logos, íconos, banderitas…)
+const ES_ADORNO = /(\.svg$|logo|icon|ícono|flag|bandera|signature|firma|stub|wiki|placeholder|banner|navbox)/i
+
+// Si la página no tiene foto principal, la primera imagen que aparece en ella
+/** @param {string} api @param {string} titulo @param {number} ancho */
+const primeraImagen = async (api, titulo, ancho) => {
+    const datos = await consultar(api, new URLSearchParams({ action: "parse", page: titulo, prop: "images", redirects: "1" }))
+    /** @type {string[]} */
+    const imagenes = datos.parse?.images ?? []
+    const archivo = imagenes.find((x) => !ES_ADORNO.test(x))
+    if (!archivo) return null
+    const info = await consultar(
+        api,
+        new URLSearchParams({ action: "query", titles: `File:${archivo}`, prop: "imageinfo", iiprop: "url", iiurlwidth: String(ancho) })
+    )
+    const url = info.query?.pages?.[0]?.imageinfo?.[0]?.thumburl
+    return url ? { url, archivo } : null
+}
+
 /**
  * @param {string} fuente
  * @param {number} ancho ancho de la foto en píxeles (Wikipedia prefiere 250, 330, 500 o 960)
@@ -33,8 +61,6 @@ export async function buscarFoto(fuente, ancho) {
 
     const p = new URLSearchParams({
         action: "query",
-        format: "json",
-        formatversion: "2",
         redirects: "1",
         prop: "pageimages|info",
         inprop: "url",
@@ -50,14 +76,13 @@ export async function buscarFoto(fuente, ancho) {
         p.set("gsrnamespace", "0")
     }
 
-    const r = await fetch(`${api}?${p}`, { headers: { "User-Agent": AGENTE } })
-    if (!r.ok) throw new Error(`${r.status} en ${wiki}`)
-    const datos = await r.json()
-    /** @type {{ title: string, fullurl: string, pageimage?: string, thumbnail?: { source: string } } | undefined} */
-    const pagina = datos.query?.pages?.find((/** @type {any} */ x) => x.thumbnail?.source)
-    if (!pagina?.thumbnail) return null
+    const datos = await consultar(api, p)
+    /** @type {{ title: string, fullurl: string, missing?: boolean, pageimage?: string, thumbnail?: { source: string } } | undefined} */
+    const pagina = datos.query?.pages?.find((/** @type {any} */ x) => !x.missing)
+    if (!pagina) return null
 
-    const url = pagina.thumbnail.source
-    if (!SERVIDORES_DE_FOTOS.includes(new URL(url).hostname)) return null
-    return { url, archivo: pagina.pageimage ?? "", pagina: pagina.title, enlace: pagina.fullurl }
+    let foto = pagina.thumbnail ? { url: pagina.thumbnail.source, archivo: pagina.pageimage ?? "" } : null
+    if (!foto) foto = await primeraImagen(api, pagina.title, ancho)
+    if (!foto || !SERVIDORES_DE_FOTOS.includes(new URL(foto.url).hostname)) return null
+    return { ...foto, pagina: pagina.title, enlace: pagina.fullurl }
 }
