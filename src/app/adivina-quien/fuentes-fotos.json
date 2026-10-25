@@ -482,12 +482,12 @@
         "villanos:James (Twilight)"
     ],
     "victoria": [
-        "f.twilightsaga:Victoria",
-        "villanos:Victoria (Twilight)"
+        "villanos:Victoria (Twilight)",
+        "f.twilightsaga:Victoria"
     ],
     "laurent": [
-        "f.twilightsaga:Laurent",
-        "villanos:Laurent (Twilight)"
+        "villanos:Laurent (Twilight)",
+        "f.twilightsaga:Laurent"
     ],
     "aro": [
         "f.twilightsaga:Aro",
@@ -526,16 +526,19 @@
         "villanos:Riley Biers"
     ],
     "lock": [
-        "f.nightmarebeforechristmas:Lock",
-        "disney:Lock"
+        "f.timburton:Lock",
+        "disney:Lock (The Nightmare Before Christmas)",
+        "f.thenightmarebeforechristmas:Lock"
     ],
     "shock": [
-        "f.nightmarebeforechristmas:Shock",
-        "disney:Shock"
+        "f.timburton:Shock",
+        "disney:Shock (The Nightmare Before Christmas)",
+        "f.thenightmarebeforechristmas:Shock"
     ],
     "barrel": [
-        "f.nightmarebeforechristmas:Barrel",
-        "disney:Barrel"
+        "f.timburton:Barrel",
+        "disney:Barrel (The Nightmare Before Christmas)",
+        "f.thenightmarebeforechristmas:Barrel"
     ],
     "finkelstein": [
         "disney:Dr. Finkelstein",
@@ -554,12 +557,20 @@
         "f.nightmarebeforechristmas:Behemoth"
     ],
     "hombre-lobo-jack": [
-        "disney:Wolfman (The Nightmare Before Christmas)",
-        "f.nightmarebeforechristmas:Wolfman"
+        "disney:Wolfman",
+        "disney:Wolf Man (The Nightmare Before Christmas)",
+        "disney:Werewolf (The Nightmare Before Christmas)",
+        "f.timburton:Wolfman",
+        "f.timburton:Werewolf",
+        "disney:The Nightmare Before Christmas#wolfman|wolf man|werewolf"
     ],
     "vampiros-jack": [
-        "disney:Vampire Brothers",
-        "f.nightmarebeforechristmas:Vampire Brothers"
+        "disney:Vampires (The Nightmare Before Christmas)",
+        "disney:Vampire Brothers (The Nightmare Before Christmas)",
+        "disney:The Vampire Brothers",
+        "f.timburton:Vampire Brothers",
+        "f.timburton:Vampires",
+        "disney:The Nightmare Before Christmas#vampire"
     ],
     "arlequin": [
         "disney:Harlequin Demon",
@@ -570,21 +581,27 @@
         "f.nightmarebeforechristmas:Clown with the Tear-Away Face"
     ],
     "mr-hyde": [
-        "disney:Mr. Hyde (The Nightmare Before Christmas)",
-        "f.nightmarebeforechristmas:Mr. Hyde"
+        "disney:Mr. Hyde",
+        "disney:Mr. Hyde (character)",
+        "f.timburton:Mr. Hyde",
+        "disney:The Nightmare Before Christmas#hyde"
     ],
     "conejo-pascua": [
-        "disney:Easter Bunny (The Nightmare Before Christmas)",
-        "f.nightmarebeforechristmas:Easter Bunny"
+        "disney:Easter Bunny",
+        "disney:The Easter Bunny (The Nightmare Before Christmas)",
+        "f.timburton:Easter Bunny",
+        "disney:The Nightmare Before Christmas#easter|bunny"
     ],
     "pericles": [
-        "f.addamsfamily:Pugsley Addams",
-        "w:Pugsley Addams"
+        "w:Pugsley Addams",
+        "f.addamsfamily:Pugsley Addams#1964|weatherwax|tv series",
+        "f.addamsfamily:Pugsley Addams"
     ],
     "abuela-addams": [
+        "w:Grandmama Addams",
+        "f.addamsfamily:Grandmama Addams#1964|blossom|tv series",
         "f.addamsfamily:Grandmama Addams",
-        "f.addamsfamily:Grandmama",
-        "w:Grandmama"
+        "f.addamsfamily:Grandmama"
     ],
     "primo-eso": [
         "f.addamsfamily:Cousin Itt",
@@ -699,8 +716,9 @@
         "w:Velma Dinkley"
     ],
     "caballero-negro": [
-        "f.scoobydoo:Black Knight Ghost",
-        "villanos:Black Knight Ghost"
+        "f.scoobydoo:Black Knight Ghost#black knight ghost.png|black knight ghost.jpg|1969|where are you",
+        "villanos:Black Knight Ghost",
+        "f.scoobydoo:Black Knight Ghost"
     ],
     "capitan-cutler": [
         "f.scoobydoo:Ghost of Captain Cutler",
@@ -805,8 +823,13 @@
         "villanos:Benton Tarantella"
     ],
     "pollo-espacio": [
-        "f.courage:Chicken from Outer Space",
-        "villanos:Chicken from Outer Space"
+        "f.courage:Space Chicken",
+        "f.courage:Chicken from Outer Space (character)",
+        "f.courage:The Chicken from Outer Space (character)",
+        "villanos:Chicken from Outer Space (Courage the Cowardly Dog)",
+        "villanos:The Chicken from Outer Space",
+        "villanos:Space Chicken",
+        "f.courage:The Chicken from Outer Space#chicken"
     ],
     "gremlin-autobus": [
         "simpson:Terror at 5½ Feet#gremlin|terror"
@@ -819,30 +842,43 @@
         "simpson:Lard Lad"
     ],
     "maggie-alien": [
-        "simpson:Starship Poopers#maggie|starship|poopers"
+        "simpson:Starship Poopers (segment)#maggie|starship|alien",
+        "simpson:Treehouse of Horror IX#starship|maggie|poopers|alien baby"
     ],
     "tomy-daly": [
-        "simpson:The Terror of Tiny Toon#itchy|scratchy|tiny toon|terror"
+        "simpson:The Terror of Tiny Toon (segment)#itchy|scratchy|tiny toon",
+        "simpson:Treehouse of Horror IX#tiny toon|itchy|scratchy",
+        "simpson:Itchy & Scratchy",
+        "simpson:Itchy"
     ],
     "flanders-lobo": [
-        "simpson:I Know What You Diddily-Iddily-Did#wolf|werewolf|flanders|diddily"
+        "simpson:I Know What You Diddily-Iddily-Did (segment)#wolf|werewolf|flanders",
+        "simpson:Treehouse of Horror X#werewolf|wolf|diddily|flanders"
     ],
     "el-coleccionista": [
         "simpson:The Collector",
         "simpson:Desperately Xeeking Xena#collector|xeeking"
     ],
     "homero-fantasma": [
-        "simpson:G-G-Ghost D-D-Dad#ghost|homer|dad"
+        "simpson:G-G-Ghost D-D-Dad (segment)#ghost|homer",
+        "simpson:Treehouse of Horror XI#ghost|g-g|dad"
     ],
     "ultracasa": [
         "simpson:Ultrahouse 3000",
         "simpson:House of Whacks#ultrahouse|whacks"
     ],
     "homero-muerte": [
-        "simpson:Reaper Madness#reaper|death|madness|homer"
+        "simpson:Reaper Madness (segment)#reaper|death|homer",
+        "simpson:Treehouse of Horror XIV#reaper|grim|death|madness",
+        "simpson:Grim Reaper",
+        "simpson:Death"
     ],
     "frinkenstein": [
-        "simpson:Frinkenstein#frink|frinkenstein",
-        "simpson:Professor Frink Sr."
+        "simpson:Frinkenstein (segment)#frink|frinkenstein",
+        "simpson:Treehouse of Horror XIV#frinkenstein|frink",
+        "simpson:Professor Frink, Sr.",
+        "simpson:Professor Frink Sr",
+        "simpson:John Frink Sr.",
+        "simpson:Professor Frink#sr|father|dad"
     ]
 }
