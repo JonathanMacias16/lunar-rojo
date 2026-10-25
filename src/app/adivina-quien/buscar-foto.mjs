@@ -6,13 +6,14 @@
 //   "wiki?texto a buscar"          → la foto principal de la primera página que encuentre
 //   "wiki:Título#palabra|otra"     → de las imágenes de esa página, la primera cuyo nombre
 //                                    tenga alguna de esas palabras (para páginas sin foto principal)
+// "wiki" es uno de los de abajo o "f.<nombre>" para el wiki <nombre>.fandom.com
 
 // Dirección de la API de cada wiki
 const WIKIS = {
     w: "https://en.wikipedia.org/w/api.php",
     es: "https://es.wikipedia.org/w/api.php",
     villanos: "https://villains.fandom.com/api.php",
-    heroes: "https://heroes.fandom.com/api.php",
+    heroes: "https://hero.fandom.com/api.php",
     disney: "https://disney.fandom.com/api.php",
     simpson: "https://simpsons.fandom.com/api.php",
 }
@@ -69,10 +70,11 @@ const imagenConPalabra = async (api, titulo, palabras, ancho) => {
  * Si no hay foto, lanza un error que dice por qué.
  */
 export async function buscarFoto(fuente, ancho) {
-    const exacta = fuente.match(/^(\w+):(.+)$/)
-    const busqueda = fuente.match(/^(\w+)\?(.+)$/)
-    const [, wiki, resto] = exacta ?? busqueda ?? []
-    const api = WIKIS[/** @type {keyof typeof WIKIS} */ (wiki)]
+    const exacta = fuente.match(/^([\w.-]+):(.+)$/)
+    const busqueda = fuente.match(/^([\w.-]+)\?(.+)$/)
+    const [, wiki = "", resto = ""] = exacta ?? busqueda ?? []
+    const fandom = wiki.match(/^f\.([a-z0-9-]+)$/)
+    const api = fandom ? `https://${fandom[1]}.fandom.com/api.php` : WIKIS[/** @type {keyof typeof WIKIS} */ (wiki)]
     if (!api) throw new Error(`Fuente mal escrita: ${fuente}`)
     const [texto, palabras] = exacta ? resto.split("#") : [resto]
 
@@ -100,7 +102,7 @@ export async function buscarFoto(fuente, ancho) {
 
     const foto = palabras
         ? await imagenConPalabra(api, pagina.title, palabras, ancho)
-        : pagina.thumbnail
+        : pagina.thumbnail && !ES_ADORNO.test(pagina.pageimage ?? "")
             ? { url: pagina.thumbnail.source, archivo: pagina.pageimage ?? "" }
             : null
     if (!foto) {

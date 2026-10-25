@@ -7,7 +7,8 @@
         "w:Dracula (1931 English-language film)"
     ],
     "frankenstein": [
-        "w:Frankenstein's monster"
+        "villanos:Frankenstein's Monster (Universal)",
+        "w:Frankenstein (1931 film)"
     ],
     "momia": [
         "villanos:Imhotep (Universal)",
@@ -52,8 +53,7 @@
         "w:Jack Torrance"
     ],
     "gemelas-grady": [
-        "villanos:Grady Twins",
-        "villanos?Grady twins Shining"
+        "villanos:Grady Twins"
     ],
     "ash": [
         "w:Ash Williams"
@@ -62,12 +62,13 @@
         "w:Freddy Krueger"
     ],
     "gizmo": [
+        "f.gremlins:Gizmo",
         "heroes:Gizmo (Gremlins)",
-        "heroes?Gizmo Gremlins mogwai"
+        "heroes:Gizmo"
     ],
     "stripe": [
         "villanos:Stripe (Gremlins)",
-        "villanos?Stripe Gremlins"
+        "f.gremlins:Stripe"
     ],
     "pegajoso": [
         "w:Slimer"
@@ -82,14 +83,18 @@
         "w:Predator (fictional species)"
     ],
     "chucky": [
-        "w:Chucky"
+        "villanos:Chucky",
+        "villanos:Charles Lee Ray",
+        "w:Chucky (character)"
     ],
     "beetlejuice": [
-        "w:Beetlejuice (character)",
-        "villanos?Betelgeuse Beetlejuice"
+        "villanos:Betelgeuse (Beetlejuice)",
+        "villanos:Beetlejuice",
+        "w:Beetlejuice (character)"
     ],
     "lydia": [
-        "w:Lydia Deetz"
+        "heroes:Lydia Deetz",
+        "f.beetlejuice:Lydia Deetz"
     ],
     "edward-tijeras": [
         "heroes:Edward Scissorhands",
@@ -114,47 +119,46 @@
         "w:Candyman (character)"
     ],
     "winifred": [
-        "disney:Winifred Sanderson",
-        "disney?Winifred Sanderson"
+        "disney:Winifred Sanderson"
     ],
     "mary-sanderson": [
-        "disney:Mary Sanderson",
-        "disney?Mary Sanderson"
+        "disney:Mary Sanderson"
     ],
     "sarah-sanderson": [
-        "disney:Sarah Sanderson",
-        "disney?Sarah Sanderson"
+        "disney:Sarah Sanderson"
     ],
     "binx": [
-        "disney:Thackery Binx",
-        "disney?Thackery Binx"
+        "disney:Thackery Binx#cat",
+        "disney:Thackery Binx"
     ],
     "ghostface": [
-        "w:Ghostface (identity)"
+        "villanos:Ghostface",
+        "villanos:Ghostface (Scream)",
+        "f.scream:Ghostface"
     ],
     "jinete": [
-        "villanos:Headless Horseman (Sleepy Hollow)",
-        "villanos?Headless Horseman Sleepy Hollow 1999"
+        "villanos:Headless Horseman (Sleepy Hollow)"
     ],
     "creeper": [
         "w:The Creeper (Jeepers Creepers)"
     ],
     "samara": [
-        "w:Samara Morgan"
+        "villanos:Samara Morgan",
+        "f.thering:Samara Morgan"
     ],
     "billy-saw": [
         "w:Billy the Puppet"
     ],
     "sweeney": [
         "villanos:Sweeney Todd (Tim Burton)",
-        "villanos?Sweeney Todd Demon Barber Fleet Street"
+        "villanos:Sweeney Todd"
     ],
     "edward-cullen": [
         "w:Edward Cullen"
     ],
     "annabelle": [
-        "villanos:Annabelle (The Conjuring Universe)",
-        "villanos?Annabelle doll Conjuring"
+        "w:Annabelle (film)",
+        "villanos:Annabelle (The Conjuring Universe)#doll|annabelle"
     ],
     "babadook": [
         "villanos:The Babadook",
@@ -168,22 +172,21 @@
     ],
     "valak": [
         "villanos:Valak (The Conjuring Universe)",
-        "villanos?Valak demon nun"
+        "villanos:Valak"
     ],
     "llorona": [
-        "villanos:La Llorona (The Conjuring Universe)",
-        "villanos?La Llorona Curse"
+        "villanos:La Llorona (The Conjuring Universe)"
     ],
     "grabber": [
-        "villanos:The Grabber",
-        "villanos?Grabber Black Phone"
+        "villanos:The Grabber"
     ],
     "m3gan": [
         "villanos:M3GAN",
         "w:M3GAN"
     ],
     "fazbear": [
-        "w:Freddy Fazbear"
+        "villanos:Freddy Fazbear",
+        "f.freddy-fazbears-pizza:Freddy Fazbear"
     ],
     "bruja-blancanieves": [
         "w:Evil Queen (Disney)"
@@ -195,84 +198,92 @@
         "w:Ursula (The Little Mermaid)"
     ],
     "jack": [
-        "w:Jack Skellington"
+        "disney:Jack Skellington"
     ],
     "sally": [
-        "w:Sally (The Nightmare Before Christmas)"
+        "disney:Sally"
     ],
     "oogie": [
-        "w:Oogie Boogie"
+        "disney:Oogie Boogie"
     ],
     "zero": [
-        "disney:Zero",
-        "disney?Zero ghost dog Nightmare Before Christmas",
-        "disney?Zero ghost dog"
+        "disney:Zero"
     ],
     "alcalde": [
-        "disney:Mayor of Halloween Town",
-        "disney?Mayor Halloween Town"
+        "disney:Mayor of Halloween Town"
     ],
     "sulley": [
-        "w:James P. Sullivan"
+        "disney:James P. Sullivan"
     ],
     "mike": [
-        "w:Mike Wazowski"
+        "w:Mike Wazowski",
+        "disney:Mike Wazowski"
     ],
     "randall": [
-        "w:Randall Boggs"
+        "disney:Randall Boggs"
     ],
     "boo": [
-        "w:Boo (Monsters, Inc.)"
+        "disney:Boo"
     ],
     "emily": [
         "heroes:Emily (Corpse Bride)",
-        "heroes?Emily Corpse Bride"
+        "f.timburton:Emily",
+        "f.corpsebride:Emily"
     ],
     "victor": [
         "heroes:Victor Van Dort",
-        "heroes?Victor Van Dort Corpse Bride"
+        "f.timburton:Victor Van Dort",
+        "f.corpsebride:Victor Van Dort"
     ],
     "casa-monstruo": [
         "w:Monster House (film)"
     ],
     "nahuala": [
-        "es:La leyenda de la Nahuala"
+        "w:La Leyenda de la Nahuala",
+        "w:Legend of the Nahuala",
+        "villanos:La Nahuala"
     ],
     "coraline": [
         "heroes:Coraline Jones",
+        "f.coraline:Coraline Jones",
         "w:Coraline (film)"
     ],
     "otra-madre": [
-        "villanos:The Beldam",
-        "villanos?Beldam Other Mother Coraline"
+        "f.coraline:The Beldam",
+        "f.coraline:Other Mother",
+        "villanos:The Beldam#film|movie|2009|stop motion"
     ],
     "drac": [
-        "heroes:Dracula (Hotel Transylvania)",
-        "heroes?Dracula Hotel Transylvania"
+        "f.hoteltransylvania:Dracula",
+        "heroes:Count Dracula (Hotel Transylvania)",
+        "heroes:Dracula (Hotel Transylvania)"
     ],
     "mavis": [
+        "f.hoteltransylvania:Mavis",
         "heroes:Mavis Dracula",
-        "heroes?Mavis Hotel Transylvania"
+        "heroes:Mavis (Hotel Transylvania)"
     ],
     "norman-babcock": [
         "heroes:Norman Babcock",
+        "f.paranorman:Norman Babcock",
         "w:ParaNorman"
     ],
     "sparky": [
-        "heroes:Sparky (Frankenweenie)",
-        "heroes?Sparky Frankenweenie"
+        "disney:Sparky (Frankenweenie)",
+        "disney:Sparky"
     ],
     "la-muerte": [
         "heroes:La Muerte",
-        "heroes?La Muerte Book of Life"
+        "f.bookoflife:La Muerte",
+        "f.thebookoflife:La Muerte"
     ],
     "xibalba": [
-        "villanos:Xibalba",
-        "villanos?Xibalba Book of Life"
+        "villanos:Xibalba"
     ],
     "hector": [
-        "heroes:Héctor Rivera",
-        "heroes?Hector Coco Pixar"
+        "disney:Héctor",
+        "disney:Héctor Rivera",
+        "disney:Hector Rivera"
     ],
     "herman": [
         "w:Herman Munster"
@@ -284,7 +295,8 @@
         "w:Count von Count"
     ],
     "slappy": [
-        "w:Slappy the Dummy"
+        "villanos:Slappy the Dummy",
+        "f.goosebumps:Slappy the Dummy"
     ],
     "salem": [
         "w:Salem Saberhagen"
@@ -300,20 +312,18 @@
         "w:Eleven (Stranger Things)"
     ],
     "demogorgon": [
-        "villanos:Demogorgon (Stranger Things)",
-        "villanos?Demogorgon Stranger Things"
+        "villanos:Demogorgon (Stranger Things)"
     ],
     "vecna": [
-        "villanos:Vecna (Stranger Things)",
-        "villanos?Vecna Henry Creel"
+        "villanos:Vecna (Stranger Things)"
     ],
     "merlina": [
-        "heroes:Wednesday Addams (Wednesday)",
-        "w:Wednesday Addams"
+        "w:Wednesday (TV series)",
+        "f.addamsfamily:Wednesday Addams"
     ],
     "enid": [
-        "heroes:Enid Sinclair",
-        "heroes?Enid Sinclair Wednesday"
+        "f.addamsfamily:Enid Sinclair",
+        "heroes:Enid Sinclair"
     ],
     "dedos": [
         "w:Thing (The Addams Family)"
@@ -329,40 +339,45 @@
         "w:Count Duckula"
     ],
     "el": [
-        "w:Him (The Powerpuff Girls)"
+        "villanos:HIM",
+        "villanos:Him (The Powerpuff Girls)",
+        "f.powerpuffgirls:HIM"
     ],
     "coraje": [
         "heroes:Courage (Courage the Cowardly Dog)",
-        "w:Courage the Cowardly Dog"
+        "heroes:Courage",
+        "f.courage:Courage"
     ],
     "holandes": [
-        "villanos:Flying Dutchman (SpongeBob SquarePants)",
-        "villanos?Flying Dutchman SpongeBob"
+        "villanos:Flying Dutchman (SpongeBob SquarePants)"
     ],
     "zim": [
         "w:Zim (Invader Zim)"
     ],
     "puro-hueso": [
         "heroes:Grim (The Grim Adventures of Billy & Mandy)",
-        "heroes?Grim Billy Mandy"
+        "heroes:Grim (Billy & Mandy)",
+        "f.grim:Grim"
     ],
     "mandy": [
         "villanos:Mandy (The Grim Adventures of Billy & Mandy)",
-        "villanos?Mandy Grim Adventures"
+        "villanos:Mandy"
     ],
     "danny": [
-        "heroes:Danny Phantom (character)",
-        "heroes?Danny Phantom Fenton"
+        "heroes:Danny Phantom",
+        "f.dannyphantom:Danny Phantom",
+        "f.dannyphantom:Danny Fenton"
     ],
     "marceline": [
         "w:Marceline the Vampire Queen"
     ],
     "draculaura": [
-        "heroes:Draculaura",
-        "heroes?Draculaura Monster High"
+        "f.monsterhigh:Draculaura",
+        "heroes:Draculaura"
     ],
     "bill": [
-        "w:Bill Cipher"
+        "villanos:Bill Cipher",
+        "f.gravityfalls:Bill Cipher"
     ],
     "kang-kodos": [
         "w:Kang and Kodos",
@@ -373,13 +388,11 @@
         "simpson:Treehouse of Horror#raven"
     ],
     "bart-poderoso": [
-        "simpson:Treehouse of Horror II#bart's nightmare|jack|zone|bart",
-        "simpson?Bart's Nightmare segment Treehouse of Horror II"
+        "simpson:Treehouse of Horror II#bart's nightmare|jack|zone|bart"
     ],
     "muneco-krusty": [
         "simpson:Krusty Doll",
-        "simpson:Clown Without Pity#doll|krusty",
-        "simpson:Treehouse of Horror III#doll"
+        "simpson:Clown Without Pity#doll|krusty"
     ],
     "king-homero": [
         "simpson:King Homer (character)",
@@ -408,9 +421,6 @@
     ],
     "willie": [
         "simpson:Nightmare on Evergreen Terrace#willie|nightmare|evergreen|freddy|krueger",
-        "simpson:A Nightmare on Evergreen Terrace#willie|nightmare|evergreen",
-        "simpson:Treehouse of Horror VI#willie|nightmare|evergreen",
-        "simpson?Nightmare on Evergreen Terrace",
         "simpson:Groundskeeper Willie"
     ],
     "homero-3d": [
@@ -419,8 +429,7 @@
         "simpson:Treehouse of Horror VI#homer3|homer³|3d"
     ],
     "hugo": [
-        "simpson:Hugo Simpson",
-        "simpson?Hugo Simpson"
+        "simpson:Hugo Simpson"
     ],
     "bart-mosca": [
         "simpson:Fly vs. Fly#fly",

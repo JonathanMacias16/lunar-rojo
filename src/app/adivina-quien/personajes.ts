@@ -72,7 +72,6 @@ const fuentes = {
     beetlejuice: peli("Beetlejuice", 1988),
     manosTijera: peli("El joven manos de tijera", 1990),
     silencio: peli("El silencio de los inocentes", 1991),
-    addams: peli("Los locos Addams", 1991),
     candyman: peli("Candyman", 1992),
     abracadabra: peli("Abracadabra", 1993),
     scream: peli("Scream", 1996),
@@ -109,6 +108,7 @@ const fuentes = {
     coco: peliAnimada("Coco", 2017),
 
     // Series
+    addams: serie("Los locos Addams", 1964),
     munster: serie("La familia Monster", 1964),
     sesamo: serie("Plaza Sésamo", 1972),
     escalofrios: serie("Escalofríos", 1995),
@@ -233,10 +233,6 @@ export const personajes: Personaje[] = [
     p("lydia", "Lydia Deetz", "beetlejuice", "📷", "#27272a", "mujer", "humano", "joven"),
     p("edward-tijeras", "Edward Manos de Tijera", "manosTijera", "✂️", "#334155"),
     p("hannibal", "Hannibal Lecter", "silencio", "🍷", "#7f1d1d", "villano", "humano", "mascara"),
-    p("homero-addams", "Homero Addams", "addams", "🤵", "#292524", "humano"),
-    p("morticia", "Morticia Addams", "addams", "🥀", "#3b0764", "mujer", "humano"),
-    p("tio-lucas", "Tío Lucas", "addams", "💡", "#44403c", "humano"),
-    p("largo", "Largo", "addams", "🛎️", "#1e293b"),
     p("candyman", "Candyman", "candyman", "🐝", "#713f12", "villano", "arma"),
     p("winifred", "Winifred Sanderson", "abracadabra", "📕", "#6b21a8", "mujer", "villano", "humano"),
     p("mary-sanderson", "Mary Sanderson", "abracadabra", "👃", "#9a3412", "mujer", "villano", "humano"),
@@ -287,6 +283,10 @@ export const personajes: Personaje[] = [
     p("hector", "Héctor", "coco", "🎸", "#c2410c", "sombrero"),
 
     // Series
+    p("homero-addams", "Homero Addams", "addams", "🤵", "#292524", "humano"),
+    p("morticia", "Morticia Addams", "addams", "🥀", "#3b0764", "mujer", "humano"),
+    p("tio-lucas", "Tío Lucas", "addams", "💡", "#44403c", "humano"),
+    p("largo", "Largo", "addams", "🛎️", "#1e293b"),
     p("herman", "Herman Monster", "munster", "🥾", "#3f6212"),
     p("lily-monster", "Lily Monster", "munster", "🧛‍♀️", "#312e81", "mujer"),
     p("conde-contar", "El Conde Contar", "sesamo", "🔢", "#5b21b6"),
