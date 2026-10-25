@@ -39,7 +39,6 @@ for (const id of ids) {
     for (const fuente of fuentes) {
         try {
             const foto = await buscarFoto(fuente, 960)
-            if (!foto) continue
             const r = await fetch(foto.url, { headers: { "User-Agent": AGENTE } })
             if (!r.ok) throw new Error(`${r.status} al bajar la foto`)
             const salida = await sharp(Buffer.from(await r.arrayBuffer()), { animated: false })

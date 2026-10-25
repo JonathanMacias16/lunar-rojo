@@ -56,7 +56,8 @@ const imagenConPalabra = async (api, titulo, palabras, ancho) => {
 /**
  * @param {string} fuente
  * @param {number} ancho ancho de la foto en píxeles (Wikipedia prefiere 250, 330, 500 o 960)
- * @returns {Promise<{ url: string, archivo: string, pagina: string, enlace: string } | null>}
+ * @returns {Promise<{ url: string, archivo: string, pagina: string, enlace: string }>}
+ * Si no hay foto, lanza un error que dice por qué.
  */
 export async function buscarFoto(fuente, ancho) {
     const exacta = fuente.match(/^(\w+):(.+)$/)
@@ -86,13 +87,18 @@ export async function buscarFoto(fuente, ancho) {
     const datos = await consultar(api, p)
     /** @type {{ title: string, fullurl: string, missing?: boolean, pageimage?: string, thumbnail?: { source: string } } | undefined} */
     const pagina = datos.query?.pages?.find((/** @type {any} */ x) => !x.missing)
-    if (!pagina) return null
+    if (!pagina) throw new Error(exacta ? "no existe la página" : "la búsqueda no encontró nada")
 
     const foto = palabras
         ? await imagenConPalabra(api, pagina.title, palabras, ancho)
         : pagina.thumbnail
             ? { url: pagina.thumbnail.source, archivo: pagina.pageimage ?? "" }
             : null
-    if (!foto || !SERVIDORES_DE_FOTOS.includes(new URL(foto.url).hostname)) return null
+    if (!foto) {
+        throw new Error(
+            palabras ? `«${pagina.title}» no tiene imágenes con esas palabras` : `«${pagina.title}» no tiene foto principal`
+        )
+    }
+    if (!SERVIDORES_DE_FOTOS.includes(new URL(foto.url).hostname)) throw new Error(`foto en otro servidor: ${foto.url}`)
     return { ...foto, pagina: pagina.title, enlace: pagina.fullurl }
 }
