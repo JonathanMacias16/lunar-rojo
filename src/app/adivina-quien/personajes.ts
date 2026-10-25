@@ -237,7 +237,7 @@ export const personajes: Personaje[] = [
     p("winifred", "Winifred Sanderson", "abracadabra", "📕", "#6b21a8", "mujer", "villano", "humano"),
     p("mary-sanderson", "Mary Sanderson", "abracadabra", "👃", "#9a3412", "mujer", "villano", "humano"),
     p("sarah-sanderson", "Sarah Sanderson", "abracadabra", "🎶", "#be185d", "mujer", "villano", "humano"),
-    p("binx", "Binx", "abracadabra", "🐈‍⬛", "#292524", "animal"),
+    p("binx", "Thackery Binx", "abracadabra", "🐈‍⬛", "#292524", "animal"),
     p("ghostface", "Ghostface", "scream", "😱", "#18181b", "villano", "humano", "mascara", "arma"),
     p("jinete", "El Jinete sin Cabeza", "jineteSinCabeza", "🐎", "#312e81", "villano", "arma"),
     p("creeper", "El Creeper", "jeepers", "🚚", "#3f6212", "villano", "sombrero"),
