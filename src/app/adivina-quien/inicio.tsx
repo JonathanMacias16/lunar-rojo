@@ -6,7 +6,7 @@ import { ChevronDown, Users, Wifi } from "lucide-react"
 import clsx from "clsx"
 import { Boton, fuenteTerror } from "./componentes"
 import { limpiarCodigo, nuevoCodigo, type Partida } from "./juego"
-import { personajes } from "./personajes"
+import { hayFotos, personajes } from "./personajes"
 
 const CLAVE_NOMBRE = "adivina-quien:nombre"
 
@@ -265,6 +265,12 @@ export function Inicio({
                     )}
                 </AnimatePresence>
             </section>
+
+            {hayFotos && (
+                <p className="mt-6 text-center text-[11px] leading-relaxed text-neutral-600">
+                    Fotos de Wikipedia y de los wikis de Fandom. Los personajes son de sus estudios y creadores.
+                </p>
+            )}
         </div>
     )
 }

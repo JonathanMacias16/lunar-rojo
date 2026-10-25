@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, type ReactNode } from "react"
+import { useEffect, type ReactNode, type SyntheticEvent } from "react"
+import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { X } from "lucide-react"
 import clsx from "clsx"
@@ -9,6 +10,41 @@ import { preguntas, type Personaje } from "./personajes"
 export const fuenteTerror = { fontFamily: "var(--font-terror), var(--font-geist-sans), serif" }
 
 const caraOculta = { backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" } as const
+
+// Si la foto no carga, queda el emoji que está detrás
+const esconderSiFalla = (e: SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.style.display = "none"
+}
+
+// La foto del personaje encima de su emoji, llenando su caja
+function Foto({ p, tamanos }: { p: Personaje; tamanos: string }) {
+    if (!p.foto) return null
+    return (
+        <Image
+            src={p.foto}
+            alt=""
+            fill
+            unoptimized
+            sizes={tamanos}
+            draggable={false}
+            onError={esconderSiFalla}
+            className="object-cover"
+        />
+    )
+}
+
+// Cuadrito con la foto (o el emoji) para listas y la barra de abajo
+export function Retrato({ p, className }: { p: Personaje; className?: string }) {
+    return (
+        <span
+            className={clsx("relative grid shrink-0 place-items-center overflow-hidden leading-none", className)}
+            style={{ background: p.color }}
+        >
+            <span aria-hidden>{p.emoji}</span>
+            <Foto p={p} tamanos="64px" />
+        </span>
+    )
+}
 
 // Una tarjeta del tablero. Al bajarla se voltea como en el juego de mesa.
 export function Tarjeta({
@@ -52,11 +88,18 @@ export function Tarjeta({
                     className="absolute inset-0 flex flex-col overflow-hidden rounded-xl border border-white/15 shadow-[0_6px_14px_-6px_rgba(0,0,0,0.8)]"
                     style={{ ...caraOculta, background: p.color }}
                 >
-                    <span className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/75" />
-                    <span className="relative grid flex-1 place-items-center text-[clamp(1.7rem,8.5vw,2.6rem)] leading-none drop-shadow-[0_3px_4px_rgba(0,0,0,0.5)]">
+                    <span className="absolute inset-0 grid place-items-center pb-6 text-[clamp(1.7rem,8.5vw,2.6rem)] leading-none drop-shadow-[0_3px_4px_rgba(0,0,0,0.5)]">
                         {p.emoji}
                     </span>
-                    <span className="relative line-clamp-2 px-1 pb-1.5 text-center text-[11px] font-semibold leading-[1.15] text-white sm:text-xs">
+                    <Foto p={p} tamanos="(min-width: 640px) 120px, 25vw" />
+                    <span
+                        className={clsx(
+                            "absolute inset-0 bg-gradient-to-b",
+                            p.foto ? "from-transparent via-transparent via-55% to-black/90" : "from-white/20 via-transparent to-black/75"
+                        )}
+                    />
+                    <span className="flex-1" />
+                    <span className="relative mx-1 mb-1.5 line-clamp-2 text-center text-[11px] font-semibold leading-[1.15] text-white sm:text-xs">
                         {p.nombre}
                     </span>
                 </span>
@@ -88,10 +131,17 @@ export function TarjetaGrande({ p }: { p: Personaje }) {
             className="relative mx-auto flex aspect-[3/4] w-44 flex-col overflow-hidden rounded-2xl border border-white/20 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.9)]"
             style={{ background: p.color }}
         >
-            <span className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/80" />
-            <span className="relative grid flex-1 place-items-center text-7xl leading-none drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]">
+            <span className="absolute inset-0 grid place-items-center pb-12 text-7xl leading-none drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]">
                 {p.emoji}
             </span>
+            <Foto p={p} tamanos="176px" />
+            <span
+                className={clsx(
+                    "absolute inset-0 bg-gradient-to-b",
+                    p.foto ? "from-transparent via-transparent via-50% to-black/90" : "from-white/20 via-transparent to-black/80"
+                )}
+            />
+            <span className="flex-1" />
             <span className="relative px-3 pb-3 text-center">
                 <span className="block text-base font-bold leading-tight text-white">{p.nombre}</span>
                 <span className="mt-1 block text-[11px] leading-tight text-white/70">{p.de}</span>

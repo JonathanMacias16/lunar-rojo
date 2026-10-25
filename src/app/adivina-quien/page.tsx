@@ -20,7 +20,7 @@ import {
     WifiOff,
 } from "lucide-react"
 import clsx from "clsx"
-import { Boton, Festejo, Ficha, Fondo, Hoja, Tarjeta, TarjetaGrande, fuenteTerror } from "./componentes"
+import { Boton, Festejo, Ficha, Fondo, Hoja, Retrato, Tarjeta, TarjetaGrande, fuenteTerror } from "./componentes"
 import { Inicio } from "./inicio"
 import { abrirConexion, type EstadoConexion } from "./conexion"
 import { crearMotor, esMiTurno, faseDe, nombreDe, tableroDe, type Motor, type Partida } from "./juego"
@@ -499,12 +499,11 @@ function EnPartida({
                         aria-label="Ver tu personaje secreto"
                         className="flex shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] p-1.5 text-left transition-colors hover:bg-white/10 cursor-pointer min-[400px]:pr-3"
                     >
-                        <span
-                            className="grid size-10 place-items-center rounded-xl text-2xl"
-                            style={{ background: mostrarSecreto && secreto ? secreto.color : "#2a1636" }}
-                        >
-                            {mostrarSecreto && secreto ? secreto.emoji : "🤫"}
-                        </span>
+                        {mostrarSecreto && secreto ? (
+                            <Retrato p={secreto} className="size-10 rounded-xl text-2xl" />
+                        ) : (
+                            <span className="grid size-10 place-items-center rounded-xl bg-[#2a1636] text-2xl">🤫</span>
+                        )}
                         <span className="hidden leading-tight min-[400px]:block">
                             <span className="block text-[10px] uppercase tracking-wider text-neutral-500">Tu personaje</span>
                             <span className="block max-w-[7rem] truncate text-sm font-semibold">
@@ -639,12 +638,7 @@ function EnPartida({
                         </p>
                         {secreto && (
                             <div className="mx-auto mt-5 flex w-fit items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-2 pr-4 text-left">
-                                <span
-                                    className="grid size-12 place-items-center rounded-xl text-3xl"
-                                    style={{ background: secreto.color }}
-                                >
-                                    {secreto.emoji}
-                                </span>
+                                <Retrato p={secreto} className="size-12 rounded-xl text-3xl" />
                                 <span className="leading-tight">
                                     <span className="block text-[10px] uppercase tracking-wider text-neutral-500">
                                         Tu personaje
@@ -1195,10 +1189,10 @@ function ContenidoRespuesta({
                                 ? "Así que 1 de tus personajes ya no puede ser:"
                                 : `Así que ${descartables.length} de tus personajes ya no pueden ser:`}
                         </p>
-                        <div className="mx-auto mt-2 flex max-w-xs flex-wrap justify-center gap-1 text-2xl">
+                        <div className="mx-auto mt-3 flex max-w-xs flex-wrap justify-center gap-1.5">
                             {descartables.map((p) => (
                                 <span key={p.id} title={p.nombre}>
-                                    {p.emoji}
+                                    <Retrato p={p} className="size-10 rounded-lg text-xl" />
                                 </span>
                             ))}
                         </div>
@@ -1373,12 +1367,13 @@ function ContenidoFinal({
     const cartita = (p: Personaje | undefined, etiqueta: string) => (
         <div className="flex flex-1 flex-col items-center gap-1.5">
             <span className="text-[10px] uppercase tracking-wider text-neutral-500">{etiqueta}</span>
-            <span
-                className="grid size-16 place-items-center rounded-2xl border border-white/15 text-4xl"
-                style={{ background: p?.color ?? "#2a1636" }}
-            >
-                {p?.emoji ?? "❓"}
-            </span>
+            {p ? (
+                <Retrato p={p} className="size-16 rounded-2xl border border-white/15 text-4xl" />
+            ) : (
+                <span className="grid size-16 place-items-center rounded-2xl border border-white/15 bg-[#2a1636] text-4xl">
+                    ❓
+                </span>
+            )}
             <span className="text-xs font-semibold leading-tight">{p?.nombre ?? "No sabemos"}</span>
         </div>
     )

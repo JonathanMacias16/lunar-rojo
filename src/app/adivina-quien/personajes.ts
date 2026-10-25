@@ -1,4 +1,5 @@
 // Personajes del Adivina Quién de Halloween y lo que se puede preguntar de ellos.
+import listaFotos from "./fotos.json"
 
 // Lo que se pregunta. Los primeros cuatro salen de dónde viene el personaje;
 // los demás se anotan a mano en cada uno.
@@ -150,10 +151,31 @@ export type Personaje = {
     nombre: string
     emoji: string
     color: string
+    foto?: string // si no hay, se usa el emoji
     de: string // "Título (año)"
     grupo: Grupo
     rasgos: ReadonlySet<Rasgo>
 }
+
+// Número a partir de un texto (para que el mismo código dé el mismo tablero en los dos celulares)
+export const numeroDeTexto = (texto: string) => {
+    let h = 2166136261
+    for (let i = 0; i < texto.length; i++) {
+        h ^= texto.charCodeAt(i)
+        h = Math.imul(h, 16777619)
+    }
+    return h >>> 0
+}
+
+// Las fotos las baja scripts/fotos-adivina-quien.mjs; la versión cambia si se cambia la foto
+const fotos: Record<string, { archivo?: string }> = listaFotos
+const fotoDe = (id: string) => {
+    const foto = fotos[id]
+    if (!foto) return undefined
+    return `/adivina-quien/fotos/${id}.webp?v=${numeroDeTexto(foto.archivo ?? id).toString(36)}`
+}
+
+export const hayFotos = Object.keys(fotos).length > 0
 
 const p = (
     id: string,
@@ -175,7 +197,7 @@ const p = (
         : f.tipo === "pelicula"
             ? f.animado ? "animadas" : "peliculas"
             : f.animado ? "caricaturas" : "series"
-    return { id, nombre, emoji, color, de: `${f.titulo} (${f.anio})`, grupo, rasgos }
+    return { id, nombre, emoji, color, foto: fotoDe(id), de: `${f.titulo} (${f.anio})`, grupo, rasgos }
 }
 
 export const personajes: Personaje[] = [
@@ -322,16 +344,6 @@ export const tiene = (id: string, rasgo: Rasgo) => porId.get(id)?.rasgos.has(ras
 // ——— Tablero ———
 
 export const TAMANO_TABLERO = 24
-
-// Número a partir de un texto (para que el mismo código dé el mismo tablero en los dos celulares)
-export const numeroDeTexto = (texto: string) => {
-    let h = 2166136261
-    for (let i = 0; i < texto.length; i++) {
-        h ^= texto.charCodeAt(i)
-        h = Math.imul(h, 16777619)
-    }
-    return h >>> 0
-}
 
 const azarConSemilla = (semilla: number) => {
     let a = semilla
