@@ -369,73 +369,63 @@
         "simpson:Kang and Kodos"
     ],
     "bart-cuervo": [
-        "simpson:The Raven",
-        "simpson?Bart raven Treehouse of Horror",
-        "simpson?The Raven segment"
+        "simpson:The Raven#raven|bart",
+        "simpson:Treehouse of Horror#raven"
     ],
     "bart-poderoso": [
-        "simpson:Bart's Nightmare",
-        "simpson?Bart's Nightmare Treehouse of Horror II",
-        "simpson?Bart Zone Twilight Zone Treehouse"
+        "simpson:Bart's Nightmare#bart",
+        "simpson:Treehouse of Horror II#bart"
     ],
     "muneco-krusty": [
         "simpson:Krusty Doll",
-        "simpson:Clown Without Pity",
-        "simpson?Krusty Doll evil switch"
+        "simpson:Clown Without Pity#doll|krusty",
+        "simpson:Treehouse of Horror III#doll"
     ],
     "king-homero": [
-        "simpson:King Homer",
-        "simpson?King Homer giant ape",
-        "simpson?King Homer Treehouse of Horror III"
+        "simpson:King Homer (character)",
+        "simpson:King Homer (segment)#king|kong|ape",
+        "simpson:Treehouse of Horror III#king homer|kong"
     ],
     "flanders-zombi": [
         "simpson:Zombie Flanders",
-        "simpson:Dial Z for Zombies",
-        "simpson?zombie Flanders"
+        "simpson:Dial Z for Zombies#flanders|ned|zombie",
+        "simpson:Treehouse of Horror III#zombie"
     ],
     "flanders-diablo": [
         "simpson:Devil Flanders",
-        "simpson?Devil Flanders",
-        "simpson:The Devil and Homer Simpson"
+        "simpson:The Devil and Homer Simpson#devil|flanders"
     ],
     "homero-dona": [
-        "simpson:The Devil and Homer Simpson",
-        "simpson?Homer donut head",
-        "simpson?Devil and Homer Simpson"
+        "simpson:The Devil and Homer Simpson#donut|doughnut",
+        "simpson:Treehouse of Horror IV#donut|doughnut"
     ],
     "burns-dracula": [
-        "simpson:Bart Simpson's Dracula",
-        "simpson?Burns Dracula vampire",
-        "simpson?Bart Simpson's Dracula"
+        "simpson:Bart Simpson's Dracula#dracula|burns|vampire",
+        "simpson:Treehouse of Horror IV#dracula|vampire"
     ],
     "homero-resplandor": [
-        "simpson:The Shinning",
-        "simpson?The Shinning Treehouse of Horror V",
-        "simpson?Shinning"
+        "simpson:The Shinning#homer|shinning|axe|shining",
+        "simpson:Treehouse of Horror V#shinning|shining"
     ],
     "willie": [
-        "simpson:Nightmare on Evergreen Terrace",
-        "simpson?Groundskeeper Willie Nightmare on Evergreen Terrace",
-        "simpson?Nightmare Evergreen Terrace"
+        "simpson:Nightmare on Evergreen Terrace#willie",
+        "simpson:Treehouse of Horror VI#willie"
     ],
     "homero-3d": [
-        "simpson:Homer³",
-        "simpson:Homer3",
-        "simpson?Homer3 Treehouse of Horror VI",
-        "simpson?3D Homer"
+        "simpson:Homer³#homer|3d|cube",
+        "simpson:Homer3#homer|3d",
+        "simpson:Treehouse of Horror VI#homer3|homer³|3d"
     ],
     "hugo": [
         "simpson:Hugo Simpson",
         "simpson?Hugo Simpson"
     ],
     "bart-mosca": [
-        "simpson:Fly vs. Fly",
-        "simpson?Fly vs. Fly",
-        "simpson?Bart fly Treehouse of Horror VIII"
+        "simpson:Fly vs. Fly#fly",
+        "simpson:Treehouse of Horror VIII#fly"
     ],
     "marge-bruja": [
-        "simpson:Easy-Bake Coven",
-        "simpson?Easy-Bake Coven",
-        "simpson?Marge witch Treehouse of Horror VIII"
+        "simpson:Easy-Bake Coven#witch|coven|marge",
+        "simpson:Treehouse of Horror VIII#witch|coven"
     ]
 }

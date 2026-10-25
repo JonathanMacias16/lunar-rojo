@@ -1,8 +1,11 @@
 // Busca la foto principal de un personaje en Wikipedia o en un wiki de Fandom.
 // La usan la página (/adivina-quien/foto/<id>) y scripts/fotos-adivina-quien.mjs.
 //
-// Una fuente es "wiki:Título exacto" (la foto de esa página) o
-// "wiki?texto a buscar" (la foto de la primera página que encuentre).
+// Una fuente puede ser:
+//   "wiki:Título exacto"           → la foto principal de esa página
+//   "wiki?texto a buscar"          → la foto principal de la primera página que encuentre
+//   "wiki:Título#palabra|otra"     → de las imágenes de esa página, la primera cuyo nombre
+//                                    tenga alguna de esas palabras (para páginas sin foto principal)
 
 // Dirección de la API de cada wiki
 const WIKIS = {
@@ -29,15 +32,18 @@ const consultar = async (api, p) => {
 }
 
 // Imágenes que no son el personaje (logos, íconos, banderitas…)
-const ES_ADORNO = /(\.svg$|logo|icon|ícono|flag|bandera|signature|firma|stub|wiki|placeholder|banner|navbox)/i
+const ES_ADORNO = /(\.svg$|logo|icon|ícono|flag|bandera|signature|firma|stub|wiki|placeholder|banner|navbox|disambig)/i
 
-// Si la página no tiene foto principal, la primera imagen que aparece en ella
-/** @param {string} api @param {string} titulo @param {number} ancho */
-const primeraImagen = async (api, titulo, ancho) => {
+// De las imágenes de una página, la primera cuyo nombre tenga alguna de las palabras
+/** @param {string} api @param {string} titulo @param {string} palabras @param {number} ancho */
+const imagenConPalabra = async (api, titulo, palabras, ancho) => {
     const datos = await consultar(api, new URLSearchParams({ action: "parse", page: titulo, prop: "images", redirects: "1" }))
     /** @type {string[]} */
     const imagenes = datos.parse?.images ?? []
-    const archivo = imagenes.find((x) => !ES_ADORNO.test(x))
+    const buscadas = palabras.toLowerCase().split("|").filter(Boolean)
+    const archivo = imagenes.find(
+        (x) => !ES_ADORNO.test(x) && buscadas.some((palabra) => x.toLowerCase().replace(/_/g, " ").includes(palabra))
+    )
     if (!archivo) return null
     const info = await consultar(
         api,
@@ -55,9 +61,10 @@ const primeraImagen = async (api, titulo, ancho) => {
 export async function buscarFoto(fuente, ancho) {
     const exacta = fuente.match(/^(\w+):(.+)$/)
     const busqueda = fuente.match(/^(\w+)\?(.+)$/)
-    const [, wiki, texto] = exacta ?? busqueda ?? []
+    const [, wiki, resto] = exacta ?? busqueda ?? []
     const api = WIKIS[/** @type {keyof typeof WIKIS} */ (wiki)]
     if (!api) throw new Error(`Fuente mal escrita: ${fuente}`)
+    const [texto, palabras] = exacta ? resto.split("#") : [resto]
 
     const p = new URLSearchParams({
         action: "query",
@@ -81,8 +88,11 @@ export async function buscarFoto(fuente, ancho) {
     const pagina = datos.query?.pages?.find((/** @type {any} */ x) => !x.missing)
     if (!pagina) return null
 
-    let foto = pagina.thumbnail ? { url: pagina.thumbnail.source, archivo: pagina.pageimage ?? "" } : null
-    if (!foto) foto = await primeraImagen(api, pagina.title, ancho)
+    const foto = palabras
+        ? await imagenConPalabra(api, pagina.title, palabras, ancho)
+        : pagina.thumbnail
+            ? { url: pagina.thumbnail.source, archivo: pagina.pageimage ?? "" }
+            : null
     if (!foto || !SERVIDORES_DE_FOTOS.includes(new URL(foto.url).hostname)) return null
     return { ...foto, pagina: pagina.title, enlace: pagina.fullurl }
 }
