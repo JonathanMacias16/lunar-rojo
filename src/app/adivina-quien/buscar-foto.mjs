@@ -28,13 +28,28 @@ const servidorConfiable = (url) => {
 
 export const AGENTE = "LunarRojoAdivinaQuien/1.0 (https://lunar-rojo.vercel.app/adivina-quien)"
 
+// Un error que puede no repetirse (el wiki tardó, se cayó o pidió esperar).
+// Con estos no hay que recordar que el personaje no tiene foto.
+export class FallaPasajera extends Error {}
+
 /** @param {string} api @param {URLSearchParams} p */
 const consultar = async (api, p) => {
     p.set("format", "json")
     p.set("formatversion", "2")
-    const r = await fetch(`${api}?${p}`, { headers: { "User-Agent": AGENTE } })
-    if (!r.ok) throw new Error(`${r.status} en ${new URL(api).hostname}`)
-    return r.json()
+    const servidor = new URL(api).hostname
+    let r
+    try {
+        r = await fetch(`${api}?${p}`, { headers: { "User-Agent": AGENTE }, signal: AbortSignal.timeout(8000) })
+    } catch (e) {
+        throw new FallaPasajera(`no respondió ${servidor} (${e instanceof Error ? e.name : e})`)
+    }
+    if (r.status === 429 || r.status >= 500) throw new FallaPasajera(`${r.status} en ${servidor}`)
+    if (!r.ok) throw new Error(`${r.status} en ${servidor}`)
+    try {
+        return await r.json()
+    } catch {
+        throw new FallaPasajera(`respuesta cortada de ${servidor}`)
+    }
 }
 
 // Imágenes que no son el personaje (logos, íconos, banderitas…)

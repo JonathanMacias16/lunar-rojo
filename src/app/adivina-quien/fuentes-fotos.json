@@ -154,8 +154,11 @@
         "w:Billy the Puppet"
     ],
     "sweeney": [
+        "f.timburton:Sweeney Todd",
         "villanos:Sweeney Todd (Tim Burton)",
-        "villanos:Sweeney Todd"
+        "villanos:Sweeney Todd (2007)",
+        "f.sweeneytodd:Sweeney Todd",
+        "w:Sweeney Todd: The Demon Barber of Fleet Street (2007 film)"
     ],
     "edward-cullen": [
         "w:Edward Cullen"
@@ -182,7 +185,12 @@
         "villanos:La Llorona (The Conjuring Universe)"
     ],
     "grabber": [
-        "villanos:The Grabber"
+        "villanos:The Grabber (The Black Phone)",
+        "villanos:Grabber",
+        "villanos:The Grabber (Black Phone)",
+        "f.theblackphone:The Grabber",
+        "f.blackphone:The Grabber",
+        "w:The Black Phone"
     ],
     "m3gan": [
         "villanos:M3GAN",
