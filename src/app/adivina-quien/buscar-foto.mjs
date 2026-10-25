@@ -17,8 +17,13 @@ const WIKIS = {
     simpson: "https://simpsons.fandom.com/api.php",
 }
 
-// Solo se aceptan fotos de estos servidores
-const SERVIDORES_DE_FOTOS = ["upload.wikimedia.org", "static.wikia.nocookie.net"]
+// Solo se aceptan fotos de los servidores de Wikipedia y Fandom
+const SERVIDORES_DE_FOTOS = ["wikimedia.org", "nocookie.net"]
+/** @param {string} url */
+const servidorConfiable = (url) => {
+    const servidor = new URL(url).hostname
+    return SERVIDORES_DE_FOTOS.some((s) => servidor === s || servidor.endsWith(`.${s}`))
+}
 
 export const AGENTE = "LunarRojoAdivinaQuien/1.0 (https://lunar-rojo.vercel.app/adivina-quien)"
 
@@ -34,16 +39,20 @@ const consultar = async (api, p) => {
 // Imágenes que no son el personaje (logos, íconos, banderitas…)
 const ES_ADORNO = /(\.svg$|logo|icon|ícono|flag|bandera|signature|firma|stub|wiki|placeholder|banner|navbox|disambig)/i
 
-// De las imágenes de una página, la primera cuyo nombre tenga alguna de las palabras
+// De las imágenes de una página, la primera cuyo nombre tenga alguna de las palabras (en ese orden)
 /** @param {string} api @param {string} titulo @param {string} palabras @param {number} ancho */
 const imagenConPalabra = async (api, titulo, palabras, ancho) => {
     const datos = await consultar(api, new URLSearchParams({ action: "parse", page: titulo, prop: "images", redirects: "1" }))
     /** @type {string[]} */
     const imagenes = datos.parse?.images ?? []
-    const buscadas = palabras.toLowerCase().split("|").filter(Boolean)
-    const archivo = imagenes.find(
-        (x) => !ES_ADORNO.test(x) && buscadas.some((palabra) => x.toLowerCase().replace(/_/g, " ").includes(palabra))
-    )
+    const nombres = imagenes.filter((x) => !ES_ADORNO.test(x))
+    const normal = (/** @type {string} */ x) => x.toLowerCase().replace(/_/g, " ")
+    // La primera palabra manda: solo si ninguna imagen la tiene se prueba la siguiente
+    let archivo
+    for (const palabra of palabras.toLowerCase().split("|").filter(Boolean)) {
+        archivo = nombres.find((x) => normal(x).includes(palabra))
+        if (archivo) break
+    }
     if (!archivo) return null
     const info = await consultar(
         api,
@@ -99,6 +108,6 @@ export async function buscarFoto(fuente, ancho) {
             palabras ? `«${pagina.title}» no tiene imágenes con esas palabras` : `«${pagina.title}» no tiene foto principal`
         )
     }
-    if (!SERVIDORES_DE_FOTOS.includes(new URL(foto.url).hostname)) throw new Error(`foto en otro servidor: ${foto.url}`)
+    if (!servidorConfiable(foto.url)) throw new Error(`foto en otro servidor: ${foto.url}`)
     return { ...foto, pagina: pagina.title, enlace: pagina.fullurl }
 }

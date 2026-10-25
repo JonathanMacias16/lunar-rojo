@@ -373,8 +373,8 @@
         "simpson:Treehouse of Horror#raven"
     ],
     "bart-poderoso": [
-        "simpson:Bart's Nightmare#bart",
-        "simpson:Treehouse of Horror II#bart"
+        "simpson:Treehouse of Horror II#bart's nightmare|jack|zone|bart",
+        "simpson?Bart's Nightmare segment Treehouse of Horror II"
     ],
     "muneco-krusty": [
         "simpson:Krusty Doll",
@@ -387,9 +387,8 @@
         "simpson:Treehouse of Horror III#king homer|kong"
     ],
     "flanders-zombi": [
-        "simpson:Zombie Flanders",
         "simpson:Dial Z for Zombies#flanders|ned|zombie",
-        "simpson:Treehouse of Horror III#zombie"
+        "simpson:Treehouse of Horror III#flanders|zombie"
     ],
     "flanders-diablo": [
         "simpson:Devil Flanders",
@@ -408,8 +407,11 @@
         "simpson:Treehouse of Horror V#shinning|shining"
     ],
     "willie": [
-        "simpson:Nightmare on Evergreen Terrace#willie",
-        "simpson:Treehouse of Horror VI#willie"
+        "simpson:Nightmare on Evergreen Terrace#willie|nightmare|evergreen|freddy|krueger",
+        "simpson:A Nightmare on Evergreen Terrace#willie|nightmare|evergreen",
+        "simpson:Treehouse of Horror VI#willie|nightmare|evergreen",
+        "simpson?Nightmare on Evergreen Terrace",
+        "simpson:Groundskeeper Willie"
     ],
     "homero-3d": [
         "simpson:Homer³#homer|3d|cube",
