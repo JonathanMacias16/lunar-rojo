@@ -1,6 +1,6 @@
 // Reglas y estado de una partida. No sabe nada de React ni de la conexión:
 // recibe acciones, avisa cambios y deja los mensajes para el otro celular en `enviar`.
-import { numeroDeTexto, personaje, tableroPara, tiene, type Rasgo } from "./personajes"
+import { categoriaPorId, codigoPara, numeroDeTexto, personaje, tableroPara, tiene, type Rasgo } from "./personajes"
 
 export type Modo = "online" | "local"
 export type Rol = "anfitrion" | "invitado"
@@ -71,13 +71,8 @@ export type Aviso =
 const CLAVE = "adivina-quien:partida"
 const VIGENCIA = 12 * 60 * 60 * 1000 // una partida guardada sirve medio día
 
-const LETRAS = "ABCDEFGHJKLMNPQRSTUVWXYZ" // sin I ni O para no confundirlas
-
-export const nuevoCodigo = () => {
-    const numeros = new Uint32Array(4)
-    crypto.getRandomValues(numeros)
-    return Array.from(numeros, (n) => LETRAS[n % LETRAS.length]).join("")
-}
+// Código nuevo para una categoría (su primera letra dice cuál es)
+export const nuevoCodigo = (categoria?: string) => codigoPara(categoriaPorId(categoria))
 
 export const limpiarCodigo = (texto: string) =>
     texto
@@ -367,7 +362,8 @@ export function crearMotor() {
             }
         },
 
-        crear: (nombre: string) => cambiar(partidaNueva("online", "anfitrion", nuevoCodigo(), nombre)),
+        crear: (nombre: string, categoria?: string) =>
+            cambiar(partidaNueva("online", "anfitrion", nuevoCodigo(categoria), nombre)),
         unirse: (codigo: string, nombre: string) => cambiar(partidaNueva("online", "invitado", codigo, nombre)),
         jugarLocal: (codigo: string, nombre: string) => cambiar(partidaNueva("local", "anfitrion", codigo, nombre)),
         continuar: () => {

@@ -444,5 +444,405 @@
     "marge-bruja": [
         "simpson:Easy-Bake Coven#witch|coven|marge",
         "simpson:Treehouse of Horror VIII#witch|coven"
+    ],
+    "bella": [
+        "f.twilightsaga:Bella Swan",
+        "w:Bella Swan"
+    ],
+    "jacob": [
+        "f.twilightsaga:Jacob Black",
+        "w:Jacob Black"
+    ],
+    "alice": [
+        "f.twilightsaga:Alice Cullen"
+    ],
+    "carlisle": [
+        "f.twilightsaga:Carlisle Cullen"
+    ],
+    "esme": [
+        "f.twilightsaga:Esme Cullen"
+    ],
+    "rosalie": [
+        "f.twilightsaga:Rosalie Hale"
+    ],
+    "emmett": [
+        "f.twilightsaga:Emmett Cullen"
+    ],
+    "jasper": [
+        "f.twilightsaga:Jasper Hale"
+    ],
+    "charlie-swan": [
+        "f.twilightsaga:Charlie Swan"
+    ],
+    "billy-black": [
+        "f.twilightsaga:Billy Black"
+    ],
+    "james": [
+        "f.twilightsaga:James",
+        "villanos:James (Twilight)"
+    ],
+    "victoria": [
+        "f.twilightsaga:Victoria",
+        "villanos:Victoria (Twilight)"
+    ],
+    "laurent": [
+        "f.twilightsaga:Laurent",
+        "villanos:Laurent (Twilight)"
+    ],
+    "aro": [
+        "f.twilightsaga:Aro",
+        "villanos:Aro (Twilight)"
+    ],
+    "caius": [
+        "f.twilightsaga:Caius",
+        "villanos:Caius"
+    ],
+    "marcus": [
+        "f.twilightsaga:Marcus",
+        "villanos:Marcus (Twilight)"
+    ],
+    "jane": [
+        "f.twilightsaga:Jane",
+        "villanos:Jane (Twilight)"
+    ],
+    "alec": [
+        "f.twilightsaga:Alec",
+        "villanos:Alec (Twilight)"
+    ],
+    "renesmee": [
+        "f.twilightsaga:Renesmee Cullen"
+    ],
+    "seth": [
+        "f.twilightsaga:Seth Clearwater"
+    ],
+    "leah": [
+        "f.twilightsaga:Leah Clearwater"
+    ],
+    "sam-uley": [
+        "f.twilightsaga:Sam Uley"
+    ],
+    "riley": [
+        "f.twilightsaga:Riley Biers",
+        "villanos:Riley Biers"
+    ],
+    "lock": [
+        "f.nightmarebeforechristmas:Lock",
+        "disney:Lock"
+    ],
+    "shock": [
+        "f.nightmarebeforechristmas:Shock",
+        "disney:Shock"
+    ],
+    "barrel": [
+        "f.nightmarebeforechristmas:Barrel",
+        "disney:Barrel"
+    ],
+    "finkelstein": [
+        "disney:Dr. Finkelstein",
+        "f.nightmarebeforechristmas:Dr. Finkelstein"
+    ],
+    "santa-jack": [
+        "disney:Santa Claus (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Santa Claus"
+    ],
+    "igor": [
+        "disney:Igor (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Igor"
+    ],
+    "behemoth": [
+        "disney:Behemoth",
+        "f.nightmarebeforechristmas:Behemoth"
+    ],
+    "hombre-lobo-jack": [
+        "disney:Wolfman (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Wolfman"
+    ],
+    "vampiros-jack": [
+        "disney:Vampire Brothers",
+        "f.nightmarebeforechristmas:Vampire Brothers"
+    ],
+    "arlequin": [
+        "disney:Harlequin Demon",
+        "f.nightmarebeforechristmas:Harlequin Demon"
+    ],
+    "payaso-jack": [
+        "disney:Clown with the Tear-Away Face",
+        "f.nightmarebeforechristmas:Clown with the Tear-Away Face"
+    ],
+    "mr-hyde": [
+        "disney:Mr. Hyde (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Mr. Hyde"
+    ],
+    "conejo-pascua": [
+        "disney:Easter Bunny (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Easter Bunny"
+    ],
+    "pericles": [
+        "f.addamsfamily:Pugsley Addams",
+        "w:Pugsley Addams"
+    ],
+    "abuela-addams": [
+        "f.addamsfamily:Grandmama Addams",
+        "f.addamsfamily:Grandmama",
+        "w:Grandmama"
+    ],
+    "primo-eso": [
+        "f.addamsfamily:Cousin Itt",
+        "w:Cousin Itt"
+    ],
+    "xavier": [
+        "f.addamsfamily:Xavier Thorpe"
+    ],
+    "tyler": [
+        "f.addamsfamily:Tyler Galpin",
+        "villanos:Tyler Galpin"
+    ],
+    "bianca": [
+        "f.addamsfamily:Bianca Barclay"
+    ],
+    "weems": [
+        "f.addamsfamily:Larissa Weems"
+    ],
+    "thornhill": [
+        "f.addamsfamily:Marilyn Thornhill",
+        "villanos:Laurel Gates"
+    ],
+    "eugene": [
+        "f.addamsfamily:Eugene Ottinger"
+    ],
+    "ajax": [
+        "f.addamsfamily:Ajax Petropolus"
+    ],
+    "mike-wheeler": [
+        "f.strangerthings:Mike Wheeler",
+        "w:Mike Wheeler"
+    ],
+    "dustin": [
+        "f.strangerthings:Dustin Henderson",
+        "w:Dustin Henderson"
+    ],
+    "lucas": [
+        "f.strangerthings:Lucas Sinclair"
+    ],
+    "will": [
+        "f.strangerthings:Will Byers"
+    ],
+    "max": [
+        "f.strangerthings:Max Mayfield"
+    ],
+    "steve": [
+        "f.strangerthings:Steve Harrington",
+        "w:Steve Harrington"
+    ],
+    "nancy": [
+        "f.strangerthings:Nancy Wheeler"
+    ],
+    "jonathan": [
+        "f.strangerthings:Jonathan Byers"
+    ],
+    "hopper": [
+        "f.strangerthings:Jim Hopper",
+        "w:Jim Hopper"
+    ],
+    "joyce": [
+        "f.strangerthings:Joyce Byers"
+    ],
+    "robin": [
+        "f.strangerthings:Robin Buckley"
+    ],
+    "eddie": [
+        "f.strangerthings:Eddie Munson"
+    ],
+    "erica": [
+        "f.strangerthings:Erica Sinclair"
+    ],
+    "billy-hargrove": [
+        "f.strangerthings:Billy Hargrove"
+    ],
+    "murray": [
+        "f.strangerthings:Murray Bauman"
+    ],
+    "brenner": [
+        "f.strangerthings:Martin Brenner",
+        "villanos:Martin Brenner"
+    ],
+    "bob-newby": [
+        "f.strangerthings:Bob Newby"
+    ],
+    "barb": [
+        "f.strangerthings:Barbara Holland"
+    ],
+    "azotamentes": [
+        "f.strangerthings:Mind Flayer",
+        "villanos:Mind Flayer"
+    ],
+    "argyle": [
+        "f.strangerthings:Argyle"
+    ],
+    "kali": [
+        "f.strangerthings:Kali Prasad"
+    ],
+    "shaggy": [
+        "f.scoobydoo:Shaggy Rogers",
+        "w:Shaggy Rogers"
+    ],
+    "fred": [
+        "f.scoobydoo:Fred Jones",
+        "w:Fred Jones (Scooby-Doo)"
+    ],
+    "daphne": [
+        "f.scoobydoo:Daphne Blake",
+        "w:Daphne Blake"
+    ],
+    "velma": [
+        "f.scoobydoo:Velma Dinkley",
+        "w:Velma Dinkley"
+    ],
+    "caballero-negro": [
+        "f.scoobydoo:Black Knight Ghost",
+        "villanos:Black Knight Ghost"
+    ],
+    "capitan-cutler": [
+        "f.scoobydoo:Ghost of Captain Cutler",
+        "villanos:Ghost of Captain Cutler"
+    ],
+    "minero-49": [
+        "f.scoobydoo:Miner Forty-Niner",
+        "villanos:Miner Forty-Niner"
+    ],
+    "sombra-fantasma": [
+        "f.scoobydoo:Phantom Shadow",
+        "villanos:Phantom Shadow"
+    ],
+    "space-kook": [
+        "f.scoobydoo:Spooky Space Kook",
+        "villanos:Spooky Space Kook"
+    ],
+    "creeper-scooby": [
+        "f.scoobydoo:Creeper",
+        "villanos:Creeper (Scooby-Doo)"
+    ],
+    "payaso-fantasma": [
+        "f.scoobydoo:Ghost Clown",
+        "villanos:Ghost Clown"
+    ],
+    "brujo-scooby": [
+        "f.scoobydoo:Witch Doctor",
+        "villanos:Witch Doctor (Scooby-Doo)"
+    ],
+    "momia-ankha": [
+        "f.scoobydoo:Mummy of Ankha",
+        "villanos:Mummy of Ankha"
+    ],
+    "fantasma-nieve": [
+        "f.scoobydoo:Snow Ghost",
+        "villanos:Snow Ghost"
+    ],
+    "monstruo-brea": [
+        "f.scoobydoo:Tar Monster",
+        "villanos:Tar Monster"
+    ],
+    "charlie-robot": [
+        "f.scoobydoo:Charlie the Funland Robot",
+        "f.scoobydoo:Charlie"
+    ],
+    "fantasma-voltios": [
+        "f.scoobydoo:10,000 Volt Ghost",
+        "villanos:10,000 Volt Ghost"
+    ],
+    "muriel": [
+        "f.courage:Muriel Bagge"
+    ],
+    "eustace": [
+        "f.courage:Eustace Bagge",
+        "villanos:Eustace Bagge"
+    ],
+    "katz": [
+        "f.courage:Katz",
+        "villanos:Katz"
+    ],
+    "le-quack": [
+        "f.courage:Le Quack",
+        "villanos:Le Quack"
+    ],
+    "di-lung": [
+        "f.courage:Di Lung"
+    ],
+    "freaky-fred": [
+        "f.courage:Freaky Fred",
+        "villanos:Freaky Fred"
+    ],
+    "computadora": [
+        "f.courage:Computer"
+    ],
+    "ma-bagge": [
+        "f.courage:Ma Bagge"
+    ],
+    "rey-ramses": [
+        "f.courage:King Ramses",
+        "villanos:King Ramses"
+    ],
+    "zorro-cajun": [
+        "f.courage:Cajun Fox",
+        "villanos:Cajun Fox"
+    ],
+    "dr-vindaloo": [
+        "f.courage:Dr. Vindaloo"
+    ],
+    "gran-fusilli": [
+        "f.courage:The Great Fusilli",
+        "villanos:The Great Fusilli"
+    ],
+    "reina-charco": [
+        "f.courage:Queen of the Black Puddle",
+        "villanos:Queen of the Black Puddle"
+    ],
+    "shirley": [
+        "f.courage:Shirley the Medium"
+    ],
+    "benton": [
+        "f.courage:Benton Tarantella",
+        "villanos:Benton Tarantella"
+    ],
+    "pollo-espacio": [
+        "f.courage:Chicken from Outer Space",
+        "villanos:Chicken from Outer Space"
+    ],
+    "gremlin-autobus": [
+        "simpson:Terror at 5½ Feet#gremlin|terror"
+    ],
+    "skinner-cafeteria": [
+        "simpson:Nightmare Cafeteria#skinner|cafeteria|nightmare"
+    ],
+    "lard-lad": [
+        "simpson:Attack of the 50-Foot Eyesores#lard|eyesore|attack",
+        "simpson:Lard Lad"
+    ],
+    "maggie-alien": [
+        "simpson:Starship Poopers#maggie|starship|poopers"
+    ],
+    "tomy-daly": [
+        "simpson:The Terror of Tiny Toon#itchy|scratchy|tiny toon|terror"
+    ],
+    "flanders-lobo": [
+        "simpson:I Know What You Diddily-Iddily-Did#wolf|werewolf|flanders|diddily"
+    ],
+    "el-coleccionista": [
+        "simpson:The Collector",
+        "simpson:Desperately Xeeking Xena#collector|xeeking"
+    ],
+    "homero-fantasma": [
+        "simpson:G-G-Ghost D-D-Dad#ghost|homer|dad"
+    ],
+    "ultracasa": [
+        "simpson:Ultrahouse 3000",
+        "simpson:House of Whacks#ultrahouse|whacks"
+    ],
+    "homero-muerte": [
+        "simpson:Reaper Madness#reaper|death|madness|homer"
+    ],
+    "frinkenstein": [
+        "simpson:Frinkenstein#frink|frinkenstein",
+        "simpson:Professor Frink Sr."
     ]
 }

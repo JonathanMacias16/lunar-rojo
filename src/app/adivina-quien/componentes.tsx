@@ -5,7 +5,7 @@ import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { X } from "lucide-react"
 import clsx from "clsx"
-import { preguntas, type Personaje } from "./personajes"
+import { fichaDe, type Personaje } from "./personajes"
 
 export const fuenteTerror = { fontFamily: "var(--font-terror), var(--font-geist-sans), serif" }
 
@@ -144,7 +144,7 @@ export function TarjetaGrande({ p }: { p: Personaje }) {
 export function Ficha({ p }: { p: Personaje }) {
     return (
         <ul className="grid grid-cols-1 gap-1 text-sm">
-            {preguntas.map((q) => {
+            {fichaDe(p).map((q) => {
                 const si = p.rasgos.has(q.rasgo)
                 return (
                     <li

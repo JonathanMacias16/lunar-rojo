@@ -24,7 +24,7 @@ import { Boton, Festejo, Ficha, Fondo, Hoja, Retrato, Tarjeta, TarjetaGrande, fu
 import { Inicio } from "./inicio"
 import { abrirConexion, type EstadoConexion } from "./conexion"
 import { crearMotor, esMiTurno, faseDe, nombreDe, tableroDe, type Motor, type Partida } from "./juego"
-import { personaje, preguntas, tiene, type Personaje, type Rasgo } from "./personajes"
+import { categoriaDeCodigo, personaje, preguntasPara, tiene, type Personaje, type Rasgo } from "./personajes"
 import { sonidos } from "./sonidos"
 
 const sinPartida = () => null
@@ -121,9 +121,9 @@ export default function AdivinaQuienPage() {
             ) : (
                 <Inicio
                     guardada={guardada}
-                    alCrear={(nombre) => {
+                    alCrear={(nombre, categoria) => {
                         quitarSalaDelLink()
-                        motor.crear(nombre)
+                        motor.crear(nombre, categoria)
                     }}
                     alUnirse={(c, nombre) => {
                         quitarSalaDelLink()
@@ -170,6 +170,7 @@ function EnPartida({
     const conectado = local || conexion === "conectado"
     const puedeJugar = fase === "jugando" && miTurno && !partida.pendiente && !partida.porResponder && conectado
     const secreto = personaje(partida.secreto)
+    const categoria = categoriaDeCodigo(partida.codigo)
 
     const [hoja, setHoja] = useState<HojaAbierta>(null)
     const [respuesta, setRespuesta] = useState<Respuesta | null>(null)
@@ -380,6 +381,9 @@ function EnPartida({
             {encabezado}
 
             <div className="relative z-10 mx-auto max-w-3xl px-3 pb-36 pt-3">
+                <p className="mb-1 truncate text-xs text-purple-300/80">
+                    {categoria.emoji} {categoria.nombre}
+                </p>
                 <div className="mb-3 flex items-center justify-between gap-3 text-xs text-neutral-400">
                     <span>
                         Ronda {partida.ronda} ·{" "}
@@ -854,6 +858,9 @@ function Sala({
                 {partida.codigo}
             </button>
             <p className="mt-2 h-4 text-xs text-neutral-500">{copiado ? "¡Copiado!" : anfitrion ? "Toca para copiarlo" : ""}</p>
+            <p className="mt-3 text-sm text-purple-200/90">
+                {categoriaDeCodigo(partida.codigo).emoji} {categoriaDeCodigo(partida.codigo).nombre}
+            </p>
 
             {anfitrion && (
                 <Boton className="mt-4" onClick={compartir}>
@@ -922,7 +929,9 @@ function Elegir({ motor, partida, rival }: { motor: Motor; partida: Partida; riv
 
     return (
         <div className="relative z-10 mx-auto max-w-md px-5 pb-12 pt-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-purple-300/80">Ronda {partida.ronda}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-purple-300/80">
+                Ronda {partida.ronda} · {categoriaDeCodigo(partida.codigo).nombre}
+            </p>
             <h2 className="mt-1 text-[2.6rem] leading-none text-orange-500" style={fuenteTerror}>
                 Tu personaje secreto
             </h2>
@@ -956,7 +965,7 @@ function Elegir({ motor, partida, rival }: { motor: Motor; partida: Partida; riv
                 ¡Este es!
             </Boton>
             <p className="mt-4 text-xs text-neutral-500">
-                Sale de los 24 del tablero. En la barra de abajo lo puedes volver a ver cuando quieras.
+                Sale de los {tablero.length} del tablero. En la barra de abajo lo puedes volver a ver cuando quieras.
             </p>
 
             <Hoja abierta={lista} alCerrar={() => setLista(false)} titulo="Elige tu personaje">
@@ -1032,7 +1041,7 @@ function ContenidoPreguntar({
                     : "Estas se contestan solas con la ficha de su personaje."}
             </p>
             <div className="mt-4 grid grid-cols-2 gap-2">
-                {preguntas.map((q) => {
+                {preguntasPara(partida.codigo, partida.ronda).map((q) => {
                     const hecha = hechas.get(q.rasgo)
                     const yaSabe = hecha !== undefined && hecha !== null
                     return (

@@ -6,9 +6,18 @@ import { ChevronDown, Users, Wifi } from "lucide-react"
 import clsx from "clsx"
 import { Boton, Ficha, Hoja, Tarjeta, TarjetaGrande, fuenteTerror } from "./componentes"
 import { limpiarCodigo, nuevoCodigo, type Partida } from "./juego"
-import { personajes, type Personaje } from "./personajes"
+import {
+    categoriaDeCodigo,
+    categoriaPorId,
+    categorias,
+    personajes,
+    personajesDe,
+    type Categoria,
+    type Personaje,
+} from "./personajes"
 
 const CLAVE_NOMBRE = "adivina-quien:nombre"
+const CLAVE_CATEGORIA = "adivina-quien:categoria"
 
 const sinSuscripcion = () => () => { }
 const leerNombre = () => {
@@ -25,6 +34,20 @@ const guardarNombre = (nombre: string) => {
         // Sin almacenamiento se pide otra vez la próxima
     }
 }
+const leerCategoria = () => {
+    try {
+        return localStorage.getItem(CLAVE_CATEGORIA) ?? ""
+    } catch {
+        return ""
+    }
+}
+const guardarCategoria = (id: string) => {
+    try {
+        localStorage.setItem(CLAVE_CATEGORIA, id)
+    } catch {
+        // Sin almacenamiento se elige otra vez la próxima
+    }
+}
 // El código que viene en el link de invitación (?sala=ABCD)
 const leerSalaDelLink = () => limpiarCodigo(new URLSearchParams(window.location.search).get("sala") ?? "")
 
@@ -39,7 +62,7 @@ export function Inicio({
     alOlvidar,
 }: {
     guardada: Partida | null
-    alCrear: (nombre: string) => void
+    alCrear: (nombre: string, categoria: string) => void
     alUnirse: (codigo: string, nombre: string) => void
     alJugarLocal: (codigo: string, nombre: string) => void
     alContinuar: () => void
@@ -53,11 +76,17 @@ export function Inicio({
     const [verReglas, setVerReglas] = useState(false)
     const [verTodos, setVerTodos] = useState(false)
     const [ficha, setFicha] = useState<Personaje | null>(null)
+    const categoriaGuardada = useSyncExternalStore(sinSuscripcion, leerCategoria, () => "")
+    const [categoriaElegida, setCategoriaElegida] = useState<string | null>(null)
+    const [elegirCategoria, setElegirCategoria] = useState(false)
+    const categoria = categoriaPorId(categoriaElegida ?? categoriaGuardada)
+    const delaCategoria = personajesDe(categoria)
 
     const nombre = (nombreEscrito ?? nombreGuardado).slice(0, 20)
     const panel = panelElegido === undefined ? (salaDelLink ? "unirse" : null) : panelElegido
     const codigo = codigoEscrito ?? (panel === "unirse" ? salaDelLink : "")
     const codigoCompleto = codigo.length === 4
+    const categoriaDelCodigo = codigoCompleto ? categoriaDeCodigo(codigo) : null
 
     const conNombre = (accion: (n: string) => void) => {
         const limpio = nombre.trim()
@@ -70,6 +99,16 @@ export function Inicio({
         if (!codigoCompleto) return
         if (panel === "unirse") conNombre((n) => alUnirse(codigo, n))
         else conNombre((n) => alJugarLocal(codigo, n))
+    }
+
+    const crear = () => conNombre((n) => alCrear(n, categoria.id))
+
+    const cambiarCategoria = (c: Categoria) => {
+        setCategoriaElegida(c.id)
+        guardarCategoria(c.id)
+        setElegirCategoria(false)
+        // Si ya habían inventado un código, se cambia por uno de la categoría nueva
+        if (panel === "local" && codigoEscrito) setCodigo(nuevoCodigo(c.id))
     }
 
     const abrir = (cual: Panel) => {
@@ -96,7 +135,7 @@ export function Inicio({
                         ? salaDelLink && codigoEscrito === null
                             ? "Te invitaron a esta partida:"
                             : "Escribe el código que le salió a tu rival:"
-                        : "Uno toca «Inventar» y le dice el código al otro. Si los dos escriben el mismo código, les sale el mismo tablero."}
+                        : "Uno toca «Inventar» y le dice el código al otro. Si los dos escriben el mismo código, les sale el mismo tablero (el código ya trae la categoría)."}
                 </p>
                 <div className="mt-3 flex gap-2">
                     <input
@@ -115,13 +154,20 @@ export function Inicio({
                         <Boton
                             variante="secundario"
                             className="px-3 text-sm"
-                            onClick={() => setCodigo(nuevoCodigo())}
+                            onClick={() => setCodigo(nuevoCodigo(categoria.id))}
                         >
                             Inventar
                         </Boton>
                     )}
                 </div>
-                <Boton type="submit" className="mt-3 w-full" disabled={!codigoCompleto}>
+                <p className="mt-2 h-4 text-center text-xs text-neutral-400">
+                    {categoriaDelCodigo && (
+                        <>
+                            Personajes: {categoriaDelCodigo.emoji} {categoriaDelCodigo.nombre}
+                        </>
+                    )}
+                </p>
+                <Boton type="submit" className="mt-2 w-full" disabled={!codigoCompleto}>
                     {panel === "unirse" ? "Entrar" : "¡A jugar!"}
                 </Boton>
             </div>
@@ -188,10 +234,30 @@ export function Inicio({
                     />
                 </label>
 
+                {!invitacion && (
+                    <button
+                        type="button"
+                        onClick={() => setElegirCategoria(true)}
+                        className="flex w-full items-center gap-3 rounded-2xl border border-purple-400/25 bg-purple-500/[0.08] px-4 py-3 text-left transition-colors hover:bg-purple-500/[0.14] cursor-pointer"
+                    >
+                        <span className="text-2xl" aria-hidden>
+                            {categoria.emoji}
+                        </span>
+                        <span className="min-w-0 flex-1 leading-tight">
+                            <span className="block text-[11px] font-medium uppercase tracking-wider text-purple-300/80">
+                                Personajes
+                            </span>
+                            <span className="block truncate font-semibold text-neutral-100">{categoria.nombre}</span>
+                        </span>
+                        <span className="text-xs text-neutral-400">Cambiar</span>
+                        <ChevronDown className="size-4 text-neutral-400" />
+                    </button>
+                )}
+
                 {invitacion ? (
                     <>
                         {formulario}
-                        <Boton variante="secundario" onClick={() => conNombre(alCrear)}>
+                        <Boton variante="secundario" onClick={crear}>
                             Mejor crear otra partida
                         </Boton>
                     </>
@@ -214,7 +280,7 @@ export function Inicio({
                             Necesita internet, pero las preguntas de la lista se contestan solas y lleva los turnos.
                         </p>
                         <div className="grid grid-cols-2 gap-2">
-                            <Boton variante="secundario" className="px-3" onClick={() => conNombre(alCrear)}>
+                            <Boton variante="secundario" className="px-3" onClick={crear}>
                                 <Wifi className="size-5" /> Crear
                             </Boton>
                             <Boton
@@ -253,7 +319,11 @@ export function Inicio({
                                 Los dos escriben el mismo código (en persona) o uno crea la partida y el otro se une
                                 (conectados).
                             </li>
-                            <li>Los dos tienen los mismos 24 personajes. Cada quien elige uno secreto.</li>
+                            <li>
+                                Elijan con qué personajes jugar: al azar, por época o de un solo universo, como Los
+                                Simpson o Crepúsculo.
+                            </li>
+                            <li>Los dos tienen el mismo tablero. Cada quien elige un personaje secreto.</li>
                             <li>
                                 Por turnos, hagan preguntas de sí o no: «¿Es mujer?», «¿Usa sombrero?». Para contestar,
                                 revisa la ficha de tu personaje.
@@ -275,12 +345,17 @@ export function Inicio({
                     aria-expanded={verTodos}
                     className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-neutral-200 cursor-pointer"
                 >
-                    Ver los {personajes.length} personajes
+                    <span>
+                        Ver los personajes
+                        <span className="block text-xs font-normal text-neutral-400">
+                            {categoria.emoji} {categoria.nombre} · {delaCategoria.length}
+                        </span>
+                    </span>
                     <ChevronDown className={clsx("size-4 transition-transform", verTodos && "rotate-180")} />
                 </button>
                 {verTodos && (
                     <div className="grid grid-cols-4 gap-2 px-3 pb-4">
-                        {personajes.map((p) => (
+                        {delaCategoria.map((p) => (
                             <Tarjeta key={p.id} p={p} alTocar={() => setFicha(p)} etiqueta={`Ver la ficha de ${p.nombre}`} />
                         ))}
                     </div>
@@ -290,6 +365,44 @@ export function Inicio({
             <p className="mt-6 text-center text-[11px] leading-relaxed text-neutral-600">
                 Fotos de Wikipedia y de los wikis de Fandom. Los personajes son de sus estudios y creadores.
             </p>
+
+            <Hoja abierta={elegirCategoria} alCerrar={() => setElegirCategoria(false)} titulo="¿Con qué personajes?">
+                <p className="pr-8 text-lg font-semibold">¿Con qué personajes quieren jugar?</p>
+                {[
+                    { titulo: "Revueltos", lista: categorias.filter((c) => !c.universo) },
+                    { titulo: "De un solo universo", lista: categorias.filter((c) => c.universo) },
+                ].map((grupo) => (
+                    <div key={grupo.titulo} className="mt-4">
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">{grupo.titulo}</p>
+                        <div className="grid grid-cols-2 gap-2">
+                            {grupo.lista.map((c) => (
+                                <button
+                                    key={c.id}
+                                    type="button"
+                                    onClick={() => cambiarCategoria(c)}
+                                    aria-pressed={c.id === categoria.id}
+                                    className={clsx(
+                                        "flex min-h-16 items-start gap-2 rounded-xl border px-3 py-2.5 text-left transition-colors cursor-pointer",
+                                        c.id === categoria.id
+                                            ? "border-orange-400/70 bg-orange-500/15"
+                                            : "border-white/10 bg-white/[0.04] hover:bg-white/[0.08]"
+                                    )}
+                                >
+                                    <span className="text-xl leading-none" aria-hidden>
+                                        {c.emoji}
+                                    </span>
+                                    <span className="min-w-0 leading-tight">
+                                        <span className="block text-sm font-semibold text-neutral-100">{c.nombre}</span>
+                                        <span className="mt-0.5 block text-[11px] text-neutral-400">
+                                            {c.descripcion} · {personajesDe(c).length}
+                                        </span>
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </Hoja>
 
             <Hoja abierta={ficha !== null} alCerrar={() => setFicha(null)} titulo="Ficha del personaje">
                 {ficha && (
