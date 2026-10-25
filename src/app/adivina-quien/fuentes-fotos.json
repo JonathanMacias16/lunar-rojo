@@ -557,11 +557,9 @@
         "f.nightmarebeforechristmas:Behemoth"
     ],
     "hombre-lobo-jack": [
-        "disney:Wolfman",
-        "disney:Wolf Man (The Nightmare Before Christmas)",
-        "disney:Werewolf (The Nightmare Before Christmas)",
         "f.timburton:Wolfman",
         "f.timburton:Werewolf",
+        "disney:Wolfman",
         "disney:The Nightmare Before Christmas#wolfman|wolf man|werewolf"
     ],
     "vampiros-jack": [
@@ -581,15 +579,14 @@
         "f.nightmarebeforechristmas:Clown with the Tear-Away Face"
     ],
     "mr-hyde": [
-        "disney:Mr. Hyde",
-        "disney:Mr. Hyde (character)",
         "f.timburton:Mr. Hyde",
+        "disney:Mr. Hyde",
         "disney:The Nightmare Before Christmas#hyde"
     ],
     "conejo-pascua": [
-        "disney:Easter Bunny",
-        "disney:The Easter Bunny (The Nightmare Before Christmas)",
         "f.timburton:Easter Bunny",
+        "f.timburton:The Easter Bunny",
+        "disney:Easter Bunny",
         "disney:The Nightmare Before Christmas#easter|bunny"
     ],
     "pericles": [
@@ -598,10 +595,10 @@
         "f.addamsfamily:Pugsley Addams"
     ],
     "abuela-addams": [
-        "w:Grandmama Addams",
         "f.addamsfamily:Grandmama Addams#1964|blossom|tv series",
         "f.addamsfamily:Grandmama Addams",
-        "f.addamsfamily:Grandmama"
+        "f.addamsfamily:Grandmama",
+        "w:Grandmama Addams"
     ],
     "primo-eso": [
         "f.addamsfamily:Cousin Itt",
@@ -874,11 +871,9 @@
         "simpson:Death"
     ],
     "frinkenstein": [
-        "simpson:Frinkenstein (segment)#frink|frinkenstein",
+        "simpson:Frinkenstein (segment)#promo|frinkenstein.png|frink sr|frinkenstein|frink",
         "simpson:Treehouse of Horror XIV#frinkenstein|frink",
         "simpson:Professor Frink, Sr.",
-        "simpson:Professor Frink Sr",
-        "simpson:John Frink Sr.",
-        "simpson:Professor Frink#sr|father|dad"
+        "simpson:John Frink Sr."
     ]
 }
