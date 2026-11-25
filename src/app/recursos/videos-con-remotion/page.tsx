@@ -41,6 +41,13 @@ export default async function RecursoVideosRemotion() {
                         producto con Remotion: la interfaz animada en primer plano, la cámara sobre cada acción, keypoints cortos,
                         un tag sonoro de marca y una versión vertical para redes.
                     </p>
+                    <p className="mt-4 text-sm text-white/55">
+                        ¿No eres técnico?{" "}
+                        <a href="/recursos/crea-tu-video" className="text-red-400 underline decoration-red-400/40 underline-offset-4 hover:decoration-red-400">
+                            Usa la versión fácil, con un formulario que arma el prompt por ti
+                        </a>
+                        .
+                    </p>
                     <div className="mt-8 flex flex-wrap items-center gap-3">
                         <CopyButton text={promptText} label="Copiar prompt" />
                         <a
