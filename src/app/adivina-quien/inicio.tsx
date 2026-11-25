@@ -1,0 +1,419 @@
+"use client"
+
+import { useState, useSyncExternalStore, type FormEvent } from "react"
+import { AnimatePresence, motion } from "motion/react"
+import { ChevronDown, Users, Wifi } from "lucide-react"
+import clsx from "clsx"
+import { Boton, Ficha, Hoja, Tarjeta, TarjetaGrande, fuenteTerror } from "./componentes"
+import { limpiarCodigo, nuevoCodigo, type Partida } from "./juego"
+import {
+    categoriaDeCodigo,
+    categoriaPorId,
+    categorias,
+    personajes,
+    personajesDe,
+    type Categoria,
+    type Personaje,
+} from "./personajes"
+
+const CLAVE_NOMBRE = "adivina-quien:nombre"
+const CLAVE_CATEGORIA = "adivina-quien:categoria"
+
+const sinSuscripcion = () => () => { }
+const leerNombre = () => {
+    try {
+        return localStorage.getItem(CLAVE_NOMBRE) ?? ""
+    } catch {
+        return ""
+    }
+}
+const guardarNombre = (nombre: string) => {
+    try {
+        localStorage.setItem(CLAVE_NOMBRE, nombre)
+    } catch {
+        // Sin almacenamiento se pide otra vez la próxima
+    }
+}
+const leerCategoria = () => {
+    try {
+        return localStorage.getItem(CLAVE_CATEGORIA) ?? ""
+    } catch {
+        return ""
+    }
+}
+const guardarCategoria = (id: string) => {
+    try {
+        localStorage.setItem(CLAVE_CATEGORIA, id)
+    } catch {
+        // Sin almacenamiento se elige otra vez la próxima
+    }
+}
+// El código que viene en el link de invitación (?sala=ABCD)
+const leerSalaDelLink = () => limpiarCodigo(new URLSearchParams(window.location.search).get("sala") ?? "")
+
+type Panel = "unirse" | "local" | null
+
+export function Inicio({
+    guardada,
+    alCrear,
+    alUnirse,
+    alJugarLocal,
+    alContinuar,
+    alOlvidar,
+}: {
+    guardada: Partida | null
+    alCrear: (nombre: string, categoria: string) => void
+    alUnirse: (codigo: string, nombre: string) => void
+    alJugarLocal: (codigo: string, nombre: string) => void
+    alContinuar: () => void
+    alOlvidar: () => void
+}) {
+    const nombreGuardado = useSyncExternalStore(sinSuscripcion, leerNombre, () => "")
+    const salaDelLink = useSyncExternalStore(sinSuscripcion, leerSalaDelLink, () => "")
+    const [nombreEscrito, setNombreEscrito] = useState<string | null>(null)
+    const [panelElegido, setPanel] = useState<Panel | undefined>(undefined)
+    const [codigoEscrito, setCodigo] = useState<string | null>(null)
+    const [verReglas, setVerReglas] = useState(false)
+    const [verTodos, setVerTodos] = useState(false)
+    const [ficha, setFicha] = useState<Personaje | null>(null)
+    const categoriaGuardada = useSyncExternalStore(sinSuscripcion, leerCategoria, () => "")
+    const [categoriaElegida, setCategoriaElegida] = useState<string | null>(null)
+    const [elegirCategoria, setElegirCategoria] = useState(false)
+    const categoria = categoriaPorId(categoriaElegida ?? categoriaGuardada)
+    const delaCategoria = personajesDe(categoria)
+
+    const nombre = (nombreEscrito ?? nombreGuardado).slice(0, 20)
+    const panel = panelElegido === undefined ? (salaDelLink ? "unirse" : null) : panelElegido
+    const codigo = codigoEscrito ?? (panel === "unirse" ? salaDelLink : "")
+    const codigoCompleto = codigo.length === 4
+    const categoriaDelCodigo = codigoCompleto ? categoriaDeCodigo(codigo) : null
+
+    const conNombre = (accion: (n: string) => void) => {
+        const limpio = nombre.trim()
+        guardarNombre(limpio)
+        accion(limpio)
+    }
+
+    const enviarCodigo = (e: FormEvent) => {
+        e.preventDefault()
+        if (!codigoCompleto) return
+        if (panel === "unirse") conNombre((n) => alUnirse(codigo, n))
+        else conNombre((n) => alJugarLocal(codigo, n))
+    }
+
+    const crear = () => conNombre((n) => alCrear(n, categoria.id))
+
+    const cambiarCategoria = (c: Categoria) => {
+        setCategoriaElegida(c.id)
+        guardarCategoria(c.id)
+        setElegirCategoria(false)
+        // Si ya habían inventado un código, se cambia por uno de la categoría nueva
+        if (panel === "local" && codigoEscrito) setCodigo(nuevoCodigo(c.id))
+    }
+
+    const abrir = (cual: Panel) => {
+        setPanel(panel === cual ? null : cual)
+        setCodigo(null)
+    }
+
+    const puedeContinuar = guardada && !guardada.final
+    // Llegó con el link de invitación: lo principal es entrar, no crear otra
+    const invitacion = Boolean(salaDelLink) && panelElegido === undefined
+
+    const formulario = (
+        <motion.form
+            key={panel}
+            onSubmit={enviarCodigo}
+            className="overflow-hidden"
+            initial={invitacion ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+        >
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-sm text-neutral-300">
+                    {panel === "unirse"
+                        ? salaDelLink && codigoEscrito === null
+                            ? "Te invitaron a esta partida:"
+                            : "Escribe el código que le salió a tu rival:"
+                        : "Uno toca «Inventar» y le dice el código al otro. Si los dos escriben el mismo código, les sale el mismo tablero (el código ya trae la categoría)."}
+                </p>
+                <div className="mt-3 flex gap-2">
+                    <input
+                        value={codigo}
+                        onChange={(e) => setCodigo(limpiarCodigo(e.target.value))}
+                        placeholder="ABCD"
+                        aria-label="Código de la partida"
+                        autoCapitalize="characters"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        enterKeyHint="go"
+                        className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-center font-mono text-2xl font-bold uppercase tracking-[0.4em] text-orange-200 outline-none placeholder:text-neutral-700 focus:border-orange-500/60"
+                    />
+                    {panel === "local" && (
+                        <Boton
+                            variante="secundario"
+                            className="px-3 text-sm"
+                            onClick={() => setCodigo(nuevoCodigo(categoria.id))}
+                        >
+                            Inventar
+                        </Boton>
+                    )}
+                </div>
+                <p className="mt-2 h-4 text-center text-xs text-neutral-400">
+                    {categoriaDelCodigo && (
+                        <>
+                            Personajes: {categoriaDelCodigo.emoji} {categoriaDelCodigo.nombre}
+                        </>
+                    )}
+                </p>
+                <Boton type="submit" className="mt-2 w-full" disabled={!codigoCompleto}>
+                    {panel === "unirse" ? "Entrar" : "¡A jugar!"}
+                </Boton>
+            </div>
+        </motion.form>
+    )
+
+    return (
+        <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-10 pt-[max(2.5rem,env(safe-area-inset-top))]">
+            <header className="text-center">
+                <motion.div
+                    className="mb-2 text-5xl"
+                    animate={{ rotate: [0, -6, 6, -3, 0] }}
+                    transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 2 }}
+                    aria-hidden
+                >
+                    🎃
+                </motion.div>
+                <h1
+                    className="text-[3.25rem] leading-[0.95] text-orange-500 drop-shadow-[0_4px_18px_rgba(249,115,22,0.45)]"
+                    style={fuenteTerror}
+                >
+                    Adivina Quién
+                </h1>
+                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.35em] text-purple-300/80">
+                    Edición Halloween
+                </p>
+                <p className="mx-auto mt-4 max-w-xs text-sm text-neutral-400">
+                    {personajes.length} personajes de películas, series, caricaturas y La casita del horror. Para dos
+                    personas, cada quien en su cel.
+                </p>
+            </header>
+
+            <div className="mt-8 flex flex-col gap-3">
+                {puedeContinuar && (
+                    <div className="rounded-2xl border border-orange-500/30 bg-orange-500/[0.08] p-4">
+                        <p className="text-sm text-orange-100">
+                            Tienes una partida a medias
+                            {guardada.rivalNombre ? ` con ${guardada.rivalNombre}` : ""} · código{" "}
+                            <span className="font-mono font-bold tracking-widest">{guardada.codigo}</span>
+                        </p>
+                        <div className="mt-3 flex gap-2">
+                            <Boton className="flex-1" onClick={alContinuar}>
+                                Continuar
+                            </Boton>
+                            <Boton variante="fantasma" onClick={alOlvidar}>
+                                Descartar
+                            </Boton>
+                        </div>
+                    </div>
+                )}
+
+                <label className="block">
+                    <span className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-neutral-500">
+                        Tu nombre
+                    </span>
+                    <input
+                        value={nombre}
+                        onChange={(e) => setNombreEscrito(e.target.value)}
+                        maxLength={20}
+                        placeholder="Para que tu rival sepa quién eres"
+                        autoComplete="nickname"
+                        enterKeyHint="done"
+                        className="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-base text-neutral-100 outline-none transition-colors placeholder:text-neutral-500 focus:border-orange-500/60 focus:bg-white/[0.08]"
+                    />
+                </label>
+
+                {!invitacion && (
+                    <button
+                        type="button"
+                        onClick={() => setElegirCategoria(true)}
+                        className="flex w-full items-center gap-3 rounded-2xl border border-purple-400/25 bg-purple-500/[0.08] px-4 py-3 text-left transition-colors hover:bg-purple-500/[0.14] cursor-pointer"
+                    >
+                        <span className="text-2xl" aria-hidden>
+                            {categoria.emoji}
+                        </span>
+                        <span className="min-w-0 flex-1 leading-tight">
+                            <span className="block text-[11px] font-medium uppercase tracking-wider text-purple-300/80">
+                                Personajes
+                            </span>
+                            <span className="block truncate font-semibold text-neutral-100">{categoria.nombre}</span>
+                        </span>
+                        <span className="text-xs text-neutral-400">Cambiar</span>
+                        <ChevronDown className="size-4 text-neutral-400" />
+                    </button>
+                )}
+
+                {invitacion ? (
+                    <>
+                        {formulario}
+                        <Boton variante="secundario" onClick={crear}>
+                            Mejor crear otra partida
+                        </Boton>
+                    </>
+                ) : (
+                    <>
+                        <Boton onClick={() => abrir("local")} aria-expanded={panel === "local"} className="mt-1">
+                            <Users className="size-5" /> Jugar en persona
+                        </Boton>
+                        <p className="-mt-1 text-center text-xs text-neutral-500">
+                            Cada quien en su cel, sin internet. Las preguntas se hacen en voz alta.
+                        </p>
+                        <AnimatePresence initial={false}>{panel === "local" && formulario}</AnimatePresence>
+
+                        <div className="mt-4 flex items-center gap-3 text-xs text-neutral-500">
+                            <span className="h-px flex-1 bg-white/10" />
+                            o conecten los dos cels
+                            <span className="h-px flex-1 bg-white/10" />
+                        </div>
+                        <p className="-mt-1 text-center text-xs text-neutral-500">
+                            Necesita internet, pero las preguntas de la lista se contestan solas y lleva los turnos.
+                        </p>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Boton variante="secundario" className="px-3" onClick={crear}>
+                                <Wifi className="size-5" /> Crear
+                            </Boton>
+                            <Boton
+                                variante="secundario"
+                                className="px-3"
+                                onClick={() => abrir("unirse")}
+                                aria-expanded={panel === "unirse"}
+                            >
+                                Unirme
+                            </Boton>
+                        </div>
+                        <AnimatePresence initial={false}>{panel === "unirse" && formulario}</AnimatePresence>
+                    </>
+                )}
+            </div>
+
+            <section className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03]">
+                <button
+                    type="button"
+                    onClick={() => setVerReglas((v) => !v)}
+                    aria-expanded={verReglas}
+                    className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-neutral-200 cursor-pointer"
+                >
+                    ¿Cómo se juega?
+                    <ChevronDown className={clsx("size-4 transition-transform", verReglas && "rotate-180")} />
+                </button>
+                <AnimatePresence initial={false}>
+                    {verReglas && (
+                        <motion.ol
+                            className="list-decimal space-y-2 overflow-hidden pl-9 pr-4 text-sm text-neutral-400"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1, paddingBottom: 16 }}
+                            exit={{ height: 0, opacity: 0, paddingBottom: 0 }}
+                        >
+                            <li>
+                                Los dos escriben el mismo código (en persona) o uno crea la partida y el otro se une
+                                (conectados).
+                            </li>
+                            <li>
+                                Elijan con qué personajes jugar: al azar, por época o de un solo universo, como Los
+                                Simpson o Crepúsculo.
+                            </li>
+                            <li>Los dos tienen el mismo tablero. Cada quien elige un personaje secreto.</li>
+                            <li>
+                                Por turnos, hagan preguntas de sí o no: «¿Es mujer?», «¿Usa sombrero?». Para contestar,
+                                revisa la ficha de tu personaje.
+                            </li>
+                            <li>Toca a los personajes que ya no pueden ser para bajarlos.</li>
+                            <li>
+                                Cuando creas saber quién es, toca <b className="text-neutral-200">Adivinar</b>. Si
+                                aciertas ganas; si fallas, pierdes.
+                            </li>
+                        </motion.ol>
+                    )}
+                </AnimatePresence>
+            </section>
+
+            <section className="mt-3 rounded-2xl border border-white/10 bg-white/[0.03]">
+                <button
+                    type="button"
+                    onClick={() => setVerTodos((v) => !v)}
+                    aria-expanded={verTodos}
+                    className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-neutral-200 cursor-pointer"
+                >
+                    <span>
+                        Ver los personajes
+                        <span className="block text-xs font-normal text-neutral-400">
+                            {categoria.emoji} {categoria.nombre} · {delaCategoria.length}
+                        </span>
+                    </span>
+                    <ChevronDown className={clsx("size-4 transition-transform", verTodos && "rotate-180")} />
+                </button>
+                {verTodos && (
+                    <div className="grid grid-cols-4 gap-2 px-3 pb-4">
+                        {delaCategoria.map((p) => (
+                            <Tarjeta key={p.id} p={p} alTocar={() => setFicha(p)} etiqueta={`Ver la ficha de ${p.nombre}`} />
+                        ))}
+                    </div>
+                )}
+            </section>
+
+            <p className="mt-6 text-center text-[11px] leading-relaxed text-neutral-600">
+                Fotos de Wikipedia y de los wikis de Fandom. Los personajes son de sus estudios y creadores.
+            </p>
+
+            <Hoja abierta={elegirCategoria} alCerrar={() => setElegirCategoria(false)} titulo="¿Con qué personajes?">
+                <p className="pr-8 text-lg font-semibold">¿Con qué personajes quieren jugar?</p>
+                {[
+                    { titulo: "Revueltos", lista: categorias.filter((c) => !c.universo) },
+                    { titulo: "De un solo universo", lista: categorias.filter((c) => c.universo) },
+                ].map((grupo) => (
+                    <div key={grupo.titulo} className="mt-4">
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">{grupo.titulo}</p>
+                        <div className="grid grid-cols-2 gap-2">
+                            {grupo.lista.map((c) => (
+                                <button
+                                    key={c.id}
+                                    type="button"
+                                    onClick={() => cambiarCategoria(c)}
+                                    aria-pressed={c.id === categoria.id}
+                                    className={clsx(
+                                        "flex min-h-16 items-start gap-2 rounded-xl border px-3 py-2.5 text-left transition-colors cursor-pointer",
+                                        c.id === categoria.id
+                                            ? "border-orange-400/70 bg-orange-500/15"
+                                            : "border-white/10 bg-white/[0.04] hover:bg-white/[0.08]"
+                                    )}
+                                >
+                                    <span className="text-xl leading-none" aria-hidden>
+                                        {c.emoji}
+                                    </span>
+                                    <span className="min-w-0 leading-tight">
+                                        <span className="block text-sm font-semibold text-neutral-100">{c.nombre}</span>
+                                        <span className="mt-0.5 block text-[11px] text-neutral-400">
+                                            {c.descripcion} · {personajesDe(c).length}
+                                        </span>
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </Hoja>
+
+            <Hoja abierta={ficha !== null} alCerrar={() => setFicha(null)} titulo="Ficha del personaje">
+                {ficha && (
+                    <div className="text-center">
+                        <TarjetaGrande p={ficha} />
+                        <div className="mt-4 text-left">
+                            <Ficha p={ficha} />
+                        </div>
+                    </div>
+                )}
+            </Hoja>
+        </div>
+    )
+}

@@ -1,0 +1,887 @@
+{
+    "orlok": [
+        "w:Count Orlok"
+    ],
+    "dracula": [
+        "villanos:Count Dracula (Universal)",
+        "w:Dracula (1931 English-language film)"
+    ],
+    "frankenstein": [
+        "villanos:Frankenstein's Monster (Universal)",
+        "w:Frankenstein (1931 film)"
+    ],
+    "momia": [
+        "villanos:Imhotep (Universal)",
+        "w:Imhotep (The Mummy)",
+        "w:The Mummy (1932 film)"
+    ],
+    "novia": [
+        "w:Bride of Frankenstein"
+    ],
+    "hombre-lobo": [
+        "w:Wolf Man (character)",
+        "w:The Wolf Man (1941 film)"
+    ],
+    "criatura": [
+        "w:Gill-man"
+    ],
+    "norman-bates": [
+        "w:Norman Bates"
+    ],
+    "regan": [
+        "w:Regan MacNeil"
+    ],
+    "leatherface": [
+        "w:Leatherface"
+    ],
+    "carrie": [
+        "w:Carrie White"
+    ],
+    "damien": [
+        "w:Damien Thorn"
+    ],
+    "michael-myers": [
+        "w:Michael Myers (Halloween)"
+    ],
+    "xenomorfo": [
+        "w:Xenomorph"
+    ],
+    "jason": [
+        "w:Jason Voorhees"
+    ],
+    "jack-torrance": [
+        "w:Jack Torrance"
+    ],
+    "gemelas-grady": [
+        "villanos:Grady Daughters",
+        "villanos:The Grady Twins",
+        "f.stephenking:Grady Twins",
+        "f.stephenking:Grady Daughters",
+        "w:The Shining (film)#twins|grady"
+    ],
+    "ash": [
+        "w:Ash Williams"
+    ],
+    "freddy": [
+        "w:Freddy Krueger"
+    ],
+    "gizmo": [
+        "f.gremlins:Gizmo",
+        "heroes:Gizmo (Gremlins)",
+        "heroes:Gizmo"
+    ],
+    "stripe": [
+        "villanos:Stripe (Gremlins)",
+        "f.gremlins:Stripe"
+    ],
+    "pegajoso": [
+        "w:Slimer"
+    ],
+    "malvavisco": [
+        "w:Stay Puft Marshmallow Man"
+    ],
+    "pinhead": [
+        "w:Pinhead (Hellraiser)"
+    ],
+    "depredador": [
+        "w:Predator (fictional species)"
+    ],
+    "chucky": [
+        "villanos:Chucky",
+        "villanos:Charles Lee Ray",
+        "w:Chucky (character)"
+    ],
+    "beetlejuice": [
+        "villanos:Betelgeuse (Beetlejuice)",
+        "villanos:Beetlejuice",
+        "w:Beetlejuice (character)"
+    ],
+    "lydia": [
+        "heroes:Lydia Deetz",
+        "f.beetlejuice:Lydia Deetz"
+    ],
+    "edward-tijeras": [
+        "heroes:Edward Scissorhands",
+        "w:Edward Scissorhands"
+    ],
+    "hannibal": [
+        "w:Hannibal Lecter"
+    ],
+    "homero-addams": [
+        "w:Gomez Addams"
+    ],
+    "morticia": [
+        "w:Morticia Addams"
+    ],
+    "tio-lucas": [
+        "w:Uncle Fester"
+    ],
+    "largo": [
+        "w:Lurch (The Addams Family)"
+    ],
+    "candyman": [
+        "w:Candyman (character)"
+    ],
+    "winifred": [
+        "disney:Winifred Sanderson"
+    ],
+    "mary-sanderson": [
+        "disney:Mary Sanderson"
+    ],
+    "sarah-sanderson": [
+        "disney:Sarah Sanderson"
+    ],
+    "binx": [
+        "disney:Thackery Binx#cat",
+        "disney:Thackery Binx"
+    ],
+    "ghostface": [
+        "villanos:Ghostface",
+        "villanos:Ghostface (Scream)",
+        "f.scream:Ghostface"
+    ],
+    "jinete": [
+        "villanos:Headless Horseman (Sleepy Hollow)"
+    ],
+    "creeper": [
+        "w:The Creeper (Jeepers Creepers)"
+    ],
+    "samara": [
+        "villanos:Samara Morgan",
+        "f.thering:Samara Morgan"
+    ],
+    "billy-saw": [
+        "w:Billy the Puppet"
+    ],
+    "sweeney": [
+        "f.timburton:Sweeney Todd",
+        "villanos:Sweeney Todd (Tim Burton)",
+        "villanos:Sweeney Todd (2007)",
+        "f.sweeneytodd:Sweeney Todd",
+        "w:Sweeney Todd: The Demon Barber of Fleet Street (2007 film)"
+    ],
+    "edward-cullen": [
+        "w:Edward Cullen"
+    ],
+    "annabelle": [
+        "w:Annabelle (film)",
+        "villanos:Annabelle (The Conjuring Universe)#doll|annabelle"
+    ],
+    "babadook": [
+        "villanos:The Babadook",
+        "w:The Babadook"
+    ],
+    "art": [
+        "w:Art the Clown"
+    ],
+    "pennywise": [
+        "w:It (character)"
+    ],
+    "valak": [
+        "villanos:Valak (The Conjuring Universe)",
+        "villanos:Valak"
+    ],
+    "llorona": [
+        "villanos:La Llorona (The Conjuring Universe)"
+    ],
+    "grabber": [
+        "villanos:The Grabber (The Black Phone)",
+        "villanos:Grabber",
+        "villanos:The Grabber (Black Phone)",
+        "f.theblackphone:The Grabber",
+        "f.blackphone:The Grabber",
+        "w:The Black Phone"
+    ],
+    "m3gan": [
+        "villanos:M3GAN",
+        "w:M3GAN"
+    ],
+    "fazbear": [
+        "villanos:Freddy Fazbear",
+        "f.freddy-fazbears-pizza:Freddy Fazbear"
+    ],
+    "bruja-blancanieves": [
+        "w:Evil Queen (Disney)"
+    ],
+    "malefica": [
+        "w:Maleficent"
+    ],
+    "ursula": [
+        "w:Ursula (The Little Mermaid)"
+    ],
+    "jack": [
+        "disney:Jack Skellington"
+    ],
+    "sally": [
+        "disney:Sally"
+    ],
+    "oogie": [
+        "disney:Oogie Boogie"
+    ],
+    "zero": [
+        "disney:Zero"
+    ],
+    "alcalde": [
+        "disney:Mayor of Halloween Town"
+    ],
+    "sulley": [
+        "disney:James P. Sullivan"
+    ],
+    "mike": [
+        "w:Mike Wazowski",
+        "disney:Mike Wazowski"
+    ],
+    "randall": [
+        "disney:Randall Boggs"
+    ],
+    "boo": [
+        "disney:Boo"
+    ],
+    "emily": [
+        "heroes:Emily (Corpse Bride)",
+        "f.timburton:Emily",
+        "f.corpsebride:Emily"
+    ],
+    "victor": [
+        "heroes:Victor Van Dort",
+        "f.timburton:Victor Van Dort",
+        "f.corpsebride:Victor Van Dort"
+    ],
+    "casa-monstruo": [
+        "w:Monster House (film)"
+    ],
+    "nahuala": [
+        "w:La Leyenda de la Nahuala",
+        "w:Legend of the Nahuala",
+        "villanos:La Nahuala"
+    ],
+    "coraline": [
+        "w:Coraline (film)",
+        "f.coraline:Coraline Jones"
+    ],
+    "otra-madre": [
+        "f.coraline:The Beldam",
+        "f.coraline:Other Mother",
+        "villanos:The Beldam#film|movie|2009|stop motion"
+    ],
+    "drac": [
+        "f.hoteltransylvania:Dracula",
+        "heroes:Count Dracula (Hotel Transylvania)",
+        "heroes:Dracula (Hotel Transylvania)"
+    ],
+    "mavis": [
+        "f.hoteltransylvania:Mavis",
+        "heroes:Mavis Dracula",
+        "heroes:Mavis (Hotel Transylvania)"
+    ],
+    "norman-babcock": [
+        "heroes:Norman Babcock",
+        "f.paranorman:Norman Babcock",
+        "w:ParaNorman"
+    ],
+    "sparky": [
+        "disney:Sparky (Frankenweenie)",
+        "disney:Sparky"
+    ],
+    "la-muerte": [
+        "heroes:La Muerte",
+        "f.bookoflife:La Muerte",
+        "f.thebookoflife:La Muerte"
+    ],
+    "xibalba": [
+        "villanos:Xibalba"
+    ],
+    "hector": [
+        "disney:Héctor",
+        "disney:Héctor Rivera",
+        "disney:Hector Rivera"
+    ],
+    "herman": [
+        "w:Herman Munster"
+    ],
+    "lily-monster": [
+        "w:Lily Munster"
+    ],
+    "conde-contar": [
+        "w:Count von Count"
+    ],
+    "slappy": [
+        "villanos:Slappy the Dummy",
+        "f.goosebumps:Slappy the Dummy"
+    ],
+    "salem": [
+        "w:Salem Saberhagen"
+    ],
+    "sabrina": [
+        "heroes:Sabrina Spellman (1996)",
+        "w:Sabrina Spellman"
+    ],
+    "buffy": [
+        "w:Buffy Summers"
+    ],
+    "once": [
+        "w:Eleven (Stranger Things)"
+    ],
+    "demogorgon": [
+        "villanos:Demogorgon (Stranger Things)"
+    ],
+    "vecna": [
+        "villanos:Vecna (Stranger Things)"
+    ],
+    "merlina": [
+        "heroes:Wednesday Addams (Wednesday)",
+        "heroes:Wednesday Addams (2022)",
+        "f.addamsfamily:Wednesday Addams#jenna|netflix|2022|tv series",
+        "heroes:Wednesday Addams",
+        "w:Wednesday Addams"
+    ],
+    "enid": [
+        "f.addamsfamily:Enid Sinclair",
+        "heroes:Enid Sinclair"
+    ],
+    "dedos": [
+        "w:Thing (The Addams Family)"
+    ],
+    "gasparin": [
+        "w:Casper the Friendly Ghost"
+    ],
+    "scooby": [
+        "w:Scooby-Doo (character)"
+    ],
+    "patula": [
+        "heroes:Count Duckula",
+        "w:Count Duckula"
+    ],
+    "el": [
+        "villanos:HIM",
+        "villanos:Him (The Powerpuff Girls)",
+        "f.powerpuffgirls:HIM"
+    ],
+    "coraje": [
+        "heroes:Courage (Courage the Cowardly Dog)",
+        "heroes:Courage",
+        "f.courage:Courage"
+    ],
+    "holandes": [
+        "villanos:Flying Dutchman (SpongeBob SquarePants)"
+    ],
+    "zim": [
+        "w:Zim (Invader Zim)"
+    ],
+    "puro-hueso": [
+        "heroes:Grim (The Grim Adventures of Billy & Mandy)",
+        "heroes:Grim (Billy & Mandy)",
+        "f.grim:Grim"
+    ],
+    "mandy": [
+        "villanos:Mandy (The Grim Adventures of Billy & Mandy)",
+        "villanos:Mandy"
+    ],
+    "danny": [
+        "heroes:Danny Phantom",
+        "f.dannyphantom:Danny Phantom",
+        "f.dannyphantom:Danny Fenton"
+    ],
+    "marceline": [
+        "w:Marceline the Vampire Queen"
+    ],
+    "draculaura": [
+        "f.monsterhigh:Draculaura",
+        "heroes:Draculaura"
+    ],
+    "bill": [
+        "villanos:Bill Cipher",
+        "f.gravityfalls:Bill Cipher"
+    ],
+    "kang-kodos": [
+        "w:Kang and Kodos",
+        "simpson:Kang and Kodos"
+    ],
+    "bart-cuervo": [
+        "simpson:The Raven#raven|bart",
+        "simpson:Treehouse of Horror#raven"
+    ],
+    "bart-poderoso": [
+        "simpson:Treehouse of Horror II#bart's nightmare|jack|zone|bart"
+    ],
+    "muneco-krusty": [
+        "simpson:Krusty Doll",
+        "simpson:Clown Without Pity#doll|krusty"
+    ],
+    "king-homero": [
+        "simpson:King Homer (character)",
+        "simpson:King Homer (segment)#king|kong|ape",
+        "simpson:Treehouse of Horror III#king homer|kong"
+    ],
+    "flanders-zombi": [
+        "simpson:Dial Z for Zombies#flanders|ned|zombie",
+        "simpson:Treehouse of Horror III#flanders|zombie"
+    ],
+    "flanders-diablo": [
+        "simpson:Devil Flanders",
+        "simpson:The Devil and Homer Simpson#devil|flanders"
+    ],
+    "homero-dona": [
+        "simpson:The Devil and Homer Simpson#donut|doughnut",
+        "simpson:Treehouse of Horror IV#donut|doughnut"
+    ],
+    "burns-dracula": [
+        "simpson:Bart Simpson's Dracula#dracula|burns|vampire",
+        "simpson:Treehouse of Horror IV#dracula|vampire"
+    ],
+    "homero-resplandor": [
+        "simpson:The Shinning#homer|shinning|axe|shining",
+        "simpson:Treehouse of Horror V#shinning|shining"
+    ],
+    "willie": [
+        "simpson:Nightmare on Evergreen Terrace#willie|nightmare|evergreen|freddy|krueger",
+        "simpson:Groundskeeper Willie"
+    ],
+    "homero-3d": [
+        "simpson:Homer³#homer|3d|cube",
+        "simpson:Homer3#homer|3d",
+        "simpson:Treehouse of Horror VI#homer3|homer³|3d"
+    ],
+    "hugo": [
+        "simpson:Hugo Simpson"
+    ],
+    "bart-mosca": [
+        "simpson:Fly vs. Fly#fly",
+        "simpson:Treehouse of Horror VIII#fly"
+    ],
+    "marge-bruja": [
+        "simpson:Easy-Bake Coven#witch|coven|marge",
+        "simpson:Treehouse of Horror VIII#witch|coven"
+    ],
+    "bella": [
+        "f.twilightsaga:Bella Swan",
+        "w:Bella Swan"
+    ],
+    "jacob": [
+        "f.twilightsaga:Jacob Black",
+        "w:Jacob Black"
+    ],
+    "alice": [
+        "f.twilightsaga:Alice Cullen"
+    ],
+    "carlisle": [
+        "f.twilightsaga:Carlisle Cullen"
+    ],
+    "esme": [
+        "f.twilightsaga:Esme Cullen"
+    ],
+    "rosalie": [
+        "f.twilightsaga:Rosalie Hale"
+    ],
+    "emmett": [
+        "f.twilightsaga:Emmett Cullen"
+    ],
+    "jasper": [
+        "f.twilightsaga:Jasper Hale"
+    ],
+    "charlie-swan": [
+        "f.twilightsaga:Charlie Swan"
+    ],
+    "billy-black": [
+        "f.twilightsaga:Billy Black"
+    ],
+    "james": [
+        "f.twilightsaga:James",
+        "villanos:James (Twilight)"
+    ],
+    "victoria": [
+        "villanos:Victoria (Twilight)",
+        "f.twilightsaga:Victoria"
+    ],
+    "laurent": [
+        "villanos:Laurent (Twilight)",
+        "f.twilightsaga:Laurent"
+    ],
+    "aro": [
+        "f.twilightsaga:Aro",
+        "villanos:Aro (Twilight)"
+    ],
+    "caius": [
+        "f.twilightsaga:Caius",
+        "villanos:Caius"
+    ],
+    "marcus": [
+        "f.twilightsaga:Marcus",
+        "villanos:Marcus (Twilight)"
+    ],
+    "jane": [
+        "f.twilightsaga:Jane",
+        "villanos:Jane (Twilight)"
+    ],
+    "alec": [
+        "f.twilightsaga:Alec",
+        "villanos:Alec (Twilight)"
+    ],
+    "renesmee": [
+        "f.twilightsaga:Renesmee Cullen"
+    ],
+    "seth": [
+        "f.twilightsaga:Seth Clearwater"
+    ],
+    "leah": [
+        "f.twilightsaga:Leah Clearwater"
+    ],
+    "sam-uley": [
+        "f.twilightsaga:Sam Uley"
+    ],
+    "riley": [
+        "f.twilightsaga:Riley Biers",
+        "villanos:Riley Biers"
+    ],
+    "lock": [
+        "f.timburton:Lock",
+        "disney:Lock (The Nightmare Before Christmas)",
+        "f.thenightmarebeforechristmas:Lock"
+    ],
+    "shock": [
+        "f.timburton:Shock",
+        "disney:Shock (The Nightmare Before Christmas)",
+        "f.thenightmarebeforechristmas:Shock"
+    ],
+    "barrel": [
+        "f.timburton:Barrel",
+        "disney:Barrel (The Nightmare Before Christmas)",
+        "f.thenightmarebeforechristmas:Barrel"
+    ],
+    "finkelstein": [
+        "disney:Dr. Finkelstein",
+        "f.nightmarebeforechristmas:Dr. Finkelstein"
+    ],
+    "santa-jack": [
+        "disney:Santa Claus (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Santa Claus"
+    ],
+    "igor": [
+        "disney:Igor (The Nightmare Before Christmas)",
+        "f.nightmarebeforechristmas:Igor"
+    ],
+    "behemoth": [
+        "disney:Behemoth",
+        "f.nightmarebeforechristmas:Behemoth"
+    ],
+    "hombre-lobo-jack": [
+        "f.timburton:Wolfman",
+        "f.timburton:Werewolf",
+        "disney:Wolfman",
+        "disney:The Nightmare Before Christmas#wolfman|wolf man|werewolf"
+    ],
+    "vampiros-jack": [
+        "disney:Vampires (The Nightmare Before Christmas)",
+        "disney:Vampire Brothers (The Nightmare Before Christmas)",
+        "disney:The Vampire Brothers",
+        "f.timburton:Vampire Brothers",
+        "f.timburton:Vampires",
+        "disney:The Nightmare Before Christmas#vampire"
+    ],
+    "arlequin": [
+        "disney:Harlequin Demon",
+        "f.nightmarebeforechristmas:Harlequin Demon"
+    ],
+    "payaso-jack": [
+        "disney:Clown with the Tear-Away Face",
+        "f.nightmarebeforechristmas:Clown with the Tear-Away Face"
+    ],
+    "mr-hyde": [
+        "f.timburton:Mr. Hyde",
+        "disney:Mr. Hyde",
+        "disney:The Nightmare Before Christmas#hyde"
+    ],
+    "conejo-pascua": [
+        "f.timburton:Easter Bunny",
+        "f.timburton:The Easter Bunny",
+        "disney:Easter Bunny",
+        "disney:The Nightmare Before Christmas#easter|bunny"
+    ],
+    "pericles": [
+        "w:Pugsley Addams",
+        "f.addamsfamily:Pugsley Addams#1964|weatherwax|tv series",
+        "f.addamsfamily:Pugsley Addams"
+    ],
+    "abuela-addams": [
+        "f.addamsfamily:Grandmama Addams#1964|blossom|tv series",
+        "f.addamsfamily:Grandmama Addams",
+        "f.addamsfamily:Grandmama",
+        "w:Grandmama Addams"
+    ],
+    "primo-eso": [
+        "f.addamsfamily:Cousin Itt",
+        "w:Cousin Itt"
+    ],
+    "xavier": [
+        "f.addamsfamily:Xavier Thorpe"
+    ],
+    "tyler": [
+        "f.addamsfamily:Tyler Galpin",
+        "villanos:Tyler Galpin"
+    ],
+    "bianca": [
+        "f.addamsfamily:Bianca Barclay"
+    ],
+    "weems": [
+        "f.addamsfamily:Larissa Weems"
+    ],
+    "thornhill": [
+        "f.addamsfamily:Marilyn Thornhill",
+        "villanos:Laurel Gates"
+    ],
+    "eugene": [
+        "f.addamsfamily:Eugene Ottinger"
+    ],
+    "ajax": [
+        "f.addamsfamily:Ajax Petropolus"
+    ],
+    "mike-wheeler": [
+        "f.strangerthings:Mike Wheeler",
+        "w:Mike Wheeler"
+    ],
+    "dustin": [
+        "f.strangerthings:Dustin Henderson",
+        "w:Dustin Henderson"
+    ],
+    "lucas": [
+        "f.strangerthings:Lucas Sinclair"
+    ],
+    "will": [
+        "f.strangerthings:Will Byers"
+    ],
+    "max": [
+        "f.strangerthings:Max Mayfield"
+    ],
+    "steve": [
+        "f.strangerthings:Steve Harrington",
+        "w:Steve Harrington"
+    ],
+    "nancy": [
+        "f.strangerthings:Nancy Wheeler"
+    ],
+    "jonathan": [
+        "f.strangerthings:Jonathan Byers"
+    ],
+    "hopper": [
+        "f.strangerthings:Jim Hopper",
+        "w:Jim Hopper"
+    ],
+    "joyce": [
+        "f.strangerthings:Joyce Byers"
+    ],
+    "robin": [
+        "f.strangerthings:Robin Buckley"
+    ],
+    "eddie": [
+        "f.strangerthings:Eddie Munson"
+    ],
+    "erica": [
+        "f.strangerthings:Erica Sinclair"
+    ],
+    "billy-hargrove": [
+        "f.strangerthings:Billy Hargrove"
+    ],
+    "murray": [
+        "f.strangerthings:Murray Bauman"
+    ],
+    "brenner": [
+        "f.strangerthings:Martin Brenner",
+        "villanos:Martin Brenner"
+    ],
+    "bob-newby": [
+        "f.strangerthings:Bob Newby"
+    ],
+    "barb": [
+        "f.strangerthings:Barbara Holland"
+    ],
+    "azotamentes": [
+        "f.strangerthings:Mind Flayer",
+        "villanos:Mind Flayer"
+    ],
+    "argyle": [
+        "f.strangerthings:Argyle"
+    ],
+    "kali": [
+        "f.strangerthings:Kali Prasad"
+    ],
+    "shaggy": [
+        "f.scoobydoo:Shaggy Rogers",
+        "w:Shaggy Rogers"
+    ],
+    "fred": [
+        "f.scoobydoo:Fred Jones",
+        "w:Fred Jones (Scooby-Doo)"
+    ],
+    "daphne": [
+        "f.scoobydoo:Daphne Blake",
+        "w:Daphne Blake"
+    ],
+    "velma": [
+        "f.scoobydoo:Velma Dinkley",
+        "w:Velma Dinkley"
+    ],
+    "caballero-negro": [
+        "f.scoobydoo:Black Knight Ghost#black knight ghost.png|black knight ghost.jpg|1969|where are you",
+        "villanos:Black Knight Ghost",
+        "f.scoobydoo:Black Knight Ghost"
+    ],
+    "capitan-cutler": [
+        "f.scoobydoo:Ghost of Captain Cutler",
+        "villanos:Ghost of Captain Cutler"
+    ],
+    "minero-49": [
+        "f.scoobydoo:Miner Forty-Niner",
+        "villanos:Miner Forty-Niner"
+    ],
+    "sombra-fantasma": [
+        "f.scoobydoo:Phantom Shadow",
+        "villanos:Phantom Shadow"
+    ],
+    "space-kook": [
+        "f.scoobydoo:Spooky Space Kook",
+        "villanos:Spooky Space Kook"
+    ],
+    "creeper-scooby": [
+        "f.scoobydoo:Creeper",
+        "villanos:Creeper (Scooby-Doo)"
+    ],
+    "payaso-fantasma": [
+        "f.scoobydoo:Ghost Clown",
+        "villanos:Ghost Clown"
+    ],
+    "brujo-scooby": [
+        "f.scoobydoo:Witch Doctor",
+        "villanos:Witch Doctor (Scooby-Doo)"
+    ],
+    "momia-ankha": [
+        "f.scoobydoo:Mummy of Ankha",
+        "villanos:Mummy of Ankha"
+    ],
+    "fantasma-nieve": [
+        "f.scoobydoo:Snow Ghost",
+        "villanos:Snow Ghost"
+    ],
+    "monstruo-brea": [
+        "f.scoobydoo:Tar Monster",
+        "villanos:Tar Monster"
+    ],
+    "charlie-robot": [
+        "f.scoobydoo:Charlie the Funland Robot",
+        "f.scoobydoo:Charlie"
+    ],
+    "fantasma-voltios": [
+        "f.scoobydoo:10,000 Volt Ghost",
+        "villanos:10,000 Volt Ghost"
+    ],
+    "muriel": [
+        "f.courage:Muriel Bagge"
+    ],
+    "eustace": [
+        "f.courage:Eustace Bagge",
+        "villanos:Eustace Bagge"
+    ],
+    "katz": [
+        "f.courage:Katz",
+        "villanos:Katz"
+    ],
+    "le-quack": [
+        "f.courage:Le Quack",
+        "villanos:Le Quack"
+    ],
+    "di-lung": [
+        "f.courage:Di Lung"
+    ],
+    "freaky-fred": [
+        "f.courage:Freaky Fred",
+        "villanos:Freaky Fred"
+    ],
+    "computadora": [
+        "f.courage:Computer"
+    ],
+    "ma-bagge": [
+        "f.courage:Ma Bagge"
+    ],
+    "rey-ramses": [
+        "f.courage:King Ramses",
+        "villanos:King Ramses"
+    ],
+    "zorro-cajun": [
+        "f.courage:Cajun Fox",
+        "villanos:Cajun Fox"
+    ],
+    "dr-vindaloo": [
+        "f.courage:Dr. Vindaloo"
+    ],
+    "gran-fusilli": [
+        "f.courage:The Great Fusilli",
+        "villanos:The Great Fusilli"
+    ],
+    "reina-charco": [
+        "f.courage:Queen of the Black Puddle",
+        "villanos:Queen of the Black Puddle"
+    ],
+    "shirley": [
+        "f.courage:Shirley the Medium"
+    ],
+    "benton": [
+        "f.courage:Benton Tarantella",
+        "villanos:Benton Tarantella"
+    ],
+    "pollo-espacio": [
+        "f.courage:Space Chicken",
+        "f.courage:Chicken from Outer Space (character)",
+        "f.courage:The Chicken from Outer Space (character)",
+        "villanos:Chicken from Outer Space (Courage the Cowardly Dog)",
+        "villanos:The Chicken from Outer Space",
+        "villanos:Space Chicken",
+        "f.courage:The Chicken from Outer Space#chicken"
+    ],
+    "gremlin-autobus": [
+        "simpson:Terror at 5½ Feet#gremlin|terror"
+    ],
+    "skinner-cafeteria": [
+        "simpson:Nightmare Cafeteria#skinner|cafeteria|nightmare"
+    ],
+    "lard-lad": [
+        "simpson:Attack of the 50-Foot Eyesores#lard|eyesore|attack",
+        "simpson:Lard Lad"
+    ],
+    "maggie-alien": [
+        "simpson:Starship Poopers (segment)#maggie|starship|alien",
+        "simpson:Treehouse of Horror IX#starship|maggie|poopers|alien baby"
+    ],
+    "tomy-daly": [
+        "simpson:The Terror of Tiny Toon (segment)#itchy|scratchy|tiny toon",
+        "simpson:Treehouse of Horror IX#tiny toon|itchy|scratchy",
+        "simpson:Itchy & Scratchy",
+        "simpson:Itchy"
+    ],
+    "flanders-lobo": [
+        "simpson:I Know What You Diddily-Iddily-Did (segment)#wolf|werewolf|flanders",
+        "simpson:Treehouse of Horror X#werewolf|wolf|diddily|flanders"
+    ],
+    "el-coleccionista": [
+        "simpson:The Collector",
+        "simpson:Desperately Xeeking Xena#collector|xeeking"
+    ],
+    "homero-fantasma": [
+        "simpson:G-G-Ghost D-D-Dad (segment)#ghost|homer",
+        "simpson:Treehouse of Horror XI#ghost|g-g|dad"
+    ],
+    "ultracasa": [
+        "simpson:Ultrahouse 3000",
+        "simpson:House of Whacks#ultrahouse|whacks"
+    ],
+    "homero-muerte": [
+        "simpson:Reaper Madness (segment)#reaper|death|homer",
+        "simpson:Treehouse of Horror XIV#reaper|grim|death|madness",
+        "simpson:Grim Reaper",
+        "simpson:Death"
+    ],
+    "frinkenstein": [
+        "simpson:Frinkenstein (segment)#promo|frinkenstein.png|frink sr|frinkenstein|frink",
+        "simpson:Treehouse of Horror XIV#frinkenstein|frink",
+        "simpson:Professor Frink, Sr.",
+        "simpson:John Frink Sr."
+    ]
+}
